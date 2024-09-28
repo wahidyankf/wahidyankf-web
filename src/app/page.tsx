@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Terminal from "@/components/terminal";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Wahidyan Kresna Fridayoka (Yoka) - Software Engineer",
@@ -11,9 +12,53 @@ export default function Home() {
   const commands = [
     { command: "whoami", output: "Wahidyan Kresna Fridayoka (Yoka)" },
     { command: "job", output: "Software Engineer (Engineering Manager)" },
-    { command: "ls", output: "cv.txt  projects.txt" },
-    { command: "cat cv.txt", output: "Loading CV..." },
-    { command: "cat projects.txt", output: "Loading Projects..." },
+    {
+      command: "ls",
+      output: (
+        <span>
+          <Link
+            href="/cv"
+            className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
+          >
+            cv.txt
+          </Link>{" "}
+          <Link
+            href="/projects"
+            className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
+          >
+            projects.txt
+          </Link>
+        </span>
+      ),
+    },
+    {
+      command: "cat cv.txt",
+      output: (
+        <span>
+          Loading CV...{" "}
+          <Link
+            href="/cv"
+            className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
+          >
+            View full CV
+          </Link>
+        </span>
+      ),
+    },
+    {
+      command: "cat projects.txt",
+      output: (
+        <span>
+          Loading Projects...{" "}
+          <Link
+            href="/projects"
+            className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
+          >
+            View all projects
+          </Link>
+        </span>
+      ),
+    },
   ];
 
   return (
