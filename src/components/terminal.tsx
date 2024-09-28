@@ -7,19 +7,28 @@ type Command = {
   output: string;
 };
 
-export function TerminalComponent({ commands }: { commands: Command[] }) {
-  const [displayedCommands, setDisplayedCommands] = useState<Command[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function Terminal({
+  initialCommands,
+}: {
+  initialCommands: Command[];
+}) {
+  const [displayedCommands, setDisplayedCommands] =
+    useState<Command[]>(initialCommands);
+  const [currentIndex, setCurrentIndex] = useState(initialCommands.length);
 
   useEffect(() => {
-    if (currentIndex < commands.length) {
-      const timer = setTimeout(() => {
-        setDisplayedCommands((prev) => [...prev, commands[currentIndex]]);
-        setCurrentIndex((prev) => prev + 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, commands]);
+    const timer = setInterval(() => {
+      setDisplayedCommands((prev) => {
+        if (prev.length < initialCommands.length) {
+          return [...prev, initialCommands[prev.length]];
+        }
+        return prev;
+      });
+      setCurrentIndex((prev) => Math.min(prev + 1, initialCommands.length));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [initialCommands]);
 
   return (
     <div className="bg-gray-900 text-green-400 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg font-mono text-xs sm:text-sm md:text-base overflow-hidden">
@@ -44,7 +53,7 @@ export function TerminalComponent({ commands }: { commands: Command[] }) {
             </pre>
           </div>
         ))}
-        {currentIndex < commands.length && (
+        {currentIndex < initialCommands.length && (
           <div className="flex items-center flex-wrap">
             <span className="text-blue-400 mr-2 text-xs sm:text-sm md:text-base">
               guest@wahidyankf.com:~$

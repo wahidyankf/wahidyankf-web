@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { TerminalComponent } from "@/components/terminal";
+import Terminal from "@/components/terminal";
 
 export const metadata: Metadata = {
   title: "Wahidyan Kresna Fridayoka (Yoka) - Software Engineer",
@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black p-4 sm:p-8 md:p-12 lg:p-16 flex items-center justify-center">
       <div className="w-full max-w-4xl">
-        <TerminalComponent commands={commands} />
+        <Terminal initialCommands={commands} />
       </div>
     </main>
   );
