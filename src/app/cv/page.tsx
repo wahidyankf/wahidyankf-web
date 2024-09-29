@@ -68,10 +68,13 @@ const cvData: CVEntry[] = [
     type: "honor",
   },
   {
-    title: "Licenses & Certifications",
-    organization: "",
-    period: "",
-    details: ["In Progress"],
+    title: "Certificate of Completion - System Design Assessment",
+    organization: "AlgoExpert",
+    period: "December 2021",
+    details: ["Credential ID: 524646adaa", "Skills: System Design"],
+    links: {
+      credential: "https://certificate.algoexpert.io/SE-524646adaa",
+    },
     type: "certification",
   },
   {
@@ -172,6 +175,7 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
             {key === "linkedin" && <Linkedin className="w-4 h-4 mr-1" />}
             {key === "website" && <Globe className="w-4 h-4 mr-1" />}
             {key === "email" && <Mail className="w-4 h-4 mr-1" />}
+            {key === "credential" && <FileCheck className="w-4 h-4 mr-1" />}
             {key === "github"
               ? "GitHub"
               : key === "githubOrg"
@@ -182,6 +186,8 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
               ? "Website"
               : key === "email"
               ? "Email"
+              : key === "credential"
+              ? "View Credential"
               : key}
           </a>
         ))}
