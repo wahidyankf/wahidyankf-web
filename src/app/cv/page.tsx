@@ -265,7 +265,7 @@ export default function CV() {
           <>
             {aboutEntry && (
               <CVSection
-                title="About"
+                title="Highlights"
                 entries={[aboutEntry]}
                 icon={<User className="w-6 h-6" />}
               />
