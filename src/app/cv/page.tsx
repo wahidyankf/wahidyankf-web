@@ -123,11 +123,21 @@ const CVEntryComponent = ({
         )}
       </p>
     )}
-    {entry.details.map((detail, index) => (
-      <p key={index} className="mb-2 text-green-200">
-        {highlightText(detail, searchTerm)}
-      </p>
-    ))}
+    {entry.type === "work" ? (
+      <ul className="list-disc list-inside mb-2 text-green-200">
+        {entry.details.map((detail, index) => (
+          <li key={index} className="mb-1">
+            {highlightText(detail, searchTerm)}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      entry.details.map((detail, index) => (
+        <p key={index} className="mb-2 text-green-200">
+          {highlightText(detail, searchTerm)}
+        </p>
+      ))
+    )}
     {entry.skills && (
       <>
         <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
