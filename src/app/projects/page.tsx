@@ -1,12 +1,8 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import { Github, Globe, Youtube } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Personal Projects - Wahidyan Kresna Fridayoka (Yoka)",
-  description:
-    "Showcase of personal projects by Wahidyan Kresna Fridayoka (Yoka), a Software Engineer and Engineering Manager.",
-};
+import { useState } from "react";
+import Link from "next/link";
+import { Github, Globe, Youtube, Search } from "lucide-react";
 
 type Project = {
   title: string;
@@ -102,13 +98,21 @@ const ProjectComponent = ({ project }: { project: Project }) => (
   </div>
 );
 
-const renderProjects = (projects: Project[]) => {
-  return projects.map((project, index) => (
-    <ProjectComponent key={index} project={project} />
-  ));
-};
-
 export default function Projects() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredProjects = projects.filter(
+    (project) =>
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.details.some((detail) =>
+        detail.toLowerCase().includes(searchTerm.toLowerCase())
+      ) ||
+      Object.keys(project.links).some((key) =>
+        key.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
+
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16">
       <div className="max-w-4xl mx-auto">
@@ -116,7 +120,26 @@ export default function Projects() {
           Personal Projects
         </h1>
 
-        {renderProjects(projects)}
+        <div className="mb-8 relative">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+        </div>
+
+        {filteredProjects.length > 0 ? (
+          filteredProjects.map((project, index) => (
+            <ProjectComponent key={index} project={project} />
+          ))
+        ) : (
+          <p className="text-center text-yellow-400">
+            No projects found matching your search.
+          </p>
+        )}
 
         <div className="text-center mt-8">
           <Link
