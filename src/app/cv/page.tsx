@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -123,23 +123,44 @@ const cvData: CVEntry[] = [
   },
 ];
 
-const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
+const highlightText = (text: string, searchTerm: string) => {
+  if (!searchTerm) return text;
+  const regex = new RegExp(`(${searchTerm})`, "gi");
+  return text.split(regex).map((part, index) =>
+    regex.test(part) ? (
+      <mark key={index} className="bg-yellow-300 text-gray-900">
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+};
+
+const CVEntryComponent = ({
+  entry,
+  searchTerm,
+}: {
+  entry: CVEntry;
+  searchTerm: string;
+}) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
     {entry.type !== "language" && (
       <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
-        {entry.title}
+        {highlightText(entry.title, searchTerm)}
       </h3>
     )}
     {entry.organization && entry.period && (
       <p className="mb-2 text-green-300">
-        {entry.organization} | {entry.period}
+        {highlightText(entry.organization, searchTerm)} |{" "}
+        {highlightText(entry.period, searchTerm)}
       </p>
     )}
     {entry.type === "about" ? (
       <>
         {entry.details.map((detail, index) => (
           <p key={index} className="mb-2 text-green-200">
-            {detail}
+            {highlightText(detail, searchTerm)}
           </p>
         ))}
         {entry.skills && (
@@ -151,7 +172,7 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
               {entry.skills.map((skill, index) => (
                 <li key={index} className="flex items-center">
                   <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                  {skill}
+                  {highlightText(skill, searchTerm)}
                 </li>
               ))}
             </ul>
@@ -166,9 +187,13 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
             <li key={index} className="mb-2 flex items-start">
               <Globe className="w-4 h-4 mr-2 mt-1 text-yellow-400" />
               <div>
-                <span className="font-semibold">{language}</span>
+                <span className="font-semibold">
+                  {highlightText(language, searchTerm)}
+                </span>
                 <br />
-                <span className="text-sm text-green-300">{proficiency}</span>
+                <span className="text-sm text-green-300">
+                  {highlightText(proficiency, searchTerm)}
+                </span>
               </div>
             </li>
           );
@@ -178,7 +203,7 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
       <ul className="list-disc list-inside mb-2 text-green-200">
         {entry.details.map((detail, index) => (
           <li key={index} className="mb-1">
-            {detail}
+            {highlightText(detail, searchTerm)}
           </li>
         ))}
       </ul>
@@ -199,19 +224,22 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
             {key === "website" && <Globe className="w-4 h-4 mr-1" />}
             {key === "email" && <Mail className="w-4 h-4 mr-1" />}
             {key === "credential" && <FileCheck className="w-4 h-4 mr-1" />}
-            {key === "github"
-              ? "GitHub"
-              : key === "githubOrg"
-              ? "GitHub (Org)"
-              : key === "linkedin"
-              ? "LinkedIn"
-              : key === "website"
-              ? "Website"
-              : key === "email"
-              ? "Email"
-              : key === "credential"
-              ? "View Credential"
-              : key}
+            {highlightText(
+              key === "github"
+                ? "GitHub"
+                : key === "githubOrg"
+                ? "GitHub (Org)"
+                : key === "linkedin"
+                ? "LinkedIn"
+                : key === "website"
+                ? "Website"
+                : key === "email"
+                ? "Email"
+                : key === "credential"
+                ? "View Credential"
+                : key,
+              searchTerm
+            )}
           </a>
         ))}
       </div>
@@ -223,18 +251,20 @@ const CVSection = ({
   title,
   entries,
   icon,
+  searchTerm,
 }: {
   title: string;
   entries: CVEntry[];
   icon: React.ReactNode;
+  searchTerm: string;
 }) => (
   <div className="mb-8">
     <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
       {icon}
-      <span className="ml-2">{title}</span>
+      <span className="ml-2">{highlightText(title, searchTerm)}</span>
     </h2>
     {entries.map((entry, index) => (
-      <CVEntryComponent key={index} entry={entry} />
+      <CVEntryComponent key={index} entry={entry} searchTerm={searchTerm} />
     ))}
   </div>
 );
@@ -242,21 +272,25 @@ const CVSection = ({
 export default function CV() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEntries = cvData.filter(
-    (entry) =>
-      entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.details.some((detail) =>
-        detail.toLowerCase().includes(searchTerm.toLowerCase())
-      ) ||
-      (entry.skills &&
-        entry.skills.some((skill) =>
-          skill.toLowerCase().includes(searchTerm.toLowerCase())
-        )) ||
-      (entry.links &&
-        Object.values(entry.links).some((link) =>
-          link.toLowerCase().includes(searchTerm.toLowerCase())
-        ))
+  const filteredEntries = useMemo(
+    () =>
+      cvData.filter(
+        (entry) =>
+          entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          entry.details.some((detail) =>
+            detail.toLowerCase().includes(searchTerm.toLowerCase())
+          ) ||
+          (entry.skills &&
+            entry.skills.some((skill) =>
+              skill.toLowerCase().includes(searchTerm.toLowerCase())
+            )) ||
+          (entry.links &&
+            Object.values(entry.links).some((link) =>
+              link.toLowerCase().includes(searchTerm.toLowerCase())
+            ))
+      ),
+    [searchTerm]
   );
 
   const aboutEntry = filteredEntries.find((entry) => entry.type === "about");
@@ -299,34 +333,40 @@ export default function CV() {
                 title="Highlights"
                 entries={[aboutEntry]}
                 icon={<User className="w-6 h-6" />}
+                searchTerm={searchTerm}
               />
             )}
             <CVSection
               title="Work Experience"
               entries={workEntries}
               icon={<Briefcase className="w-6 h-6" />}
+              searchTerm={searchTerm}
             />
             <CVSection
               title="Honors & Awards"
               entries={honorEntries}
               icon={<Award className="w-6 h-6" />}
+              searchTerm={searchTerm}
             />
             <CVSection
               title="Licenses & Certifications"
               entries={certificationEntries}
               icon={<FileCheck className="w-6 h-6" />}
+              searchTerm={searchTerm}
             />
             {languageEntry && (
               <CVSection
                 title="Languages"
                 entries={[languageEntry]}
                 icon={<Languages className="w-6 h-6" />}
+                searchTerm={searchTerm}
               />
             )}
             <CVSection
               title="Education"
               entries={educationEntries}
               icon={<GraduationCap className="w-6 h-6" />}
+              searchTerm={searchTerm}
             />
           </>
         ) : (
