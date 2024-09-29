@@ -109,8 +109,31 @@ export type Project = {
   description: string;
   technologies: string[];
   link: string;
+  image?: string;
 };
 
 export const projectsData: Project[] = [
-  // Add your projects here
+  {
+    title: "Personal Website",
+    description:
+      "A responsive personal website showcasing my portfolio and blog.",
+    technologies: ["Next.js", "React", "Tailwind CSS", "TypeScript"],
+    link: "https://github.com/wahidyankf/wahidyankf.com",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    title: "AyoKoding",
+    description:
+      "An educational platform for learning programming in Bahasa Indonesia.",
+    technologies: ["React", "Node.js", "Express", "MongoDB"],
+    link: "https://ayokoding.com",
+    image: "/placeholder.svg?height=200&width=300",
+  },
+  {
+    title: "Ruangguru Clone",
+    description: "A clone of the Ruangguru platform for educational purposes.",
+    technologies: ["React Native", "Redux", "Firebase"],
+    link: "https://github.com/wahidyankf/ruangguru-clone",
+    image: "/placeholder.svg?height=200&width=300",
+  },
 ];
