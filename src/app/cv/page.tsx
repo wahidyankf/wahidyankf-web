@@ -55,7 +55,7 @@ const parseDate = (dateString: string): Date => {
   return new Date(parseInt(year), monthIndex);
 };
 
-const calculateDuration = (period: string) => {
+const calculateDuration = (period: string): number => {
   const [start, end] = period.split(" - ");
   let startDate: Date, endDate: Date;
 
@@ -64,12 +64,16 @@ const calculateDuration = (period: string) => {
     endDate = end === "Present" ? new Date() : parseDate(end);
   } catch (error) {
     console.error("Error parsing date:", error);
-    return "Invalid date";
+    return 0;
   }
 
   const months =
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
     (endDate.getMonth() - startDate.getMonth());
+  return Math.ceil(months + (endDate.getDate() - startDate.getDate()) / 31);
+};
+
+const formatDuration = (months: number): string => {
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
 
@@ -100,7 +104,12 @@ const CVEntryComponent = ({
         {highlightText(entry.period, searchTerm)}
         {entry.type === "work" && (
           <span className="ml-2 text-yellow-400">
-            ({highlightText(calculateDuration(entry.period), searchTerm)})
+            (
+            {highlightText(
+              formatDuration(calculateDuration(entry.period)),
+              searchTerm
+            )}
+            )
           </span>
         )}
       </p>
@@ -225,6 +234,16 @@ const WorkExperienceSection = ({
     return dateB.getTime() - dateA.getTime();
   });
 
+  // Calculate total duration for each organization
+  const organizationDurations = sortedOrganizations.reduce((acc, org) => {
+    const totalMonths = groupedEntries[org].reduce(
+      (sum, entry) => sum + calculateDuration(entry.period),
+      0
+    );
+    acc[org] = formatDuration(totalMonths);
+    return acc;
+  }, {} as Record<string, string>);
+
   return (
     <div className="mb-8">
       <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
@@ -238,8 +257,12 @@ const WorkExperienceSection = ({
           key={organization}
           className="mb-6 border border-green-400 rounded-lg p-4"
         >
-          <h3 className="text-lg sm:text-xl md:text-2xl mb-4 text-yellow-400">
-            {highlightText(organization, searchTerm)}
+          <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400 flex justify-between items-center">
+            <span>{highlightText(organization, searchTerm)}</span>
+            <span className="text-sm text-green-300">
+              Total:{" "}
+              {highlightText(organizationDurations[organization], searchTerm)}
+            </span>
           </h3>
           {groupedEntries[organization].map((entry, index) => (
             <CVEntryComponent
