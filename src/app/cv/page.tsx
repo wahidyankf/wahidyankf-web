@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -248,7 +248,7 @@ const WorkExperienceSection = ({
     return dateB.getTime() - dateA.getTime();
   });
 
-  // Calculate total duration for each organization
+  // Calculate total duration for each organization and overall
   const organizationDurations = sortedOrganizations.reduce((acc, org) => {
     const totalMonths = groupedEntries[org].reduce(
       (sum, entry) => sum + calculateDuration(entry.period),
@@ -257,6 +257,18 @@ const WorkExperienceSection = ({
     acc[org] = formatDuration(totalMonths);
     return acc;
   }, {} as Record<string, string>);
+
+  const totalWorkExperience = formatDuration(
+    sortedOrganizations.reduce((total, org) => {
+      return (
+        total +
+        groupedEntries[org].reduce(
+          (sum, entry) => sum + calculateDuration(entry.period),
+          0
+        )
+      );
+    }, 0)
+  );
 
   // Filter entries based on visible years
   const visibleEntries = sortedOrganizations.filter((org) => {
@@ -270,12 +282,43 @@ const WorkExperienceSection = ({
 
   const hasMoreEntries = sortedOrganizations.length > visibleEntries.length;
 
+  // Check if there's a search match in hidden entries
+  const hasHiddenMatch =
+    searchTerm &&
+    sortedOrganizations.some((org) => {
+      if (visibleEntries.includes(org)) return false;
+      return groupedEntries[org].some(
+        (entry) =>
+          entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          entry.details.some((detail) =>
+            detail.toLowerCase().includes(searchTerm.toLowerCase())
+          ) ||
+          (entry.skills &&
+            entry.skills.some((skill) =>
+              skill.toLowerCase().includes(searchTerm.toLowerCase())
+            ))
+      );
+    });
+
+  // Automatically expand when there's a hidden match
+  useEffect(() => {
+    if (hasHiddenMatch) {
+      setVisibleYears(100); // Set to a large number to show all entries
+    } else if (!searchTerm) {
+      setVisibleYears(5); // Reset to default when not searching
+    }
+  }, [searchTerm, hasHiddenMatch]);
+
   return (
     <div className="mb-8">
-      <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
-        <Briefcase className="w-6 h-6" />
-        <span className="ml-2">
+      <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center justify-between">
+        <span className="flex items-center">
+          <Briefcase className="w-6 h-6 mr-2" />
           {highlightText("Work Experience", searchTerm)}
+        </span>
+        <span className="text-sm text-green-300">
+          Total: {highlightText(totalWorkExperience, searchTerm)}
         </span>
       </h2>
       {visibleEntries.map((organization) => (
@@ -299,7 +342,7 @@ const WorkExperienceSection = ({
           ))}
         </div>
       ))}
-      {hasMoreEntries && (
+      {hasMoreEntries && !hasHiddenMatch && (
         <button
           onClick={() => setVisibleYears((prev) => prev + 5)}
           className="mt-4 w-full py-2 px-4 bg-green-700 text-green-100 rounded hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
