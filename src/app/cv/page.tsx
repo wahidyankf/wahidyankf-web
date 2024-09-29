@@ -99,9 +99,11 @@ const cvData: CVEntry[] = [
 
 const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
-    <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
-      {entry.title}
-    </h3>
+    {entry.type !== "language" && (
+      <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
+        {entry.title}
+      </h3>
+    )}
     {entry.organization && entry.period && (
       <p className="mb-2 text-green-300">
         {entry.organization} | {entry.period}
