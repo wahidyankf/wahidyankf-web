@@ -15,6 +15,7 @@ import {
   Languages,
   FileCheck,
   GithubIcon,
+  ChevronDown,
 } from "lucide-react";
 import { CVEntry, cvData } from "../data";
 
@@ -210,6 +211,9 @@ const WorkExperienceSection = ({
   entries: CVEntry[];
   searchTerm: string;
 }) => {
+  const [visibleYears, setVisibleYears] = useState(5);
+  const currentYear = new Date().getFullYear();
+
   const groupedEntries = entries.reduce((acc, entry) => {
     if (!acc[entry.organization]) {
       acc[entry.organization] = [];
@@ -244,6 +248,18 @@ const WorkExperienceSection = ({
     return acc;
   }, {} as Record<string, string>);
 
+  // Filter entries based on visible years
+  const visibleEntries = sortedOrganizations.filter((org) => {
+    const mostRecentEntry = groupedEntries[org][0];
+    const endDate = mostRecentEntry.period.split(" - ")[1];
+    return (
+      endDate === "Present" ||
+      parseDate(endDate).getFullYear() > currentYear - visibleYears
+    );
+  });
+
+  const hasMoreEntries = sortedOrganizations.length > visibleEntries.length;
+
   return (
     <div className="mb-8">
       <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
@@ -252,7 +268,7 @@ const WorkExperienceSection = ({
           {highlightText("Work Experience", searchTerm)}
         </span>
       </h2>
-      {sortedOrganizations.map((organization) => (
+      {visibleEntries.map((organization) => (
         <div
           key={organization}
           className="mb-6 border border-green-400 rounded-lg p-4"
@@ -273,6 +289,15 @@ const WorkExperienceSection = ({
           ))}
         </div>
       ))}
+      {hasMoreEntries && (
+        <button
+          onClick={() => setVisibleYears((prev) => prev + 5)}
+          className="mt-4 w-full py-2 px-4 bg-green-700 text-green-100 rounded hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
+        >
+          <ChevronDown className="w-5 h-5 mr-2" />
+          View more
+        </button>
+      )}
     </div>
   );
 };
