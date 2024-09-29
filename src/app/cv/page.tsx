@@ -71,7 +71,7 @@ const cvData: CVEntry[] = [
     type: "honor",
   },
   {
-    title: "Ruangguru's Chief of The Month - September 2019",
+    title: "Ruangguru's Chief of The Month: September 2019",
     organization: "Ruangguru",
     period: "September 2019",
     details: [
@@ -81,7 +81,7 @@ const cvData: CVEntry[] = [
     type: "honor",
   },
   {
-    title: "Ruangguru's Chief of The Month - August 2018",
+    title: "Ruangguru's Chief of The Month: August 2018",
     organization: "Ruangguru",
     period: "August 2018",
     details: [
