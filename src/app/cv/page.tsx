@@ -61,10 +61,33 @@ const cvData: CVEntry[] = [
     type: "work",
   },
   {
-    title: "Honors & Awards",
-    organization: "",
-    period: "",
-    details: ["In Progress"],
+    title: "Certificate of Appreciation: Hijra Group's Exceptional Performer",
+    organization: "Hijra Group",
+    period: "May 2024",
+    details: [
+      "Associated with: Engineering Manager - Alami P2P Lending and Hijra Bank Financing at Hijra",
+      'Description: Appreciation for "Exceptional Performance" in the performance appraisal cycle 2023, based on Hijra Group\'s CFR 2023.',
+    ],
+    type: "honor",
+  },
+  {
+    title: "Ruangguru's Chief of The Month - September 2019",
+    organization: "Ruangguru",
+    period: "September 2019",
+    details: [
+      "Associated with: Senior Frontend Engineer at Ruangguru",
+      "Description: Ruang Guru's Most Performant Employee Award for September 2019",
+    ],
+    type: "honor",
+  },
+  {
+    title: "Ruangguru's Chief of The Month - August 2018",
+    organization: "Ruangguru",
+    period: "August 2018",
+    details: [
+      "Associated with: Frontend Engineer at Ruangguru",
+      "Description: Ruang Guru's Most Performant Employee Award for August 2018.",
+    ],
     type: "honor",
   },
   {
