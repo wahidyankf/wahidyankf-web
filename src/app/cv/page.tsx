@@ -16,7 +16,7 @@ import {
   FileCheck,
   GithubIcon,
 } from "lucide-react";
-import { cvData, CVEntry } from "../data";
+import { CVEntry, cvData } from "../data";
 
 const highlightText = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
@@ -32,6 +32,58 @@ const highlightText = (text: string, searchTerm: string) => {
   );
 };
 
+const parseDate = (dateString: string): Date => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const [month, year] = dateString.split(" ");
+  const monthIndex = months.indexOf(month);
+  if (monthIndex === -1) {
+    throw new Error(`Invalid month: ${month}`);
+  }
+  return new Date(parseInt(year), monthIndex);
+};
+
+const calculateDuration = (period: string) => {
+  const [start, end] = period.split(" - ");
+  let startDate: Date, endDate: Date;
+
+  try {
+    startDate = parseDate(start);
+    endDate = end === "Present" ? new Date() : parseDate(end);
+  } catch (error) {
+    console.error("Error parsing date:", error);
+    return "Invalid date";
+  }
+
+  const months =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    (endDate.getMonth() - startDate.getMonth());
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (years > 0 && remainingMonths > 0) {
+    return `${years} year${years > 1 ? "s" : ""} ${remainingMonths} month${
+      remainingMonths > 1 ? "s" : ""
+    }`;
+  } else if (years > 0) {
+    return `${years} year${years > 1 ? "s" : ""}`;
+  } else {
+    return `${remainingMonths} month${remainingMonths > 1 ? "s" : ""}`;
+  }
+};
+
 const CVEntryComponent = ({
   entry,
   searchTerm,
@@ -40,68 +92,46 @@ const CVEntryComponent = ({
   searchTerm: string;
 }) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
-    {entry.type !== "language" && (
-      <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
-        {highlightText(entry.title, searchTerm)}
-      </h3>
-    )}
-    {entry.organization && entry.period && (
+    <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
+      {highlightText(entry.title, searchTerm)}
+    </h3>
+    {entry.period && (
       <p className="mb-2 text-green-300">
-        {highlightText(entry.organization, searchTerm)} |{" "}
         {highlightText(entry.period, searchTerm)}
+        {entry.type === "work" && (
+          <span className="ml-2 text-yellow-400">
+            ({highlightText(calculateDuration(entry.period), searchTerm)})
+          </span>
+        )}
       </p>
     )}
-    {entry.type === "about" ? (
-      <>
-        {entry.details.map((detail, index) => (
-          <p key={index} className="mb-2 text-green-200">
-            {highlightText(detail, searchTerm)}
-          </p>
-        ))}
-        {entry.skills && (
-          <>
-            <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-              Top Skills
-            </h4>
-            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
-              {entry.skills.map((skill, index) => (
-                <li key={index} className="flex items-center">
-                  <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                  {highlightText(skill, searchTerm)}
-                </li>
-              ))}
-            </ul>
-          </>
+    {entry.employmentType && entry.location && entry.locationType && (
+      <p className="mb-2 text-green-200">
+        {highlightText(
+          `${entry.employmentType} | ${entry.location} | ${entry.locationType}`,
+          searchTerm
         )}
-      </>
-    ) : entry.type === "language" ? (
-      <ul className="list-none mb-2 text-green-200">
-        {entry.details.map((item, index) => {
-          const [language, proficiency] = item.split("|");
-          return (
-            <li key={index} className="mb-2 flex items-start">
-              <Globe className="w-4 h-4 mr-2 mt-1 text-yellow-400" />
-              <div>
-                <span className="font-semibold">
-                  {highlightText(language, searchTerm)}
-                </span>
-                <br />
-                <span className="text-sm text-green-300">
-                  {highlightText(proficiency, searchTerm)}
-                </span>
-              </div>
+      </p>
+    )}
+    {entry.details.map((detail, index) => (
+      <p key={index} className="mb-2 text-green-200">
+        {highlightText(detail, searchTerm)}
+      </p>
+    ))}
+    {entry.skills && (
+      <>
+        <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
+          Skills
+        </h4>
+        <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+          {entry.skills.map((skill, index) => (
+            <li key={index} className="flex items-center">
+              <Star className="w-4 h-4 mr-2 text-yellow-400" />
+              {highlightText(skill, searchTerm)}
             </li>
-          );
-        })}
-      </ul>
-    ) : (
-      <ul className="list-disc list-inside mb-2 text-green-200">
-        {entry.details.map((detail, index) => (
-          <li key={index} className="mb-1">
-            {highlightText(detail, searchTerm)}
-          </li>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      </>
     )}
     {entry.links && (
       <div className="mt-4 flex flex-wrap gap-4">
@@ -164,6 +194,66 @@ const CVSection = ({
   </div>
 );
 
+const WorkExperienceSection = ({
+  entries,
+  searchTerm,
+}: {
+  entries: CVEntry[];
+  searchTerm: string;
+}) => {
+  const groupedEntries = entries.reduce((acc, entry) => {
+    if (!acc[entry.organization]) {
+      acc[entry.organization] = [];
+    }
+    acc[entry.organization].push(entry);
+    return acc;
+  }, {} as Record<string, CVEntry[]>);
+
+  // Sort entries within each organization by date (most recent first)
+  Object.values(groupedEntries).forEach((orgEntries) => {
+    orgEntries.sort((a, b) => {
+      const dateA = parseDate(a.period.split(" - ")[0]);
+      const dateB = parseDate(b.period.split(" - ")[0]);
+      return dateB.getTime() - dateA.getTime();
+    });
+  });
+
+  // Sort organizations by the most recent job
+  const sortedOrganizations = Object.keys(groupedEntries).sort((a, b) => {
+    const dateA = parseDate(groupedEntries[a][0].period.split(" - ")[0]);
+    const dateB = parseDate(groupedEntries[b][0].period.split(" - ")[0]);
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
+        <Briefcase className="w-6 h-6" />
+        <span className="ml-2">
+          {highlightText("Work Experience", searchTerm)}
+        </span>
+      </h2>
+      {sortedOrganizations.map((organization) => (
+        <div
+          key={organization}
+          className="mb-6 border border-green-400 rounded-lg p-4"
+        >
+          <h3 className="text-lg sm:text-xl md:text-2xl mb-4 text-yellow-400">
+            {highlightText(organization, searchTerm)}
+          </h3>
+          {groupedEntries[organization].map((entry, index) => (
+            <CVEntryComponent
+              key={index}
+              entry={entry}
+              searchTerm={searchTerm}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export default function CV() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -183,7 +273,15 @@ export default function CV() {
           (entry.links &&
             Object.values(entry.links).some((link) =>
               link.toLowerCase().includes(searchTerm.toLowerCase())
-            ))
+            )) ||
+          (entry.employmentType &&
+            entry.employmentType
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())) ||
+          (entry.location &&
+            entry.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (entry.locationType &&
+            entry.locationType.toLowerCase().includes(searchTerm.toLowerCase()))
       ),
     [searchTerm]
   );
@@ -231,10 +329,8 @@ export default function CV() {
                 searchTerm={searchTerm}
               />
             )}
-            <CVSection
-              title="Work Experience"
+            <WorkExperienceSection
               entries={workEntries}
-              icon={<Briefcase className="w-6 h-6" />}
               searchTerm={searchTerm}
             />
             <CVSection
