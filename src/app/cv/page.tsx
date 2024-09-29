@@ -8,13 +8,13 @@ import {
   Award,
   Search,
   User,
-  Github,
   Linkedin,
   Globe,
   Mail,
   Star,
   Languages,
   FileCheck,
+  GithubIcon,
 } from "lucide-react";
 
 type CVEntry = {
@@ -167,8 +167,8 @@ const CVEntryComponent = ({ entry }: { entry: CVEntry }) => (
             rel="noopener noreferrer"
             className="text-yellow-400 hover:text-green-400 transition-colors duration-200 flex items-center"
           >
-            {key === "github" && <Github className="w-4 h-4 mr-1" />}
-            {key === "githubOrg" && <Github className="w-4 h-4 mr-1" />}
+            {key === "github" && <GithubIcon className="w-4 h-4 mr-1" />}
+            {key === "githubOrg" && <GithubIcon className="w-4 h-4 mr-1" />}
             {key === "linkedin" && <Linkedin className="w-4 h-4 mr-1" />}
             {key === "website" && <Globe className="w-4 h-4 mr-1" />}
             {key === "email" && <Mail className="w-4 h-4 mr-1" />}
