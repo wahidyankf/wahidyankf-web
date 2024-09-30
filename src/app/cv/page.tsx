@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -193,6 +193,10 @@ const CVEntryComponent = ({
   </div>
 );
 
+const StickyHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="sticky top-0 z-10 bg-gray-900 py-2 mb-4">{children}</div>
+);
+
 const CVSection = ({
   title,
   entries,
@@ -205,10 +209,12 @@ const CVSection = ({
   searchTerm: string;
 }) => (
   <div className="mb-8">
-    <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center">
-      {icon}
-      <span className="ml-2">{highlightText(title, searchTerm)}</span>
-    </h2>
+    <StickyHeader>
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
+        {icon}
+        <span className="ml-2">{highlightText(title, searchTerm)}</span>
+      </h2>
+    </StickyHeader>
     {entries.map((entry, index) => (
       <CVEntryComponent key={index} entry={entry} searchTerm={searchTerm} />
     ))}
@@ -286,30 +292,32 @@ const WorkExperienceSection = ({
 
   return (
     <div className="mb-8">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
-          <Briefcase className="w-6 h-6 mr-2" />
-          {highlightText("Work Experience", searchTerm)}
-        </h2>
-        <div className="flex items-center">
-          <span className="text-sm text-green-300 mr-2">
-            Show recent only (≤5 years)
-          </span>
-          <button
-            onClick={() => setShowRecentOnly(!showRecentOnly)}
-            className="text-yellow-400 hover:text-green-400 transition-colors duration-200"
-          >
-            {showRecentOnly ? (
-              <ToggleRight className="w-6 h-6" />
-            ) : (
-              <ToggleLeft className="w-6 h-6" />
-            )}
-          </button>
+      <StickyHeader>
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
+            <Briefcase className="w-6 h-6 mr-2" />
+            {highlightText("Work Experience", searchTerm)}
+          </h2>
+          <div className="flex items-center">
+            <span className="text-sm text-green-300 mr-2">
+              Show recent only (≤5 years)
+            </span>
+            <button
+              onClick={() => setShowRecentOnly(!showRecentOnly)}
+              className="text-yellow-400 hover:text-green-400 transition-colors duration-200"
+            >
+              {showRecentOnly ? (
+                <ToggleRight className="w-6 h-6" />
+              ) : (
+                <ToggleLeft className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="text-sm text-green-300 mb-4">
-        Total: {highlightText(totalWorkExperience, searchTerm)}
-      </div>
+        <div className="text-sm text-green-300 mt-2">
+          Total: {highlightText(totalWorkExperience, searchTerm)}
+        </div>
+      </StickyHeader>
       {filteredOrganizations.map((organization) => (
         <div
           key={organization}
