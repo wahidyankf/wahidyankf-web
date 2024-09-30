@@ -69,10 +69,23 @@ const calculateDuration = (period: string): number => {
     return 0;
   }
 
-  const months =
+  // Calculate the difference in months
+  let months =
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-    (endDate.getMonth() - startDate.getMonth());
-  return Math.ceil(months + (endDate.getDate() - startDate.getDate()) / 31);
+    (endDate.getMonth() - startDate.getMonth()) +
+    1; // Add 1 to include the end month
+
+  // If the end date is not the last day of the month, and it's before the start day,
+  // subtract one month to avoid overcounting
+  if (
+    endDate.getDate() < startDate.getDate() &&
+    endDate.getDate() <
+      new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()
+  ) {
+    months--;
+  }
+
+  return months;
 };
 
 const formatDuration = (months: number): string => {
