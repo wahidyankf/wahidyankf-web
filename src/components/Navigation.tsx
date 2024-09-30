@@ -1,73 +1,46 @@
 import Link from "next/link";
-import { Briefcase, FolderOpen, Home } from "lucide-react";
+import { File, Folder } from "lucide-react";
 
-const NavItem = ({
-  title,
-  icon,
-  href,
-  active,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  href: string;
-  active: boolean;
-}) => (
-  <Link href={href} className="flex flex-col items-center">
-    <div
-      className={`flex items-center justify-center w-12 h-12 rounded-full ${
-        active ? "bg-gray-800" : "hover:bg-gray-800"
-      }`}
-    >
-      {icon}
-    </div>
-    <span className="mt-1 text-xs">{title}</span>
-  </Link>
-);
+type NavigationProps = {
+  activePage: string;
+};
 
-export function Navigation({ activePage }: { activePage: string }) {
+export const Navigation = ({ activePage }: NavigationProps) => {
   return (
-    <>
-      <nav className="w-64 pr-4 hidden lg:block sticky top-0 h-screen overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4 text-yellow-400">Navigation</h2>
-        <NavItem
-          title="Home"
-          icon={<Home className="w-6 h-6" />}
-          href="/"
-          active={activePage === "home"}
-        />
-        <NavItem
-          title="CV"
-          icon={<Briefcase className="w-6 h-6" />}
-          href="/cv"
-          active={activePage === "cv"}
-        />
-        <NavItem
-          title="Personal Projects"
-          icon={<FolderOpen className="w-6 h-6" />}
-          href="/personal-projects"
-          active={activePage === "projects"}
-        />
-      </nav>
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 flex justify-around items-center p-2">
-        <NavItem
-          title="Home"
-          icon={<Home className="w-6 h-6" />}
-          href="/"
-          active={activePage === "home"}
-        />
-        <NavItem
-          title="CV"
-          icon={<Briefcase className="w-6 h-6" />}
-          href="/cv"
-          active={activePage === "cv"}
-        />
-        <NavItem
-          title="Personal Projects"
-          icon={<FolderOpen className="w-6 h-6" />}
-          href="/personal-projects"
-          active={activePage === "projects"}
-        />
-      </nav>
-    </>
+    <nav className="hidden lg:block w-64 pr-8 text-green-400 font-mono">
+      <div className="mb-4">
+        <Folder className="inline-block mr-2" />
+        <span className="font-bold">organiclever</span>
+      </div>
+      <ul className="pl-4">
+        <li className="mb-2">
+          <File className="inline-block mr-2" />
+          <Link
+            href="/"
+            className={activePage === "home" ? "text-yellow-400" : ""}
+          >
+            home.tsx
+          </Link>
+        </li>
+        <li className="mb-2">
+          <File className="inline-block mr-2" />
+          <Link
+            href="/cv"
+            className={activePage === "cv" ? "text-yellow-400" : ""}
+          >
+            cv.tsx
+          </Link>
+        </li>
+        <li className="mb-2">
+          <File className="inline-block mr-2" />
+          <Link
+            href="/personal-projects"
+            className={activePage === "projects" ? "text-yellow-400" : ""}
+          >
+            personal-projects.tsx
+          </Link>
+        </li>
+      </ul>
+    </nav>
   );
-}
+};
