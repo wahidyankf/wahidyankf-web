@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { File, Folder } from "lucide-react";
+import React from "react";
 
 type NavigationProps = {
   activePage: string;
 };
 
-export const Navigation = ({ activePage }: NavigationProps) => {
+export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
   return (
     <>
       {/* Mobile Navigation */}
@@ -57,17 +58,12 @@ export const Navigation = ({ activePage }: NavigationProps) => {
 };
 
 // Helper components
-const NavLink = ({
-  href,
-  activePage,
-  pageName,
-  label,
-}: {
+const NavLink: React.FC<{
   href: string;
   activePage: string;
   pageName: string;
   label: string;
-}) => (
+}> = ({ href, activePage, pageName, label }) => (
   <Link
     href={href}
     className={`flex flex-col items-center ${
@@ -79,17 +75,12 @@ const NavLink = ({
   </Link>
 );
 
-const NavItem = ({
-  href,
-  activePage,
-  pageName,
-  label,
-}: {
+const NavItem: React.FC<{
   href: string;
   activePage: string;
   pageName: string;
   label: string;
-}) => (
+}> = ({ href, activePage, pageName, label }) => (
   <li className="mb-2">
     <File className="inline-block mr-2" />
     <Link
