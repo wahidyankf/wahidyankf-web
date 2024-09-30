@@ -1,23 +1,23 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import Link from "next/link";
 import {
-  Briefcase,
-  GraduationCap,
   Award,
-  Search,
-  User,
-  Linkedin,
-  Globe,
-  Mail,
-  Star,
-  Languages,
+  Briefcase,
   FileCheck,
   GithubIcon,
+  Globe,
+  GraduationCap,
+  Languages,
+  Linkedin,
+  Mail,
+  Search,
+  Star,
   ToggleLeft,
   ToggleRight,
+  User,
 } from "lucide-react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { CVEntry, cvData } from "../data";
 
 const highlightText = (text: string, searchTerm: string) => {
