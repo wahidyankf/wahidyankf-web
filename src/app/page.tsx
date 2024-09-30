@@ -1,8 +1,7 @@
-import { Metadata } from "next";
 import Terminal from "@/components/terminal";
+import { Metadata } from "next";
 import Link from "next/link";
 import { cvData } from "./data";
-import { FaChevronDown } from "react-icons/fa"; // Make sure to install react-icons
 
 export const metadata: Metadata = {
   title: "Wahidyan Kresna Fridayoka (Yoka) - Software Engineer",
