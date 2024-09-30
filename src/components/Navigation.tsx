@@ -22,7 +22,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
           href="/personal-projects"
           activePage={activePage}
           pageName="projects"
-          label="Projects"
+          label="Personal Projects"
         />
       </nav>
 
