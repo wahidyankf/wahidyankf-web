@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -15,7 +15,6 @@ import {
   Languages,
   FileCheck,
   GithubIcon,
-  ChevronDown,
 } from "lucide-react";
 import { CVEntry, cvData } from "../data";
 
@@ -221,9 +220,6 @@ const WorkExperienceSection = ({
   entries: CVEntry[];
   searchTerm: string;
 }) => {
-  const [visibleYears, setVisibleYears] = useState(5);
-  const currentYear = new Date().getFullYear();
-
   const groupedEntries = entries.reduce((acc, entry) => {
     if (!acc[entry.organization]) {
       acc[entry.organization] = [];
@@ -270,46 +266,6 @@ const WorkExperienceSection = ({
     }, 0)
   );
 
-  // Filter entries based on visible years
-  const visibleEntries = sortedOrganizations.filter((org) => {
-    const mostRecentEntry = groupedEntries[org][0];
-    const endDate = mostRecentEntry.period.split(" - ")[1];
-    return (
-      endDate === "Present" ||
-      parseDate(endDate).getFullYear() > currentYear - visibleYears
-    );
-  });
-
-  const hasMoreEntries = sortedOrganizations.length > visibleEntries.length;
-
-  // Check if there's a search match in hidden entries
-  const hasHiddenMatch =
-    searchTerm &&
-    sortedOrganizations.some((org) => {
-      if (visibleEntries.includes(org)) return false;
-      return groupedEntries[org].some(
-        (entry) =>
-          entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          entry.details.some((detail) =>
-            detail.toLowerCase().includes(searchTerm.toLowerCase())
-          ) ||
-          (entry.skills &&
-            entry.skills.some((skill) =>
-              skill.toLowerCase().includes(searchTerm.toLowerCase())
-            ))
-      );
-    });
-
-  // Automatically expand when there's a hidden match
-  useEffect(() => {
-    if (hasHiddenMatch) {
-      setVisibleYears(100); // Set to a large number to show all entries
-    } else if (!searchTerm) {
-      setVisibleYears(5); // Reset to default when not searching
-    }
-  }, [searchTerm, hasHiddenMatch]);
-
   return (
     <div className="mb-8">
       <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center justify-between">
@@ -321,7 +277,7 @@ const WorkExperienceSection = ({
           Total: {highlightText(totalWorkExperience, searchTerm)}
         </span>
       </h2>
-      {visibleEntries.map((organization) => (
+      {sortedOrganizations.map((organization) => (
         <div
           key={organization}
           className="mb-6 border border-green-400 rounded-lg p-4"
@@ -342,15 +298,6 @@ const WorkExperienceSection = ({
           ))}
         </div>
       ))}
-      {hasMoreEntries && !hasHiddenMatch && (
-        <button
-          onClick={() => setVisibleYears((prev) => prev + 5)}
-          className="mt-4 w-full py-2 px-4 bg-green-700 text-green-100 rounded hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
-        >
-          <ChevronDown className="w-5 h-5 mr-2" />
-          View more
-        </button>
-      )}
     </div>
   );
 };
