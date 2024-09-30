@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import Terminal from "@/components/terminal";
 import Link from "next/link";
+import { cvData } from "./data";
+import { FaChevronDown } from "react-icons/fa"; // Make sure to install react-icons
 
 export const metadata: Metadata = {
   title: "Wahidyan Kresna Fridayoka (Yoka) - Software Engineer",
@@ -28,6 +30,10 @@ const StyledLink = ({
 );
 
 export default function Home() {
+  const aboutMe = cvData.find((entry) => entry.type === "about");
+  const latestJob = cvData.find((entry) => entry.type === "work");
+  const skills = aboutMe?.skills?.join(", ");
+
   const commands = [
     {
       command: "whoami",
@@ -47,14 +53,33 @@ export default function Home() {
       command: "job",
       output: (
         <span>
-          Software Engineer | Engineering Management at{" "}
+          {latestJob?.title} at{" "}
           <StyledLink
             href="https://www.linkedin.com/company/hijrabyalamigroup/mycompany/"
             external
           >
-            Hijra Group
+            {latestJob?.organization}
           </StyledLink>
         </span>
+      ),
+    },
+    {
+      command: "summary",
+      output: (
+        <div>
+          <p>{aboutMe?.details[0]}</p>
+          <p className="mt-2">Key skills: {skills}</p>
+        </div>
+      ),
+    },
+    {
+      command: "achievements",
+      output: (
+        <ul className="list-disc list-inside">
+          {latestJob?.details.slice(0, 3).map((detail, index) => (
+            <li key={index}>{detail}</li>
+          ))}
+        </ul>
       ),
     },
     {
@@ -90,9 +115,15 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-black p-4 sm:p-8 md:p-12 lg:p-16 flex items-center justify-center">
-      <div className="w-full max-w-4xl">
-        <Terminal initialCommands={commands} />
+    <main className="min-h-screen bg-black p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col">
+      <div className="w-full max-w-4xl mx-auto flex-grow flex flex-col">
+        <div className="flex-grow">
+          <Terminal initialCommands={commands} />
+        </div>
+        <div className="text-white animate-bounce flex flex-col items-center mt-4 md:mt-6 lg:mt-8">
+          <FaChevronDown size={24} />
+          <p className="text-sm mt-2 text-center">Scroll down for more</p>
+        </div>
       </div>
     </main>
   );
