@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Github, Globe, Youtube, Search } from "lucide-react";
 
@@ -98,19 +98,60 @@ const ProjectComponent = ({ project }: { project: Project }) => (
   </div>
 );
 
+const highlightText = (text: string, searchTerm: string) => {
+  if (!searchTerm) return text;
+  const regex = new RegExp(`(${searchTerm})`, "gi");
+  return text.split(regex).map((part, index) =>
+    regex.test(part) ? (
+      <mark key={index} className="bg-yellow-300 text-gray-900">
+        {part}
+      </mark>
+    ) : (
+      part
+    )
+  );
+};
+
+const SearchComponent = ({
+  searchTerm,
+  setSearchTerm,
+}: {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+}) => (
+  <div className="mb-8 relative">
+    <input
+      type="text"
+      placeholder="Search projects..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
+    />
+    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+  </div>
+);
+
 export default function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredProjects = projects.filter(
-    (project) =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.details.some((detail) =>
-        detail.toLowerCase().includes(searchTerm.toLowerCase())
-      ) ||
-      Object.keys(project.links).some((key) =>
-        key.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  const filteredProjects = useMemo(
+    () =>
+      projects.filter(
+        (project) =>
+          project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          project.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          project.details.some((detail) =>
+            detail.toLowerCase().includes(searchTerm.toLowerCase())
+          ) ||
+          Object.entries(project.links).some(
+            ([key, value]) =>
+              key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              value.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+      ),
+    [searchTerm]
   );
 
   return (
@@ -120,20 +161,48 @@ export default function Projects() {
           Personal Projects
         </h1>
 
-        <div className="mb-8 relative">
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-        </div>
+        <SearchComponent
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
 
         {filteredProjects.length > 0 ? (
           filteredProjects.map((project, index) => (
-            <ProjectComponent key={index} project={project} />
+            <div
+              key={index}
+              className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200"
+            >
+              <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
+                {highlightText(project.title, searchTerm)}
+              </h2>
+              <p className="mb-2 text-green-300">
+                {highlightText(project.description, searchTerm)}
+              </p>
+              <ul className="list-disc list-inside mb-2 text-green-200">
+                {project.details.map((detail, index) => (
+                  <li key={index} className="mb-1">
+                    {highlightText(detail, searchTerm)}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4">
+                {Object.entries(project.links).map(([key, value]) => (
+                  <a
+                    key={key}
+                    href={value}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"
+                  >
+                    <LinkIcon type={key} />
+                    {highlightText(
+                      key.charAt(0).toUpperCase() + key.slice(1),
+                      searchTerm
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
           ))
         ) : (
           <p className="text-center text-yellow-400">
