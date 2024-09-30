@@ -1,19 +1,17 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import { filterItems } from "@/utils/search";
 import {
-  Github,
-  Globe,
-  Youtube,
-  Search,
-  ChevronRight,
-  ChevronDown,
-  Home,
   Briefcase,
   FolderOpen,
+  Github,
+  Globe,
+  Home,
+  Search,
+  Youtube,
 } from "lucide-react";
-import { filterItems } from "@/utils/search";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type Project = {
   title: string;
