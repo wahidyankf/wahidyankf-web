@@ -26,8 +26,8 @@ export const Navigation = ({ activePage }: NavigationProps) => {
       </nav>
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block w-64 pr-8 text-green-400 font-mono">
-        <div className="mb-4">
+      <nav className="hidden lg:block fixed left-0 top-0 h-full w-64 pr-8 text-green-400 font-mono bg-gray-900 overflow-y-auto">
+        <div className="mb-4 p-4">
           <Folder className="inline-block mr-2" />
           <span className="font-bold">organiclever</span>
         </div>
