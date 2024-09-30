@@ -1,10 +1,9 @@
 "use client";
 
+import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import { Github, Globe, Search, Youtube } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Navigation } from "@/components/Navigation";
 
 type Project = {
   title: string;

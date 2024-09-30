@@ -1,15 +1,14 @@
 "use client";
 
+import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import {
   Award,
   Briefcase,
   FileCheck,
-  FolderOpen,
   GithubIcon,
   Globe,
   GraduationCap,
-  Home,
   Languages,
   Linkedin,
   Mail,
@@ -19,10 +18,8 @@ import {
   ToggleRight,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CVEntry, cvData } from "../data";
-import { Navigation } from "@/components/Navigation";
 
 const highlightText = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
