@@ -62,7 +62,9 @@ export default function Home() {
       output: (
         <span>
           <StyledLink href="/cv">cv.txt</StyledLink>{" "}
-          <StyledLink href="/projects">projects.txt</StyledLink>
+          <StyledLink href="/personal-projects">
+            personal-projects.txt
+          </StyledLink>
         </span>
       ),
     },
@@ -75,11 +77,13 @@ export default function Home() {
       ),
     },
     {
-      command: "cat projects.txt",
+      command: "cat personal-projects.txt",
       output: (
         <span>
-          Loading Projects...{" "}
-          <StyledLink href="/projects">View all projects</StyledLink>
+          Loading Personal Projects...{" "}
+          <StyledLink href="/personal-projects">
+            View all personal projects
+          </StyledLink>
         </span>
       ),
     },
