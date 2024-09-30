@@ -1,6 +1,6 @@
 "use client";
 
-import { Navigation } from "@/components/Navigation";
+import { Navigation, DesktopNavigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import {
   Award,
@@ -362,6 +362,27 @@ const WorkExperienceSection = ({
   );
 };
 
+const SearchComponent = ({
+  searchTerm,
+  setSearchTerm,
+}: {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+}) => (
+  <div className="sticky top-0 z-50 bg-gray-900 py-4">
+    <div className="relative">
+      <input
+        type="text"
+        placeholder="Search CV entries..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
+      />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+    </div>
+  </div>
+);
+
 export default function CV() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -397,22 +418,16 @@ export default function CV() {
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
-      <Navigation activePage="cv" />
+      <DesktopNavigation activePage="cv" />
       <div className="flex-grow max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
           Curriculum Vitae
         </h1>
 
-        <div className="mb-8 relative">
-          <input
-            type="text"
-            placeholder="Search CV entries..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-        </div>
+        <SearchComponent
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
 
         {filteredEntries.length > 0 ? (
           <>
@@ -473,6 +488,7 @@ export default function CV() {
           </p>
         )}
       </div>
+      <Navigation activePage="cv" />
     </main>
   );
 }
