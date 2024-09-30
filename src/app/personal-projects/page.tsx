@@ -1,17 +1,10 @@
 "use client";
 
 import { filterItems } from "@/utils/search";
-import {
-  Briefcase,
-  FolderOpen,
-  Github,
-  Globe,
-  Home,
-  Search,
-  Youtube,
-} from "lucide-react";
+import { Github, Globe, Search, Youtube } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { Navigation } from "@/components/Navigation";
 
 type Project = {
   title: string;
@@ -110,29 +103,6 @@ const SearchComponent = ({
   </div>
 );
 
-const NavItem = ({
-  title,
-  icon,
-  href,
-  active,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  href: string;
-  active: boolean;
-}) => (
-  <Link href={href} className="flex flex-col items-center">
-    <div
-      className={`flex items-center justify-center w-12 h-12 rounded-full ${
-        active ? "bg-gray-800" : "hover:bg-gray-800"
-      }`}
-    >
-      {icon}
-    </div>
-    <span className="mt-1 text-xs">{title}</span>
-  </Link>
-);
-
 export default function Projects() {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -149,27 +119,7 @@ export default function Projects() {
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
-      <nav className="w-64 pr-4 hidden lg:block sticky top-0 h-screen overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4 text-yellow-400">Navigation</h2>
-        <NavItem
-          title="Home"
-          icon={<Home className="w-6 h-6" />}
-          href="/"
-          active={false}
-        />
-        <NavItem
-          title="CV"
-          icon={<Briefcase className="w-6 h-6" />}
-          href="/cv"
-          active={false}
-        />
-        <NavItem
-          title="Projects"
-          icon={<FolderOpen className="w-6 h-6" />}
-          href="/personal-projects"
-          active={true}
-        />
-      </nav>
+      <Navigation activePage="projects" />
       <div className="flex-grow max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
           Personal Projects
@@ -224,36 +174,7 @@ export default function Projects() {
             No projects found matching your search.
           </p>
         )}
-
-        <div className="text-center mt-8">
-          <Link
-            href="/"
-            className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
-          >
-            Back to Home
-          </Link>
-        </div>
       </div>
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 flex justify-around items-center p-2">
-        <NavItem
-          title="Home"
-          icon={<Home className="w-6 h-6" />}
-          href="/"
-          active={false}
-        />
-        <NavItem
-          title="CV"
-          icon={<Briefcase className="w-6 h-6" />}
-          href="/cv"
-          active={false}
-        />
-        <NavItem
-          title="Projects"
-          icon={<FolderOpen className="w-6 h-6" />}
-          href="/personal-projects"
-          active={true}
-        />
-      </nav>
     </main>
   );
 }

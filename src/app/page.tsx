@@ -1,123 +1,91 @@
-import Terminal from "@/components/terminal";
-import { Metadata } from "next";
+"use client";
+
+import { Briefcase, FolderOpen, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
-import { cvData } from "./data";
-
-export const metadata: Metadata = {
-  title: "Wahidyan Kresna Fridayoka (Yoka) - Software Engineer",
-  description:
-    "Personal website of Wahidyan Kresna Fridayoka (Yoka), a Software Engineer and Engineering Manager at Hijra Group.",
-};
-
-const StyledLink = ({
-  href,
-  children,
-  external = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  external?: boolean;
-}) => (
-  <Link
-    href={href}
-    target={external ? "_blank" : undefined}
-    rel={external ? "noopener noreferrer" : undefined}
-    className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200"
-  >
-    {children}
-  </Link>
-);
+import { cvData } from "@/app/data";
+import { Navigation } from "@/components/Navigation";
 
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
-  const latestJob = cvData.find((entry) => entry.type === "work");
-  const skills = aboutMe?.skills?.join(", ");
-
-  const commands = [
-    {
-      command: "whoami",
-      output: (
-        <span>
-          Wahidyan Kresna Fridayoka (Yoka) -{" "}
-          <StyledLink
-            href="https://www.linkedin.com/in/wahidyan-kresna-fridayoka/"
-            external
-          >
-            LinkedIn Profile
-          </StyledLink>
-        </span>
-      ),
-    },
-    {
-      command: "job",
-      output: (
-        <span>
-          {latestJob?.title} at{" "}
-          <StyledLink
-            href="https://www.linkedin.com/company/hijrabyalamigroup/mycompany/"
-            external
-          >
-            {latestJob?.organization}
-          </StyledLink>
-        </span>
-      ),
-    },
-    {
-      command: "summary",
-      output: (
-        <div>
-          <p>{aboutMe?.details[0]}</p>
-          <p className="mt-2">Key skills: {skills}</p>
-        </div>
-      ),
-    },
-    {
-      command: "tail work_experience.txt",
-      output: (
-        <ul className="list-disc list-inside">
-          {latestJob?.details.slice(0, 3).map((detail, index) => (
-            <li key={index}>{detail}</li>
-          ))}
-        </ul>
-      ),
-    },
-    {
-      command: "ls",
-      output: (
-        <span>
-          <StyledLink href="/cv">cv.txt</StyledLink>{" "}
-          <StyledLink href="/personal-projects">
-            personal-projects.txt
-          </StyledLink>
-        </span>
-      ),
-    },
-    {
-      command: "cat cv.txt",
-      output: (
-        <span>
-          Loading CV... <StyledLink href="/cv">View full CV</StyledLink>
-        </span>
-      ),
-    },
-    {
-      command: "cat personal-projects.txt",
-      output: (
-        <span>
-          Loading Personal Projects...{" "}
-          <StyledLink href="/personal-projects">
-            View all personal projects
-          </StyledLink>
-        </span>
-      ),
-    },
-  ];
 
   return (
-    <main className="min-h-screen bg-black p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col">
-      <div className="w-full max-w-4xl mx-auto flex-grow flex flex-col">
-        <div className="flex-grow">
-          <Terminal initialCommands={commands} />
+    <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
+      <Navigation activePage="home" />
+      <div className="flex-grow max-w-4xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
+          Welcome to My Portfolio
+        </h1>
+
+        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+          <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
+            About Me
+          </h2>
+          {aboutMe?.details.map((detail, index) => (
+            <p key={index} className="mb-4 text-green-300">
+              {detail}
+            </p>
+          ))}
+        </div>
+
+        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+          <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
+            Skills
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {aboutMe?.skills?.map((skill, index) => (
+              <span
+                key={index}
+                className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+          <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
+            Quick Links
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/cv"
+              className="flex items-center text-yellow-400 hover:text-green-400 transition-colors duration-200"
+            >
+              <Briefcase className="w-5 h-5 mr-2" />
+              View My CV
+            </Link>
+            <Link
+              href="/personal-projects"
+              className="flex items-center text-yellow-400 hover:text-green-400 transition-colors duration-200"
+            >
+              <FolderOpen className="w-5 h-5 mr-2" />
+              Browse My Personal Projects
+            </Link>
+          </div>
+        </div>
+
+        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+          <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
+            Connect With Me
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {aboutMe?.links &&
+              Object.entries(aboutMe.links).map(([key, value]) => (
+                <a
+                  key={key}
+                  href={value}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-yellow-400 hover:text-green-400 transition-colors duration-200"
+                >
+                  {key === "github" && <Github className="w-5 h-5 mr-2" />}
+                  {key === "linkedin" && <Linkedin className="w-5 h-5 mr-2" />}
+                  {key === "email" && <Mail className="w-5 h-5 mr-2" />}
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </a>
+              ))}
+          </div>
         </div>
       </div>
     </main>
