@@ -318,3 +318,87 @@ export const cvData: CVEntry[] = [
     type: "education",
   },
 ];
+
+export const parseDate = (dateString: string): Date => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const [month, year] = dateString.split(" ");
+  const monthIndex = months.indexOf(month);
+  if (monthIndex === -1) {
+    throw new Error(`Invalid month: ${month}`);
+  }
+  return new Date(parseInt(year), monthIndex);
+};
+
+export const calculateDuration = (period: string): number => {
+  const [start, end] = period.split(" - ");
+  const startDate = parseDate(start);
+  const endDate = end === "Present" ? new Date() : parseDate(end);
+
+  return (
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    endDate.getMonth() -
+    startDate.getMonth() +
+    (endDate.getDate() >= startDate.getDate() ? 1 : 0)
+  );
+};
+
+export const formatDuration = (months: number): string => {
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (years > 0 && remainingMonths > 0) {
+    return `${years} year${years > 1 ? "s" : ""} ${remainingMonths} month${
+      remainingMonths > 1 ? "s" : ""
+    }`;
+  } else if (years > 0) {
+    return `${years} year${years > 1 ? "s" : ""}`;
+  } else {
+    return `${remainingMonths} month${remainingMonths > 1 ? "s" : ""}`;
+  }
+};
+
+export const calculateTotalDuration = (
+  periods: { start: Date; end: Date }[]
+): number => {
+  if (periods.length === 0) return 0;
+
+  // Sort periods by start date
+  periods.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  let totalMonths = 0;
+  let currentEnd = periods[0].start;
+
+  for (const period of periods) {
+    if (period.start > currentEnd) {
+      // New non-overlapping period
+      currentEnd = period.start;
+    }
+    if (period.end > currentEnd) {
+      // Add the non-overlapping part of the period
+      totalMonths += calculateDuration(
+        `${currentEnd.toLocaleString("default", {
+          month: "long",
+        })} ${currentEnd.getFullYear()} - ${period.end.toLocaleString(
+          "default",
+          { month: "long" }
+        )} ${period.end.getFullYear()}`
+      );
+      currentEnd = period.end;
+    }
+  }
+
+  return totalMonths;
+};

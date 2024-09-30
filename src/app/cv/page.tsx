@@ -19,7 +19,14 @@ import {
   User,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { CVEntry, cvData } from "../data";
+import {
+  CVEntry,
+  cvData,
+  parseDate,
+  calculateDuration,
+  formatDuration,
+  calculateTotalDuration,
+} from "../data";
 
 const highlightText = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
@@ -33,75 +40,6 @@ const highlightText = (text: string, searchTerm: string) => {
       part
     )
   );
-};
-
-const parseDate = (dateString: string): Date => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const [month, year] = dateString.split(" ");
-  const monthIndex = months.indexOf(month);
-  if (monthIndex === -1) {
-    throw new Error(`Invalid month: ${month}`);
-  }
-  return new Date(parseInt(year), monthIndex);
-};
-
-const calculateDuration = (period: string): number => {
-  const [start, end] = period.split(" - ");
-  let startDate: Date, endDate: Date;
-
-  try {
-    startDate = parseDate(start);
-    endDate = end === "Present" ? new Date() : parseDate(end);
-  } catch (error) {
-    console.error("Error parsing date:", error);
-    return 0;
-  }
-
-  // Calculate the difference in months
-  let months =
-    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-    (endDate.getMonth() - startDate.getMonth()) +
-    1; // Add 1 to include the end month
-
-  // If the end date is not the last day of the month, and it's before the start day,
-  // subtract one month to avoid overcounting
-  if (
-    endDate.getDate() < startDate.getDate() &&
-    endDate.getDate() <
-      new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0).getDate()
-  ) {
-    months--;
-  }
-
-  return months;
-};
-
-const formatDuration = (months: number): string => {
-  const years = Math.floor(months / 12);
-  const remainingMonths = months % 12;
-
-  if (years > 0 && remainingMonths > 0) {
-    return `${years} year${years > 1 ? "s" : ""} ${remainingMonths} month${
-      remainingMonths > 1 ? "s" : ""
-    }`;
-  } else if (years > 0) {
-    return `${years} year${years > 1 ? "s" : ""}`;
-  } else {
-    return `${remainingMonths} month${remainingMonths > 1 ? "s" : ""}`;
-  }
 };
 
 const CVEntryComponent = ({
@@ -277,24 +215,27 @@ const WorkExperienceSection = ({
 
   // Calculate total duration for each organization and overall
   const organizationDurations = sortedOrganizations.reduce((acc, org) => {
-    const totalMonths = groupedEntries[org].reduce(
-      (sum, entry) => sum + calculateDuration(entry.period),
-      0
-    );
+    const periods = groupedEntries[org].map((entry) => ({
+      start: parseDate(entry.period.split(" - ")[0]),
+      end:
+        entry.period.split(" - ")[1] === "Present"
+          ? new Date()
+          : parseDate(entry.period.split(" - ")[1]),
+    }));
+    const totalMonths = calculateTotalDuration(periods);
     acc[org] = formatDuration(totalMonths);
     return acc;
   }, {} as Record<string, string>);
 
+  const allPeriods = entries.map((entry) => ({
+    start: parseDate(entry.period.split(" - ")[0]),
+    end:
+      entry.period.split(" - ")[1] === "Present"
+        ? new Date()
+        : parseDate(entry.period.split(" - ")[1]),
+  }));
   const totalWorkExperience = formatDuration(
-    sortedOrganizations.reduce((total, org) => {
-      return (
-        total +
-        groupedEntries[org].reduce(
-          (sum, entry) => sum + calculateDuration(entry.period),
-          0
-        )
-      );
-    }, 0)
+    calculateTotalDuration(allPeriods)
   );
 
   const filteredOrganizations = sortedOrganizations.filter((org) =>
