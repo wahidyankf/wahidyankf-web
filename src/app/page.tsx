@@ -73,7 +73,7 @@ export default function Home() {
       ),
     },
     {
-      command: "achievements",
+      command: "tail work_experience.txt",
       output: (
         <ul className="list-disc list-inside">
           {latestJob?.details.slice(0, 3).map((detail, index) => (
@@ -119,10 +119,6 @@ export default function Home() {
       <div className="w-full max-w-4xl mx-auto flex-grow flex flex-col">
         <div className="flex-grow">
           <Terminal initialCommands={commands} />
-        </div>
-        <div className="text-white animate-bounce flex flex-col items-center mt-4 md:mt-6 lg:mt-8">
-          <FaChevronDown size={24} />
-          <p className="text-sm mt-2 text-center">Scroll down for more</p>
         </div>
       </div>
     </main>
