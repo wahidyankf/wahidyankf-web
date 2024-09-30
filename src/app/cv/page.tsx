@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CVEntry, cvData } from "../data";
+import { filterItems } from "@/utils/search";
 
 const highlightText = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
@@ -366,30 +367,16 @@ export default function CV() {
 
   const filteredEntries = useMemo(
     () =>
-      cvData.filter(
-        (entry) =>
-          entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          entry.organization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          entry.details.some((detail) =>
-            detail.toLowerCase().includes(searchTerm.toLowerCase())
-          ) ||
-          (entry.skills &&
-            entry.skills.some((skill) =>
-              skill.toLowerCase().includes(searchTerm.toLowerCase())
-            )) ||
-          (entry.links &&
-            Object.values(entry.links).some((link) =>
-              link.toLowerCase().includes(searchTerm.toLowerCase())
-            )) ||
-          (entry.employmentType &&
-            entry.employmentType
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())) ||
-          (entry.location &&
-            entry.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (entry.locationType &&
-            entry.locationType.toLowerCase().includes(searchTerm.toLowerCase()))
-      ),
+      filterItems(cvData, searchTerm, [
+        "title",
+        "organization",
+        "details",
+        "skills",
+        "links",
+        "employmentType",
+        "location",
+        "locationType",
+      ]),
     [searchTerm]
   );
 

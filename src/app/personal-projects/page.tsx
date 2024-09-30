@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Github, Globe, Youtube, Search } from "lucide-react";
+import { filterItems } from "@/utils/search";
 
 type Project = {
   title: string;
@@ -68,36 +69,6 @@ const LinkIcon = ({ type }: { type: string }) => {
   }
 };
 
-const ProjectComponent = ({ project }: { project: Project }) => (
-  <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
-    <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
-      {project.title}
-    </h2>
-    <p className="mb-2 text-green-300">{project.description}</p>
-    <ul className="list-disc list-inside mb-2 text-green-200">
-      {project.details.map((detail, index) => (
-        <li key={index} className="mb-1">
-          {detail}
-        </li>
-      ))}
-    </ul>
-    <div className="mt-4">
-      {Object.entries(project.links).map(([key, value]) => (
-        <a
-          key={key}
-          href={value}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"
-        >
-          <LinkIcon type={key} />
-          {key.charAt(0).toUpperCase() + key.slice(1)}
-        </a>
-      ))}
-    </div>
-  </div>
-);
-
 const highlightText = (text: string, searchTerm: string) => {
   if (!searchTerm) return text;
   const regex = new RegExp(`(${searchTerm})`, "gi");
@@ -136,21 +107,12 @@ export default function Projects() {
 
   const filteredProjects = useMemo(
     () =>
-      projects.filter(
-        (project) =>
-          project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          project.description
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          project.details.some((detail) =>
-            detail.toLowerCase().includes(searchTerm.toLowerCase())
-          ) ||
-          Object.entries(project.links).some(
-            ([key, value]) =>
-              key.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              value.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-      ),
+      filterItems(projects, searchTerm, [
+        "title",
+        "description",
+        "details",
+        "links",
+      ]),
     [searchTerm]
   );
 
