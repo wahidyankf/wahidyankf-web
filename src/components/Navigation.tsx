@@ -7,7 +7,7 @@ type NavigationProps = {
 
 export const Navigation = ({ activePage }: NavigationProps) => {
   return (
-    <nav className="hidden lg:block w-64 pr-8 text-green-400 font-mono">
+    <nav className="hidden lg:block w-128 pr-8 text-green-400 font-mono">
       <div className="mb-4">
         <Folder className="inline-block mr-2" />
         <span className="font-bold">organiclever</span>
