@@ -15,6 +15,8 @@ import {
   Languages,
   FileCheck,
   GithubIcon,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { CVEntry, cvData } from "../data";
 
@@ -213,6 +215,13 @@ const CVSection = ({
   </div>
 );
 
+const isWithinLastFiveYears = (endDate: string): boolean => {
+  const date = endDate === "Present" ? new Date() : parseDate(endDate);
+  const fiveYearsAgo = new Date();
+  fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
+  return date >= fiveYearsAgo;
+};
+
 const WorkExperienceSection = ({
   entries,
   searchTerm,
@@ -220,6 +229,8 @@ const WorkExperienceSection = ({
   entries: CVEntry[];
   searchTerm: string;
 }) => {
+  const [showRecentOnly, setShowRecentOnly] = useState(false);
+
   const groupedEntries = entries.reduce((acc, entry) => {
     if (!acc[entry.organization]) {
       acc[entry.organization] = [];
@@ -266,18 +277,40 @@ const WorkExperienceSection = ({
     }, 0)
   );
 
+  const filteredOrganizations = sortedOrganizations.filter((org) =>
+    groupedEntries[org].some((entry) => {
+      const [, endDate] = entry.period.split(" - ");
+      return !showRecentOnly || isWithinLastFiveYears(endDate);
+    })
+  );
+
   return (
     <div className="mb-8">
-      <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400 flex items-center justify-between">
-        <span className="flex items-center">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
           <Briefcase className="w-6 h-6 mr-2" />
           {highlightText("Work Experience", searchTerm)}
-        </span>
-        <span className="text-sm text-green-300">
-          Total: {highlightText(totalWorkExperience, searchTerm)}
-        </span>
-      </h2>
-      {sortedOrganizations.map((organization) => (
+        </h2>
+        <div className="flex items-center">
+          <span className="text-sm text-green-300 mr-2">
+            Show recent only (≤5 years)
+          </span>
+          <button
+            onClick={() => setShowRecentOnly(!showRecentOnly)}
+            className="text-yellow-400 hover:text-green-400 transition-colors duration-200"
+          >
+            {showRecentOnly ? (
+              <ToggleRight className="w-6 h-6" />
+            ) : (
+              <ToggleLeft className="w-6 h-6" />
+            )}
+          </button>
+        </div>
+      </div>
+      <div className="text-sm text-green-300 mb-4">
+        Total: {highlightText(totalWorkExperience, searchTerm)}
+      </div>
+      {filteredOrganizations.map((organization) => (
         <div
           key={organization}
           className="mb-6 border border-green-400 rounded-lg p-4"
@@ -289,13 +322,18 @@ const WorkExperienceSection = ({
               {highlightText(organizationDurations[organization], searchTerm)}
             </span>
           </h3>
-          {groupedEntries[organization].map((entry, index) => (
-            <CVEntryComponent
-              key={index}
-              entry={entry}
-              searchTerm={searchTerm}
-            />
-          ))}
+          {groupedEntries[organization]
+            .filter((entry) => {
+              const [, endDate] = entry.period.split(" - ");
+              return !showRecentOnly || isWithinLastFiveYears(endDate);
+            })
+            .map((entry, index) => (
+              <CVEntryComponent
+                key={index}
+                entry={entry}
+                searchTerm={searchTerm}
+              />
+            ))}
         </div>
       ))}
     </div>
