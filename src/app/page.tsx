@@ -3,7 +3,7 @@
 import { Briefcase, FolderOpen, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
 import { cvData } from "@/app/data";
-import { DesktopNavigation, Navigation } from "@/components/Navigation";
+import { DesktopNavigation, MobileNavigation } from "@/components/Navigation";
 
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
       <DesktopNavigation activePage="cv" />
-      <Navigation activePage="home" />
+      <MobileNavigation activePage="home" />
       <div className="flex-grow max-w-4xl mx-auto">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
           Welcome to My Portfolio

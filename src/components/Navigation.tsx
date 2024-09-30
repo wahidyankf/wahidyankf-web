@@ -5,7 +5,7 @@ type NavigationProps = {
   activePage: string;
 };
 
-export const Navigation = ({ activePage }: NavigationProps) => {
+export const MobileNavigation = ({ activePage }: NavigationProps) => {
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center">
       <Link

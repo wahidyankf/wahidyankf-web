@@ -1,6 +1,6 @@
 "use client";
 
-import { Navigation, DesktopNavigation } from "@/components/Navigation";
+import { MobileNavigation, DesktopNavigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import {
   Award,
@@ -429,7 +429,7 @@ export default function CV() {
           </p>
         )}
       </div>
-      <Navigation activePage="cv" />
+      <MobileNavigation activePage="cv" />
     </main>
   );
 }
