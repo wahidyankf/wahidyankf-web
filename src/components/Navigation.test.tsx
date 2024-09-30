@@ -6,9 +6,11 @@ import { describe, it, expect } from "vitest";
 describe("Navigation", () => {
   it("renders mobile navigation", () => {
     render(<Navigation activePage="home" />);
-    expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("CV")).toBeInTheDocument();
-    expect(screen.getByText("Projects")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Home" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "CV" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "Personal Projects" })
+    ).toBeInTheDocument();
   });
 
   it("renders desktop navigation", () => {
