@@ -22,33 +22,12 @@ export type CVEntry =
       links?: { [key: string]: string };
     }
   | {
-      type: "education";
-      title: string;
-      organization: string;
-      period: string;
-      details: string[];
-    }
-  | {
-      type: "honor";
-      title: string;
-      organization: string;
-      period: string;
-      details: string[];
-    }
-  | {
-      type: "certification";
+      type: "education" | "honor" | "certification" | "language";
       title: string;
       organization: string;
       period: string;
       details: string[];
       links?: { [key: string]: string };
-    }
-  | {
-      type: "language";
-      title: string;
-      organization: string;
-      period: string;
-      details: string[];
     };
 
 export const cvData: CVEntry[] = [
@@ -90,7 +69,7 @@ export const cvData: CVEntry[] = [
       "Software Testing",
       "Core Banking",
     ],
-    programmingLanguages: ["JavaScript", "Java", "TypeScript"],
+    programmingLanguages: ["JavaScript", "Java", "TypeScript", "SQL"],
     frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
     type: "work",
   },
@@ -121,7 +100,7 @@ export const cvData: CVEntry[] = [
       "Financing System Engineering",
       "Data Engineering",
     ],
-    programmingLanguages: ["JavaScript", "Java", "Python", "TypeScript"],
+    programmingLanguages: ["JavaScript", "Java", "Python", "TypeScript", "SQL"],
     frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
     type: "work",
   },
@@ -150,7 +129,7 @@ export const cvData: CVEntry[] = [
       "Systems Design",
       "Software Engineering",
     ],
-    programmingLanguages: ["JavaScript", "Python", "TypeScript"],
+    programmingLanguages: ["JavaScript", "Python", "TypeScript", "SQL"],
     frameworks: ["React.js", "Next.js", "Django"],
   },
   {
@@ -206,7 +185,6 @@ export const cvData: CVEntry[] = [
       "Backend Engineering",
       "Frontend Engineering",
       "Software Engineering",
-      "React.js",
     ],
     programmingLanguages: [
       "JavaScript",
@@ -237,6 +215,7 @@ export const cvData: CVEntry[] = [
       "JavaScript",
       "TypeScript",
       "ReasonML",
+      "SQL",
       "HTML",
       "CSS",
     ],
@@ -276,7 +255,7 @@ export const cvData: CVEntry[] = [
     location: "Greater Jakarta Area, Indonesia",
     locationType: "Hybrid",
     details: [
-      "Led a team of frontend developers to develop and optimize Ruang Uji's react stacks and deployment. The result was more than 53.86% smaller initial download size (all assets included), 9.52% lower request number, 46.72% faster finish time, 137.10% faster DOMContentLoad time, and 62.49% faster load time than the original angular.js' stacks (2G connection, 280kbps/256kbps 800ms RTT). I also made subsequent pages load substantially faster by implementing on-point code optimization, aggressive code-splitting, and various images' lazy loading.",
+      "Led a team of frontend developers to develop and optimize Ruang Uji's react stacks and deployment. The result was more than 53.86% smaller initial download size (all assets included), 9.52% lower request number, 46.72% faster finish time, 137.10% faster DOMContentLoad time, and 62.49% faster load time than the original angular.js' stacks (2G connection, 256kbps 800ms RTT). I also made subsequent pages load substantially faster by implementing on-point code optimization, aggressive code-splitting, and various images' lazy loading.",
       "Refactored https://ruangguru.com/ assets and code base using IMGIX, AWS S3 bucket, and fastly CDN. The result was a load time speed improvement of more than 300% (from more than 12 seconds average to under 3 seconds) and the advancement of its https://www.webpagetest.org/ average score of B to all A's without sacrificing its assets' apparent quality.",
       "Rewrote and migrated Ruang Uji (https://uji.ruangguru.com) from Angular 1's (AngularJS) stacks to React.js' stacks from scratch. Thus solved the old \"exam event\" problem (e.g., no automatic submission in the background, submission error handler, continuing to the last exam on reload) at Ruang Uji. This project also results in the tech stack's modernization, making it less error-prone.",
       "Automated web apps' bug tracking using sentry (Raven.js) and deployment from Gitlab to AWS S3 and production using Codeship. The result was more precise bug tracking and faster web app integration, deployment, and delivery.",
@@ -433,19 +412,22 @@ export const formatDuration = (months: number): string => {
 
 export const getTopSkillsLastFiveYears = (
   data: CVEntry[]
-): { skill: string; duration: number }[] => {
+): { name: string; duration: number }[] => {
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
 
-  const allWorkEntries = data.filter((entry) => entry.type === "work");
+  const allWorkEntries = data.filter(
+    (entry): entry is CVEntry & { type: "work" } => entry.type === "work"
+  );
 
   const skillInfo: {
     [key: string]: { count: number; periods: { start: Date; end: Date }[] };
   } = {};
 
-  // Count occurrences in recent entries and collect all periods for each skill
   allWorkEntries.forEach((entry) => {
+    if (!entry.period) return;
     const [startStr, endStr] = entry.period.split(" - ");
+    if (!startStr || !endStr) return;
     const start = parseDate(startStr);
     const end = endStr === "Present" ? new Date() : parseDate(endStr);
 
@@ -460,16 +442,106 @@ export const getTopSkillsLastFiveYears = (
     });
   });
 
-  // Calculate total duration for each skill
-  const skillDurations = Object.entries(skillInfo).map(([skill, info]) => ({
-    skill,
+  const skillDurations = Object.entries(skillInfo).map(([name, info]) => ({
+    name,
     duration: calculateTotalDuration(info.periods),
     count: info.count,
   }));
 
-  // Sort by count (for skills used in last 5 years) and then by duration
   return skillDurations
-    .sort((a, b) => b.count - a.count || b.duration - a.duration)
+    .sort((a, b) => b.duration - a.duration) // Sort by duration in descending order
     .slice(0, 10)
-    .map(({ skill, duration }) => ({ skill, duration }));
+    .map(({ name, duration }) => ({ name, duration }));
+};
+
+export const getTopLanguagesLastFiveYears = (
+  data: CVEntry[]
+): { name: string; duration: number }[] => {
+  const fiveYearsAgo = new Date();
+  fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
+
+  const allWorkEntries = data.filter(
+    (entry): entry is CVEntry & { type: "work" } => entry.type === "work"
+  );
+
+  const languageInfo: {
+    [key: string]: { count: number; periods: { start: Date; end: Date }[] };
+  } = {};
+
+  allWorkEntries.forEach((entry) => {
+    if (!entry.period) return;
+    const [startStr, endStr] = entry.period.split(" - ");
+    if (!startStr || !endStr) return;
+    const start = parseDate(startStr);
+    const end = endStr === "Present" ? new Date() : parseDate(endStr);
+
+    entry.programmingLanguages?.forEach((lang) => {
+      if (!languageInfo[lang]) {
+        languageInfo[lang] = { count: 0, periods: [] };
+      }
+      if (end >= fiveYearsAgo) {
+        languageInfo[lang].count += 1;
+      }
+      languageInfo[lang].periods.push({ start, end });
+    });
+  });
+
+  const languageDurations = Object.entries(languageInfo).map(
+    ([name, info]) => ({
+      name,
+      duration: calculateTotalDuration(info.periods),
+      count: info.count,
+    })
+  );
+
+  return languageDurations
+    .sort((a, b) => b.duration - a.duration) // Sort by duration in descending order
+    .slice(0, 10)
+    .map(({ name, duration }) => ({ name, duration }));
+};
+
+export const getTopFrameworksLastFiveYears = (
+  data: CVEntry[]
+): { name: string; duration: number }[] => {
+  const fiveYearsAgo = new Date();
+  fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
+
+  const allWorkEntries = data.filter(
+    (entry): entry is CVEntry & { type: "work" } => entry.type === "work"
+  );
+
+  const frameworkInfo: {
+    [key: string]: { count: number; periods: { start: Date; end: Date }[] };
+  } = {};
+
+  allWorkEntries.forEach((entry) => {
+    if (!entry.period) return;
+    const [startStr, endStr] = entry.period.split(" - ");
+    if (!startStr || !endStr) return;
+    const start = parseDate(startStr);
+    const end = endStr === "Present" ? new Date() : parseDate(endStr);
+
+    entry.frameworks?.forEach((framework) => {
+      if (!frameworkInfo[framework]) {
+        frameworkInfo[framework] = { count: 0, periods: [] };
+      }
+      if (end >= fiveYearsAgo) {
+        frameworkInfo[framework].count += 1;
+      }
+      frameworkInfo[framework].periods.push({ start, end });
+    });
+  });
+
+  const frameworkDurations = Object.entries(frameworkInfo).map(
+    ([name, info]) => ({
+      name,
+      duration: calculateTotalDuration(info.periods),
+      count: info.count,
+    })
+  );
+
+  return frameworkDurations
+    .sort((a, b) => b.duration - a.duration) // Sort by duration in descending order
+    .slice(0, 10)
+    .map(({ name, duration }) => ({ name, duration }));
 };

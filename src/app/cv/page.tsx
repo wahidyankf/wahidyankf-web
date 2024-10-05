@@ -29,6 +29,8 @@ import {
   formatDuration,
   calculateTotalDuration,
   getTopSkillsLastFiveYears,
+  getTopLanguagesLastFiveYears,
+  getTopFrameworksLastFiveYears,
 } from "../data";
 import { parseMarkdownLinks } from "@/lib/utils/markdown";
 
@@ -46,26 +48,64 @@ const highlightText = (text: string, searchTerm: string) => {
   );
 };
 
-// Update the type definition for topSkills
-type TopSkill = { skill: string; duration: number };
+// Update the type definition for topSkills, topLanguages, and topFrameworks
+type TopItem = { name: string; duration: number };
 
 const DynamicSkillsComponent = ({
   skills,
+  languages,
+  frameworks,
   searchTerm,
 }: {
-  skills: TopSkill[];
+  skills: TopItem[];
+  languages: TopItem[];
+  frameworks: TopItem[];
   searchTerm: string;
 }) => (
   <>
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-      Top Skills (Last 5 Years)
+      Top Skills Used in The Last 5 Years (with Total Experience)
     </h4>
-    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2 text-green-200">
-      {skills.map(({ skill, duration }, index) => (
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+      {skills.map(({ name, duration }, index) => (
         <li key={index} className="flex items-center justify-between">
           <div className="flex items-center">
             <Star className="w-4 h-4 mr-2 text-yellow-400" />
-            {highlightText(skill, searchTerm)}
+            {highlightText(name, searchTerm)}
+          </div>
+          <span className="text-sm text-green-300">
+            ({highlightText(formatDuration(duration), searchTerm)})
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
+      Top Programming Languages Used in The Last 5 Years (with Total Experience)
+    </h4>
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+      {languages.map(({ name, duration }, index) => (
+        <li key={index} className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Code className="w-4 h-4 mr-2 text-yellow-400" />
+            {highlightText(name, searchTerm)}
+          </div>
+          <span className="text-sm text-green-300">
+            ({highlightText(formatDuration(duration), searchTerm)})
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
+      Top Frameworks Used in The Last 5 Years (with Total Experience)
+    </h4>
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+      {frameworks.map(({ name, duration }, index) => (
+        <li key={index} className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Package className="w-4 h-4 mr-2 text-yellow-400" />
+            {highlightText(name, searchTerm)}
           </div>
           <span className="text-sm text-green-300">
             ({highlightText(formatDuration(duration), searchTerm)})
@@ -81,10 +121,14 @@ const CVEntryComponent = ({
   entry,
   searchTerm,
   topSkills,
+  topLanguages,
+  topFrameworks,
 }: {
   entry: CVEntry;
   searchTerm: string;
-  topSkills?: TopSkill[];
+  topSkills?: TopItem[];
+  topLanguages?: TopItem[];
+  topFrameworks?: TopItem[];
 }) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
     <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
@@ -178,8 +222,13 @@ const CVEntryComponent = ({
         )}
       </>
     )}
-    {entry.type === "about" && topSkills && (
-      <DynamicSkillsComponent skills={topSkills} searchTerm={searchTerm} />
+    {entry.type === "about" && topSkills && topLanguages && topFrameworks && (
+      <DynamicSkillsComponent
+        skills={topSkills}
+        languages={topLanguages}
+        frameworks={topFrameworks}
+        searchTerm={searchTerm}
+      />
     )}
     {entry.links && (
       <div className="mt-4 flex flex-wrap gap-4">
@@ -231,12 +280,16 @@ const CVSection = ({
   icon,
   searchTerm,
   topSkills,
+  topLanguages,
+  topFrameworks,
 }: {
   title: string;
   entries: CVEntry[];
   icon: React.ReactNode;
   searchTerm: string;
-  topSkills?: TopSkill[];
+  topSkills?: TopItem[];
+  topLanguages?: TopItem[];
+  topFrameworks?: TopItem[];
 }) => (
   <div className="mb-8">
     <StickyHeader>
@@ -251,6 +304,8 @@ const CVSection = ({
         entry={entry}
         searchTerm={searchTerm}
         topSkills={topSkills}
+        topLanguages={topLanguages}
+        topFrameworks={topFrameworks}
       />
     ))}
   </div>
@@ -418,6 +473,8 @@ export default function CV() {
         "organization",
         "details",
         "skills",
+        "programmingLanguages",
+        "frameworks",
         "links",
         "employmentType",
         "location",
@@ -428,6 +485,11 @@ export default function CV() {
   );
 
   const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
+  const topLanguages = useMemo(() => getTopLanguagesLastFiveYears(cvData), []);
+  const topFrameworks = useMemo(
+    () => getTopFrameworksLastFiveYears(cvData),
+    []
+  );
 
   const aboutEntry = filteredEntries.find((entry) => entry.type === "about");
   const workEntries = filteredEntries.filter((entry) => entry.type === "work");
@@ -467,6 +529,8 @@ export default function CV() {
                   icon={<User className="w-6 h-6" />}
                   searchTerm={searchTerm}
                   topSkills={topSkills}
+                  topLanguages={topLanguages}
+                  topFrameworks={topFrameworks}
                 />
               </div>
             )}

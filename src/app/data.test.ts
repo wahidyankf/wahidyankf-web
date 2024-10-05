@@ -96,26 +96,37 @@ describe("data.ts functions", () => {
     it("should return top skills from the last five years", () => {
       const mockData: CVEntry[] = [
         {
-          title: "Job 1",
-          organization: "Company A",
+          title: "Frontend Engineer",
+          organization: "PT. Ruangguru Indonesia",
           period: "January 2020 - Present",
           details: [],
           skills: ["JavaScript", "React", "Node.js"],
           type: "work",
+          programmingLanguages: [
+            "JavaScript",
+            "TypeScript",
+            "ReasonML",
+            "SQL",
+            "HTML",
+            "CSS",
+          ],
+          frameworks: ["React.js", "React Native", "ReasonReact"],
         },
         {
-          title: "Job 2",
-          organization: "Company B",
+          title: "Frontend Engineer",
+          organization: "PT. Ruangguru Indonesia",
           period: "January 2018 - December 2019",
           details: [],
           skills: ["Python", "Django", "JavaScript"],
           type: "work",
+          programmingLanguages: ["JavaScript", "Python", "TypeScript"],
+          frameworks: ["React.js", "React Native", "ReasonReact"],
         },
       ];
 
       const result = getTopSkillsLastFiveYears(mockData);
       expect(result.length).toBeLessThanOrEqual(10);
-      expect(result[0].skill).toBe("JavaScript");
+      expect(result[0].name).toBe("JavaScript");
     });
   });
 });
