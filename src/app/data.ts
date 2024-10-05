@@ -407,15 +407,27 @@ export const getTopSkillsLastFiveYears = (
     return endDate === "Present" || parseDate(endDate) >= fiveYearsAgo;
   });
 
+  const allWorkEntries = data.filter((entry) => entry.type === "work");
+
   const skillInfo: { [key: string]: { count: number; duration: number } } = {};
+
+  // Count occurrences in recent entries
   recentWorkEntries.forEach((entry) => {
-    const duration = calculateDuration(entry.period);
     entry.skills?.forEach((skill) => {
       if (!skillInfo[skill]) {
         skillInfo[skill] = { count: 0, duration: 0 };
       }
       skillInfo[skill].count += 1;
-      skillInfo[skill].duration += duration;
+    });
+  });
+
+  // Calculate total duration from all work entries
+  allWorkEntries.forEach((entry) => {
+    const duration = calculateDuration(entry.period);
+    entry.skills?.forEach((skill) => {
+      if (skillInfo[skill]) {
+        skillInfo[skill].duration += duration;
+      }
     });
   });
 
