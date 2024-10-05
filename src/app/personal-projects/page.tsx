@@ -2,8 +2,9 @@
 
 import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
-import { Github, Globe, Search, Youtube } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Github, Globe, Search, Youtube, X } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Project = {
   title: string;
@@ -86,24 +87,62 @@ const highlightText = (text: string, searchTerm: string) => {
 const SearchComponent = ({
   searchTerm,
   setSearchTerm,
+  updateURL,
 }: {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
-}) => (
-  <div className="mb-8 relative">
-    <input
-      type="text"
-      placeholder="Search projects..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
-    />
-    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-  </div>
-);
+  updateURL: (term: string) => void;
+}) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTerm = e.target.value;
+    setSearchTerm(newTerm);
+    updateURL(newTerm);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    updateURL("");
+  };
+
+  return (
+    <div className="mb-8 relative">
+      <input
+        type="text"
+        placeholder="Search projects..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+        className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 pr-12 focus:outline-none focus:ring-2 focus:ring-green-400"
+      />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+      {searchTerm && (
+        <button
+          onClick={clearSearch}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition-colors duration-200 rounded-full p-1"
+          aria-label="Clear search"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  );
+};
 
 export default function Projects() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialSearchTerm = searchParams.get("search") || "";
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
+
+  const updateURL = (term: string) => {
+    const newURL = term
+      ? `/personal-projects?search=${encodeURIComponent(term)}`
+      : "/personal-projects";
+    router.push(newURL, { scroll: false });
+  };
 
   const filteredProjects = useMemo(
     () =>
@@ -127,6 +166,7 @@ export default function Projects() {
         <SearchComponent
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
+          updateURL={updateURL}
         />
 
         {filteredProjects.length > 0 ? (
