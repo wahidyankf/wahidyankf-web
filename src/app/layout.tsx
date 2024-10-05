@@ -64,7 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="lg:ml-64">{children}</div>
+        <div className="lg:ml-80">{children}</div>
       </body>
     </html>
   );

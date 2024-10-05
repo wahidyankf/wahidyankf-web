@@ -27,7 +27,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
       </nav>
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block fixed left-0 top-0 h-full w-64 pr-8 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50">
+      <nav className="hidden lg:block fixed left-0 top-0 h-full w-80 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50 border-r border-green-400">
         <div className="mb-4 p-4">
           <Folder className="inline-block mr-2" />
           <span className="font-bold">organiclever</span>
