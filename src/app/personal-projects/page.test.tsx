@@ -47,9 +47,17 @@ vi.mock("@/components/HighlightText", () => ({
   HighlightText: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 
+// Define a type for the project items
+type ProjectItem = {
+  title: string;
+  description: string;
+  details: string[];
+  links: Record<string, string>;
+};
+
 vi.mock("@/utils/search", () => ({
-  filterItems: vi.fn((items: any[], searchTerm: string) =>
-    items.filter((item: any) =>
+  filterItems: vi.fn((items: ProjectItem[], searchTerm: string) =>
+    items.filter((item) =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
   ),
