@@ -10,7 +10,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
   return (
     <>
       {/* Mobile Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center z-50">
         <NavLink
           href="/"
           activePage={activePage}
@@ -27,7 +27,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
       </nav>
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block fixed left-0 top-0 h-full w-64 pr-8 text-green-400 font-mono bg-gray-900 overflow-y-auto">
+      <nav className="hidden lg:block fixed left-0 top-0 h-full w-64 pr-8 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50">
         <div className="mb-4 p-4">
           <Folder className="inline-block mr-2" />
           <span className="font-bold">organiclever</span>
