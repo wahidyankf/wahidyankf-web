@@ -21,32 +21,9 @@ import {
   formatDuration,
 } from "@/app/data";
 import { Navigation } from "@/components/Navigation";
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { parseMarkdownLinks } from "@/lib/utils/markdown";
 import { filterItems } from "@/utils/search";
-import { Key } from "react";
-
-interface Searchable {
-  name: string;
-  duration: number;
-  [key: string]: string | number; // Add index signature
-}
-
-const throttle = <T extends (...args: unknown[]) => unknown>(
-  func: T,
-  delay: number
-): ((...args: Parameters<T>) => void) => {
-  let timeoutId: NodeJS.Timeout | null = null;
-  return (...args: Parameters<T>) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      func(...args);
-      timeoutId = null;
-    }, delay);
-  };
-};
 
 const SearchComponent = ({
   searchTerm,
@@ -57,15 +34,10 @@ const SearchComponent = ({
   setSearchTerm: (term: string) => void;
   updateURL: (term: string) => void;
 }) => {
-  const throttledUpdateURL = useCallback(
-    (value: string) => throttle(updateURL, 300)(value),
-    [updateURL]
-  );
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTerm = e.target.value;
     setSearchTerm(newTerm);
-    throttledUpdateURL(newTerm);
+    updateURL(newTerm);
   };
 
   return (
@@ -89,42 +61,40 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
   const aboutMe = cvData.find((entry) => entry.type === "about");
-  const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
-  const topLanguages = useMemo(() => getTopLanguagesLastFiveYears(cvData), []);
-  const topFrameworks = useMemo(
-    () => getTopFrameworksLastFiveYears(cvData),
-    []
-  );
+  const topSkills = getTopSkillsLastFiveYears(cvData);
+  const topLanguages = getTopLanguagesLastFiveYears(cvData);
+  const topFrameworks = getTopFrameworksLastFiveYears(cvData);
 
-  const filterByName = useCallback(
-    (items: Searchable[]) => filterItems(items, searchTerm, ["name"]),
-    [searchTerm]
+  const filteredSkills = filterItems(
+    topSkills.map((item) => ({ ...item, duration: item.duration.toString() })),
+    searchTerm,
+    ["name"]
   );
-
-  const filteredSkills = useMemo(
-    () => filterByName(topSkills as Searchable[]),
-    [topSkills, filterByName]
+  const filteredLanguages = filterItems(
+    topLanguages.map((item) => ({
+      ...item,
+      duration: item.duration.toString(),
+    })),
+    searchTerm,
+    ["name"]
   );
-  const filteredLanguages = useMemo(
-    () => filterByName(topLanguages as Searchable[]),
-    [topLanguages, filterByName]
-  );
-  const filteredFrameworks = useMemo(
-    () => filterByName(topFrameworks as Searchable[]),
-    [topFrameworks, filterByName]
+  const filteredFrameworks = filterItems(
+    topFrameworks.map((item) => ({
+      ...item,
+      duration: item.duration.toString(),
+    })),
+    searchTerm,
+    ["name"]
   );
 
   useEffect(() => {
     setSearchTerm(initialSearchTerm);
   }, [initialSearchTerm]);
 
-  const updateURL = useCallback(
-    (term: string) => {
-      const newURL = term ? `/?search=${encodeURIComponent(term)}` : "/";
-      router.push(newURL, { scroll: false });
-    },
-    [router]
-  );
+  const updateURL = (term: string) => {
+    const newURL = term ? `/?search=${encodeURIComponent(term)}` : "/";
+    router.push(newURL, { scroll: false });
+  };
 
   const highlightText = (text: string): React.ReactNode => {
     if (!searchTerm) return text;
@@ -154,6 +124,7 @@ export default function Home() {
           updateURL={updateURL}
         />
 
+        {/* About Me section */}
         <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             About Me
@@ -165,11 +136,13 @@ export default function Home() {
           ))}
         </section>
 
+        {/* Skills & Expertise section */}
         <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Skills & Expertise
           </h2>
           <div className="space-y-4">
+            {/* Top Skills */}
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
                 Top Skills Used in The Last 5 Years
@@ -177,20 +150,19 @@ export default function Home() {
               <div className="flex flex-wrap gap-2">
                 {filteredSkills.map(({ name, duration }) => (
                   <span
-                    key={name as Key}
+                    key={name}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
                     <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
-                      {highlightText(name as string)}
-                    </span>
+                    <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
-                      ({formatDuration(duration as number)})
+                      ({formatDuration(Number(duration))})
                     </span>
                   </span>
                 ))}
               </div>
             </div>
+            {/* Top Programming Languages */}
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
                 Top Programming Languages Used in The Last 5 Years
@@ -198,20 +170,19 @@ export default function Home() {
               <div className="flex flex-wrap gap-2">
                 {filteredLanguages.map(({ name, duration }) => (
                   <span
-                    key={name as Key}
+                    key={name}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
                     <Code className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
-                      {highlightText(name as string)}
-                    </span>
+                    <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
-                      ({formatDuration(duration as number)})
+                      ({formatDuration(Number(duration))})
                     </span>
                   </span>
                 ))}
               </div>
             </div>
+            {/* Top Frameworks & Libraries */}
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
                 Top Frameworks & Libraries Used in The Last 5 Years
@@ -219,15 +190,13 @@ export default function Home() {
               <div className="flex flex-wrap gap-2">
                 {filteredFrameworks.map(({ name, duration }) => (
                   <span
-                    key={name as Key}
+                    key={name}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
                     <Package className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
-                      {highlightText(name as string)}
-                    </span>
+                    <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
-                      ({formatDuration(duration as number)})
+                      ({formatDuration(Number(duration))})
                     </span>
                   </span>
                 ))}
@@ -236,6 +205,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Quick Links section */}
         <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Quick Links
@@ -258,6 +228,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Connect With Me section */}
         <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Connect With Me

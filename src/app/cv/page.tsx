@@ -20,7 +20,7 @@ import {
   Code,
   Package,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   CVEntry,
   cvData,
@@ -466,30 +466,23 @@ const SearchComponent = ({
 export default function CV() {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEntries = useMemo(
-    () =>
-      filterItems(cvData, searchTerm, [
-        "title",
-        "organization",
-        "details",
-        "skills",
-        "programmingLanguages",
-        "frameworks",
-        "links",
-        "employmentType",
-        "location",
-        "locationType",
-        "period",
-      ]),
-    [searchTerm]
-  );
+  const filteredEntries = filterItems(cvData, searchTerm, [
+    "title",
+    "organization",
+    "details",
+    "skills",
+    "programmingLanguages",
+    "frameworks",
+    "links",
+    "employmentType",
+    "location",
+    "locationType",
+    "period",
+  ]);
 
-  const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
-  const topLanguages = useMemo(() => getTopLanguagesLastFiveYears(cvData), []);
-  const topFrameworks = useMemo(
-    () => getTopFrameworksLastFiveYears(cvData),
-    []
-  );
+  const topSkills = getTopSkillsLastFiveYears(cvData);
+  const topLanguages = getTopLanguagesLastFiveYears(cvData);
+  const topFrameworks = getTopFrameworksLastFiveYears(cvData);
 
   const aboutEntry = filteredEntries.find((entry) => entry.type === "about");
   const workEntries = filteredEntries.filter((entry) => entry.type === "work");
