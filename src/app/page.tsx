@@ -2,11 +2,13 @@
 
 import { Briefcase, FolderOpen, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
-import { cvData } from "@/app/data";
+import { cvData, getTopSkillsLastFiveYears, formatDuration } from "@/app/data";
 import { Navigation } from "@/components/Navigation";
+import { useMemo } from "react";
 
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
+  const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
@@ -29,15 +31,18 @@ export default function Home() {
 
         <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
-            Skills
+            Top Skills (Last 5 Years)
           </h2>
           <div className="flex flex-wrap gap-2">
-            {aboutMe?.skills?.map((skill, index) => (
+            {topSkills.map(({ skill, duration }, index) => (
               <span
                 key={index}
-                className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm"
+                className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
               >
-                {skill}
+                <span className="mr-2">{skill}</span>
+                <span className="text-xs text-green-300">
+                  ({formatDuration(duration)})
+                </span>
               </span>
             ))}
           </div>
