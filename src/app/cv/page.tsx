@@ -17,6 +17,8 @@ import {
   ToggleLeft,
   ToggleRight,
   User,
+  Code,
+  Package,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
@@ -103,14 +105,17 @@ const CVEntryComponent = ({
         )}
       </p>
     )}
-    {entry.employmentType && entry.location && entry.locationType && (
-      <p className="mb-2 text-green-200">
-        {highlightText(
-          `${entry.employmentType} | ${entry.location} | ${entry.locationType}`,
-          searchTerm
-        )}
-      </p>
-    )}
+    {entry.type === "work" &&
+      entry.employmentType &&
+      entry.location &&
+      entry.locationType && (
+        <p className="mb-2 text-green-200">
+          {highlightText(
+            `${entry.employmentType} | ${entry.location} | ${entry.locationType}`,
+            searchTerm
+          )}
+        </p>
+      )}
     {entry.type === "work" ? (
       <ul className="list-disc list-inside mb-2 text-green-200">
         {entry.details.map((detail, index) => (
@@ -126,23 +131,56 @@ const CVEntryComponent = ({
         </p>
       ))
     )}
-    {entry.type === "about" && topSkills ? (
-      <DynamicSkillsComponent skills={topSkills} searchTerm={searchTerm} />
-    ) : entry.skills ? (
+    {entry.type === "work" && (
       <>
-        <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-          Skills
-        </h4>
-        <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
-          {entry.skills.map((skill, index) => (
-            <li key={index} className="flex items-center">
-              <Star className="w-4 h-4 mr-2 text-yellow-400" />
-              {highlightText(skill, searchTerm)}
-            </li>
-          ))}
-        </ul>
+        {entry.skills && (
+          <div className="mt-2">
+            <h4 className="text-md font-semibold text-yellow-400">Skills:</h4>
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+              {entry.skills.map((skill, index) => (
+                <li key={index} className="flex items-center">
+                  <Star className="w-4 h-4 mr-2 text-yellow-400" />
+                  {highlightText(skill, searchTerm)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {entry.programmingLanguages && (
+          <div className="mt-2">
+            <h4 className="text-md font-semibold text-yellow-400">
+              Programming Languages:
+            </h4>
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+              {entry.programmingLanguages.map((lang, index) => (
+                <li key={index} className="flex items-center">
+                  <Code className="w-4 h-4 mr-2 text-yellow-400" />
+                  {highlightText(lang, searchTerm)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {entry.frameworks && (
+          <div className="mt-2">
+            <h4 className="text-md font-semibold text-yellow-400">
+              Frameworks:
+            </h4>
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+              {entry.frameworks.map((framework, index) => (
+                <li key={index} className="flex items-center">
+                  <Package className="w-4 h-4 mr-2 text-yellow-400" />
+                  {highlightText(framework, searchTerm)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </>
-    ) : null}
+    )}
+    {entry.type === "about" && topSkills && (
+      <DynamicSkillsComponent skills={topSkills} searchTerm={searchTerm} />
+    )}
     {entry.links && (
       <div className="mt-4 flex flex-wrap gap-4">
         {Object.entries(entry.links).map(([key, value]) => (
