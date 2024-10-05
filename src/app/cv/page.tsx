@@ -521,33 +521,30 @@ export default function CV() {
     updateURL(item);
   };
 
-  const filteredEntries = filterItems(cvData, searchTerm, [
-    "title",
-    "organization",
-    "details",
-    "skills",
-    "programmingLanguages",
-    "frameworks",
-    "links",
-    "employmentType",
-    "location",
-    "locationType",
-    "period",
-  ]);
+  const filteredEntries =
+    filterItems(cvData, searchTerm, [
+      "title",
+      "organization",
+      "details",
+      "skills",
+      "programmingLanguages",
+      "frameworks",
+    ]) || []; // Provide an empty array as fallback
 
   const topSkills = getTopSkillsLastFiveYears(cvData);
   const topLanguages = getTopLanguagesLastFiveYears(cvData);
   const topFrameworks = getTopFrameworksLastFiveYears(cvData);
 
-  const aboutEntry = filteredEntries.find((entry) => entry.type === "about");
+  const aboutEntry =
+    filteredEntries.find((entry) => entry.type === "about") || null;
   const workEntries = filteredEntries.filter((entry) => entry.type === "work");
   const honorEntries = filteredEntries.filter(
     (entry) => entry.type === "honor"
   );
-  const certificationEntries = filteredEntries.filter(
-    (entry) => entry.type === "certification"
+  const licenseEntries = filteredEntries.filter(
+    (entry) => entry.type === "license"
   );
-  const languageEntry = filteredEntries.find(
+  const languageEntries = filteredEntries.filter(
     (entry) => entry.type === "language"
   );
   const educationEntries = filteredEntries.filter(
@@ -603,20 +600,20 @@ export default function CV() {
                 handleItemClick={handleItemClick}
               />
             </div>
-            <div id="certifications">
+            <div id="licenses">
               <CVSection
                 title="Licenses & Certifications"
-                entries={certificationEntries}
+                entries={licenseEntries}
                 icon={<FileCheck className="w-6 h-6" />}
                 searchTerm={searchTerm}
                 handleItemClick={handleItemClick}
               />
             </div>
-            {languageEntry && (
+            {languageEntries.length > 0 && (
               <div id="languages">
                 <CVSection
                   title="Languages"
-                  entries={[languageEntry]}
+                  entries={languageEntries}
                   icon={<Languages className="w-6 h-6" />}
                   searchTerm={searchTerm}
                   handleItemClick={handleItemClick}
