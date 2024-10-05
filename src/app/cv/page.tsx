@@ -56,31 +56,62 @@ const highlightText = (
 // Update the type definition for topSkills, topLanguages, and topFrameworks
 type TopItem = { name: string; duration: number };
 
+// Add this new component
+const ClickableItem = ({
+  name,
+  duration,
+  icon,
+  searchTerm,
+  handleItemClick,
+}: {
+  name: string;
+  duration: number;
+  icon: React.ReactNode;
+  searchTerm: string;
+  handleItemClick: (item: string) => void;
+}) => (
+  <button
+    onClick={() => handleItemClick(name)}
+    className="flex items-center justify-between w-full bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm hover:bg-gray-700 transition-colors duration-200"
+  >
+    <div className="flex items-center">
+      {icon}
+      {highlightText(name, searchTerm)}
+    </div>
+    <span className="text-xs text-green-300">
+      ({highlightText(formatDuration(duration), searchTerm)})
+    </span>
+  </button>
+);
+
+// Update the DynamicSkillsComponent
 const DynamicSkillsComponent = ({
   skills,
   languages,
   frameworks,
   searchTerm,
+  handleItemClick,
 }: {
   skills: TopItem[];
   languages: TopItem[];
   frameworks: TopItem[];
   searchTerm: string;
+  handleItemClick: (item: string) => void;
 }) => (
   <>
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
       Top Skills Used in The Last 5 Years
     </h4>
-    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
       {skills.map(({ name, duration }, index) => (
-        <li key={index} className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Star className="w-4 h-4 mr-2 text-yellow-400" />
-            {highlightText(name, searchTerm)}
-          </div>
-          <span className="text-sm text-green-300">
-            ({highlightText(formatDuration(duration), searchTerm)})
-          </span>
+        <li key={index}>
+          <ClickableItem
+            name={name}
+            duration={duration}
+            icon={<Star className="w-4 h-4 mr-2 text-yellow-400" />}
+            searchTerm={searchTerm}
+            handleItemClick={handleItemClick}
+          />
         </li>
       ))}
     </ul>
@@ -88,16 +119,16 @@ const DynamicSkillsComponent = ({
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
       Top Programming Languages Used in The Last 5 Years
     </h4>
-    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
       {languages.map(({ name, duration }, index) => (
-        <li key={index} className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Code className="w-4 h-4 mr-2 text-yellow-400" />
-            {highlightText(name, searchTerm)}
-          </div>
-          <span className="text-sm text-green-300">
-            ({highlightText(formatDuration(duration), searchTerm)})
-          </span>
+        <li key={index}>
+          <ClickableItem
+            name={name}
+            duration={duration}
+            icon={<Code className="w-4 h-4 mr-2 text-yellow-400" />}
+            searchTerm={searchTerm}
+            handleItemClick={handleItemClick}
+          />
         </li>
       ))}
     </ul>
@@ -105,16 +136,16 @@ const DynamicSkillsComponent = ({
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
       Top Frameworks & Libraries Used in The Last 5 Years
     </h4>
-    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
       {frameworks.map(({ name, duration }, index) => (
-        <li key={index} className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Package className="w-4 h-4 mr-2 text-yellow-400" />
-            {highlightText(name, searchTerm)}
-          </div>
-          <span className="text-sm text-green-300">
-            ({highlightText(formatDuration(duration), searchTerm)})
-          </span>
+        <li key={index}>
+          <ClickableItem
+            name={name}
+            duration={duration}
+            icon={<Package className="w-4 h-4 mr-2 text-yellow-400" />}
+            searchTerm={searchTerm}
+            handleItemClick={handleItemClick}
+          />
         </li>
       ))}
     </ul>
@@ -128,12 +159,14 @@ const CVEntryComponent = ({
   topSkills,
   topLanguages,
   topFrameworks,
+  handleItemClick,
 }: {
   entry: CVEntry;
   searchTerm: string;
   topSkills?: TopItem[];
   topLanguages?: TopItem[];
   topFrameworks?: TopItem[];
+  handleItemClick: (item: string) => void;
 }) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
     <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
@@ -185,11 +218,16 @@ const CVEntryComponent = ({
         {entry.skills && (
           <div className="mt-2">
             <h4 className="text-md font-semibold text-yellow-400">Skills:</h4>
-            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2">
               {entry.skills.map((skill, index) => (
-                <li key={index} className="flex items-center">
-                  <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                  {highlightText(skill, searchTerm)}
+                <li key={index}>
+                  <ClickableItem
+                    name={skill}
+                    duration={0} // We don't have duration for individual skills in work entries
+                    icon={<Star className="w-4 h-4 mr-2 text-yellow-400" />}
+                    searchTerm={searchTerm}
+                    handleItemClick={handleItemClick}
+                  />
                 </li>
               ))}
             </ul>
@@ -200,11 +238,16 @@ const CVEntryComponent = ({
             <h4 className="text-md font-semibold text-yellow-400">
               Programming Languages:
             </h4>
-            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2">
               {entry.programmingLanguages.map((lang, index) => (
-                <li key={index} className="flex items-center">
-                  <Code className="w-4 h-4 mr-2 text-yellow-400" />
-                  {highlightText(lang, searchTerm)}
+                <li key={index}>
+                  <ClickableItem
+                    name={lang}
+                    duration={0} // We don't have duration for individual languages in work entries
+                    icon={<Code className="w-4 h-4 mr-2 text-yellow-400" />}
+                    searchTerm={searchTerm}
+                    handleItemClick={handleItemClick}
+                  />
                 </li>
               ))}
             </ul>
@@ -215,11 +258,16 @@ const CVEntryComponent = ({
             <h4 className="text-md font-semibold text-yellow-400">
               Frameworks:
             </h4>
-            <ul className="list-none grid grid-cols-2 gap-2 mb-2 text-green-200">
+            <ul className="list-none grid grid-cols-2 gap-2 mb-2">
               {entry.frameworks.map((framework, index) => (
-                <li key={index} className="flex items-center">
-                  <Package className="w-4 h-4 mr-2 text-yellow-400" />
-                  {highlightText(framework, searchTerm)}
+                <li key={index}>
+                  <ClickableItem
+                    name={framework}
+                    duration={0} // We don't have duration for individual frameworks in work entries
+                    icon={<Package className="w-4 h-4 mr-2 text-yellow-400" />}
+                    searchTerm={searchTerm}
+                    handleItemClick={handleItemClick}
+                  />
                 </li>
               ))}
             </ul>
@@ -233,6 +281,7 @@ const CVEntryComponent = ({
         languages={topLanguages}
         frameworks={topFrameworks}
         searchTerm={searchTerm}
+        handleItemClick={handleItemClick}
       />
     )}
     {entry.links && (
@@ -287,6 +336,7 @@ const CVSection = ({
   topSkills,
   topLanguages,
   topFrameworks,
+  handleItemClick,
 }: {
   title: string;
   entries: CVEntry[];
@@ -295,6 +345,7 @@ const CVSection = ({
   topSkills?: TopItem[];
   topLanguages?: TopItem[];
   topFrameworks?: TopItem[];
+  handleItemClick: (item: string) => void;
 }) => (
   <div className="mb-8">
     <StickyHeader>
@@ -311,6 +362,7 @@ const CVSection = ({
         topSkills={topSkills}
         topLanguages={topLanguages}
         topFrameworks={topFrameworks}
+        handleItemClick={handleItemClick}
       />
     ))}
   </div>
@@ -328,11 +380,13 @@ const WorkExperienceSection = ({
   searchTerm,
   showRecentOnly,
   setShowRecentOnly,
+  handleItemClick,
 }: {
   entries: CVEntry[];
   searchTerm: string;
   showRecentOnly: boolean;
   setShowRecentOnly: (value: boolean) => void;
+  handleItemClick: (item: string) => void;
 }) => {
   const groupedEntries = entries.reduce((acc, entry) => {
     if (!acc[entry.organization]) {
@@ -440,6 +494,7 @@ const WorkExperienceSection = ({
                 key={index}
                 entry={entry}
                 searchTerm={searchTerm}
+                handleItemClick={handleItemClick}
               />
             ))}
         </div>
@@ -494,6 +549,11 @@ export default function CV() {
   const updateURL = (term: string) => {
     const newURL = term ? `/cv?search=${encodeURIComponent(term)}` : "/cv";
     router.push(newURL, { scroll: false });
+  };
+
+  const handleItemClick = (item: string) => {
+    setSearchTerm(item);
+    updateURL(item);
   };
 
   const filteredEntries = filterItems(cvData, searchTerm, [
@@ -555,6 +615,7 @@ export default function CV() {
                   topSkills={topSkills}
                   topLanguages={topLanguages}
                   topFrameworks={topFrameworks}
+                  handleItemClick={handleItemClick}
                 />
               </div>
             )}
@@ -564,6 +625,7 @@ export default function CV() {
                 searchTerm={searchTerm}
                 showRecentOnly={showRecentOnly}
                 setShowRecentOnly={setShowRecentOnly}
+                handleItemClick={handleItemClick}
               />
             </div>
             <div id="honors">
@@ -572,6 +634,7 @@ export default function CV() {
                 entries={honorEntries}
                 icon={<Award className="w-6 h-6" />}
                 searchTerm={searchTerm}
+                handleItemClick={handleItemClick}
               />
             </div>
             <div id="certifications">
@@ -580,6 +643,7 @@ export default function CV() {
                 entries={certificationEntries}
                 icon={<FileCheck className="w-6 h-6" />}
                 searchTerm={searchTerm}
+                handleItemClick={handleItemClick}
               />
             </div>
             {languageEntry && (
@@ -589,6 +653,7 @@ export default function CV() {
                   entries={[languageEntry]}
                   icon={<Languages className="w-6 h-6" />}
                   searchTerm={searchTerm}
+                  handleItemClick={handleItemClick}
                 />
               </div>
             )}
@@ -598,6 +663,7 @@ export default function CV() {
                 entries={educationEntries}
                 icon={<GraduationCap className="w-6 h-6" />}
                 searchTerm={searchTerm}
+                handleItemClick={handleItemClick}
               />
             </div>
           </>
