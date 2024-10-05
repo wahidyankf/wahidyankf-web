@@ -13,12 +13,12 @@ export type CVEntry =
       organization: string;
       period: string;
       employmentType?: string;
-      location?: string;
-      locationType?: string;
+      location: string;
+      locationType: string;
       details: string[];
-      skills?: string[];
-      programmingLanguages?: string[];
-      frameworks?: string[];
+      skills: string[];
+      programmingLanguages: string[];
+      frameworks: string[];
       links?: { [key: string]: string };
     }
   | {
