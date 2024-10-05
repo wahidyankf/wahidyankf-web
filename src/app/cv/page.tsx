@@ -46,12 +46,14 @@ const ClickableItem = ({
   icon,
   searchTerm,
   handleItemClick,
+  showDuration = true,
 }: {
   name: string;
   duration: number;
   icon: React.ReactNode;
   searchTerm: string;
   handleItemClick: (item: string) => void;
+  showDuration?: boolean;
 }) => (
   <button
     onClick={() => handleItemClick(name)}
@@ -61,10 +63,16 @@ const ClickableItem = ({
       {icon}
       <HighlightText text={name} searchTerm={searchTerm} />
     </div>
-    <span className="text-xs text-green-300">
-      (<HighlightText text={formatDuration(duration)} searchTerm={searchTerm} />
-      )
-    </span>
+    {showDuration && (
+      <span className="text-xs text-green-300">
+        (
+        <HighlightText
+          text={formatDuration(duration)}
+          searchTerm={searchTerm}
+        />
+        )
+      </span>
+    )}
   </button>
 );
 
@@ -207,10 +215,11 @@ const CVEntryComponent = ({
                 <li key={index}>
                   <ClickableItem
                     name={skill}
-                    duration={0} // We don't have duration for individual skills in work entries
+                    duration={0}
                     icon={<Star className="w-4 h-4 mr-2 text-yellow-400" />}
                     searchTerm={searchTerm}
                     handleItemClick={handleItemClick}
+                    showDuration={false}
                   />
                 </li>
               ))}
@@ -227,10 +236,11 @@ const CVEntryComponent = ({
                 <li key={index}>
                   <ClickableItem
                     name={lang}
-                    duration={0} // We don't have duration for individual languages in work entries
+                    duration={0}
                     icon={<Code className="w-4 h-4 mr-2 text-yellow-400" />}
                     searchTerm={searchTerm}
                     handleItemClick={handleItemClick}
+                    showDuration={false}
                   />
                 </li>
               ))}
@@ -247,10 +257,11 @@ const CVEntryComponent = ({
                 <li key={index}>
                   <ClickableItem
                     name={framework}
-                    duration={0} // We don't have duration for individual frameworks in work entries
+                    duration={0}
                     icon={<Package className="w-4 h-4 mr-2 text-yellow-400" />}
                     searchTerm={searchTerm}
                     handleItemClick={handleItemClick}
+                    showDuration={false}
                   />
                 </li>
               ))}
