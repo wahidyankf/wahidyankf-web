@@ -1,12 +1,22 @@
 "use client";
 
-import { Briefcase, FolderOpen, Github, Linkedin, Mail } from "lucide-react";
+import {
+  Briefcase,
+  FolderOpen,
+  Github,
+  Linkedin,
+  Mail,
+  Star,
+  Code,
+  Package,
+} from "lucide-react";
 import Link from "next/link";
 import {
   cvData,
   getTopSkillsLastFiveYears,
+  getTopLanguagesLastFiveYears,
+  getTopFrameworksLastFiveYears,
   formatDuration,
-  getLanguagesAndFrameworks,
 } from "@/app/data";
 import { Navigation } from "@/components/Navigation";
 import { useMemo } from "react";
@@ -15,8 +25,9 @@ import { parseMarkdownLinks } from "@/lib/utils/markdown";
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
   const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
-  const { languages, frameworks } = useMemo(
-    () => getLanguagesAndFrameworks(cvData),
+  const topLanguages = useMemo(() => getTopLanguagesLastFiveYears(cvData), []);
+  const topFrameworks = useMemo(
+    () => getTopFrameworksLastFiveYears(cvData),
     []
   );
 
@@ -46,7 +57,7 @@ export default function Home() {
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
-                Top Skills
+                Top Skills (Last 5 Years)
               </h3>
               <div className="flex flex-wrap gap-2">
                 {topSkills.map(({ name, duration }, index) => (
@@ -54,6 +65,7 @@ export default function Home() {
                     key={index}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
+                    <Star className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{name}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(duration)})
@@ -64,14 +76,15 @@ export default function Home() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
-                Programming Languages
+                Top Programming Languages (Last 5 Years)
               </h3>
               <div className="flex flex-wrap gap-2">
-                {languages.map(({ name, duration }, index) => (
+                {topLanguages.map(({ name, duration }, index) => (
                   <span
                     key={index}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
+                    <Code className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{name}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(duration)})
@@ -82,14 +95,15 @@ export default function Home() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2 text-green-300">
-                Frameworks & Libraries
+                Top Frameworks & Libraries (Last 5 Years)
               </h3>
               <div className="flex flex-wrap gap-2">
-                {frameworks.map(({ name, duration }, index) => (
+                {topFrameworks.map(({ name, duration }, index) => (
                   <span
                     key={index}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
                   >
+                    <Package className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{name}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(duration)})

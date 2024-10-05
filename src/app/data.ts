@@ -550,6 +550,9 @@ export function getLanguagesAndFrameworks(data: CVEntry[]): {
   languages: { name: string; duration: number }[];
   frameworks: { name: string; duration: number }[];
 } {
+  const fiveYearsAgo = new Date();
+  fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
+
   const workEntries = data.filter(
     (entry): entry is CVEntry & { type: "work" } => entry.type === "work"
   );
@@ -567,19 +570,28 @@ export function getLanguagesAndFrameworks(data: CVEntry[]): {
     const start = parseDate(startStr);
     const end = endStr === "Present" ? new Date() : parseDate(endStr);
 
-    entry.programmingLanguages?.forEach((lang) => {
-      if (!languageInfo[lang]) {
-        languageInfo[lang] = { periods: [] };
-      }
-      languageInfo[lang].periods.push({ start, end });
-    });
+    // Only consider entries that end after or during the last 5 years
+    if (end >= fiveYearsAgo) {
+      entry.programmingLanguages?.forEach((lang) => {
+        if (!languageInfo[lang]) {
+          languageInfo[lang] = { periods: [] };
+        }
+        languageInfo[lang].periods.push({
+          start: start < fiveYearsAgo ? fiveYearsAgo : start,
+          end,
+        });
+      });
 
-    entry.frameworks?.forEach((framework) => {
-      if (!frameworkInfo[framework]) {
-        frameworkInfo[framework] = { periods: [] };
-      }
-      frameworkInfo[framework].periods.push({ start, end });
-    });
+      entry.frameworks?.forEach((framework) => {
+        if (!frameworkInfo[framework]) {
+          frameworkInfo[framework] = { periods: [] };
+        }
+        frameworkInfo[framework].periods.push({
+          start: start < fiveYearsAgo ? fiveYearsAgo : start,
+          end,
+        });
+      });
+    }
   });
 
   const languages = Object.entries(languageInfo)

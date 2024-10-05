@@ -64,7 +64,7 @@ const DynamicSkillsComponent = ({
 }) => (
   <>
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-      Top Skills Used in The Last 5 Years (with Total Experience)
+      Top Skills Used in The Last 5 Years
     </h4>
     <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
       {skills.map(({ name, duration }, index) => (
@@ -81,7 +81,7 @@ const DynamicSkillsComponent = ({
     </ul>
 
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-      Top Programming Languages Used in The Last 5 Years (with Total Experience)
+      Top Programming Languages Used in The Last 5 Years
     </h4>
     <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
       {languages.map(({ name, duration }, index) => (
@@ -98,7 +98,7 @@ const DynamicSkillsComponent = ({
     </ul>
 
     <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
-      Top Frameworks Used in The Last 5 Years (with Total Experience)
+      Top Frameworks & Libraries Used in The Last 5 Years
     </h4>
     <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4 text-green-200">
       {frameworks.map(({ name, duration }, index) => (
