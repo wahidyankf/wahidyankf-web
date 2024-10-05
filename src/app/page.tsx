@@ -121,6 +121,10 @@ export default function Home() {
       }
     : null;
 
+  const handleItemClick = (item: string) => {
+    router.push(`/cv?search=${encodeURIComponent(item)}`);
+  };
+
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
       <Navigation activePage="home" />
@@ -166,16 +170,17 @@ export default function Home() {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {filteredSkills.map(({ name, duration }) => (
-                  <span
+                  <button
                     key={name}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                    onClick={() => handleItemClick(name)}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Star className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -186,16 +191,17 @@ export default function Home() {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {filteredLanguages.map(({ name, duration }) => (
-                  <span
+                  <button
                     key={name}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                    onClick={() => handleItemClick(name)}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Code className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -206,16 +212,17 @@ export default function Home() {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {filteredFrameworks.map(({ name, duration }) => (
-                  <span
+                  <button
                     key={name}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                    onClick={() => handleItemClick(name)}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Package className="w-4 h-4 mr-2 text-yellow-400" />
                     <span className="mr-2">{highlightText(name)}</span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
