@@ -15,7 +15,7 @@ describe("Navigation", () => {
 
   it("renders desktop navigation", () => {
     render(<Navigation activePage="home" />);
-    expect(screen.getByText("organiclever")).toBeInTheDocument();
+    expect(screen.getByText("WahidyanKF")).toBeInTheDocument();
     expect(screen.getByText("home.tsx")).toBeInTheDocument();
     expect(screen.getByText("cv.tsx")).toBeInTheDocument();
     expect(screen.getByText("personal-projects.tsx")).toBeInTheDocument();
