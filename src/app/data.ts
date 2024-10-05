@@ -109,7 +109,7 @@ export const cvData: CVEntry[] = [
       "Frontend Engineering",
       "Backend Engineering",
       "Software Testing",
-      "Systems Design",
+      "System Design",
       "Software Engineering",
     ],
     programmingLanguages: ["JavaScript", "Python", "TypeScript", "SQL"],
@@ -135,7 +135,7 @@ export const cvData: CVEntry[] = [
     ],
     skills: [
       "Engineering Management",
-      "Systems Design",
+      "System Design",
       "Frontend Engineering",
       "Software Engineering",
       "Software Testing",
@@ -164,7 +164,7 @@ export const cvData: CVEntry[] = [
     ],
     skills: [
       "Engineering Management",
-      "Systems Design",
+      "System Design",
       "Backend Engineering",
       "Frontend Engineering",
       "Software Engineering",
@@ -193,7 +193,7 @@ export const cvData: CVEntry[] = [
       "I was involved in Ruangguru's FE engineering committee and influenced its road map. One of the results was that Ruangguru's FE team quickly (i.e., about four weeks from the initial discussion) converged the convention and technological stacks for the then-new TypeScript adoption in Ruangguru's FE future projects.",
       "Heavily involved in Ruangguru's new FE engineer hiring. This involvement results in a faster FE engineering hiring process while ensuring only technical and culturally fit candidates pass. I also streamlined the FE team's onboarding process by creating documents and guides, resulting in a faster, more precise, and smoother onboarding for the new engineers while making it more scalable and reproducible.",
     ],
-    skills: ["Frontend Engineering", "Systems Design", "Software Engineering"],
+    skills: ["Frontend Engineering", "System Design", "Software Engineering"],
     programmingLanguages: [
       "JavaScript",
       "TypeScript",
