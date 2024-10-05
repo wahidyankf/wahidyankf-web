@@ -3,7 +3,7 @@
 import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import { Github, Globe, Youtube } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
@@ -89,16 +89,13 @@ export default function Projects() {
     router.push(newURL, { scroll: false });
   };
 
-  const filteredProjects = useMemo(
-    () =>
-      filterItems(projects, searchTerm, [
-        "title",
-        "description",
-        "details",
-        "links",
-      ]),
-    [searchTerm]
-  );
+  // Remove useMemo and directly filter projects
+  const filteredProjects = filterItems(projects, searchTerm, [
+    "title",
+    "description",
+    "details",
+    "links",
+  ]);
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
