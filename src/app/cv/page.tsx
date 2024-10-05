@@ -32,7 +32,6 @@ import {
   getTopLanguagesLastFiveYears,
   getTopFrameworksLastFiveYears,
 } from "../data";
-import { parseMarkdownLinks } from "@/lib/utils/markdown";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
 
