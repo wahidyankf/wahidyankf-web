@@ -409,30 +409,37 @@ export const getTopSkillsLastFiveYears = (
 
   const allWorkEntries = data.filter((entry) => entry.type === "work");
 
-  const skillInfo: { [key: string]: { count: number; duration: number } } = {};
+  const skillInfo: {
+    [key: string]: { count: number; periods: { start: Date; end: Date }[] };
+  } = {};
 
-  // Count occurrences in recent entries
-  recentWorkEntries.forEach((entry) => {
+  // Count occurrences in recent entries and collect all periods for each skill
+  allWorkEntries.forEach((entry) => {
+    const [startStr, endStr] = entry.period.split(" - ");
+    const start = parseDate(startStr);
+    const end = endStr === "Present" ? new Date() : parseDate(endStr);
+
     entry.skills?.forEach((skill) => {
       if (!skillInfo[skill]) {
-        skillInfo[skill] = { count: 0, duration: 0 };
+        skillInfo[skill] = { count: 0, periods: [] };
       }
-      skillInfo[skill].count += 1;
+      if (end >= fiveYearsAgo) {
+        skillInfo[skill].count += 1;
+      }
+      skillInfo[skill].periods.push({ start, end });
     });
   });
 
-  // Calculate total duration from all work entries
-  allWorkEntries.forEach((entry) => {
-    const duration = calculateDuration(entry.period);
-    entry.skills?.forEach((skill) => {
-      if (skillInfo[skill]) {
-        skillInfo[skill].duration += duration;
-      }
-    });
-  });
+  // Calculate total duration for each skill
+  const skillDurations = Object.entries(skillInfo).map(([skill, info]) => ({
+    skill,
+    duration: calculateTotalDuration(info.periods),
+    count: info.count,
+  }));
 
-  return Object.entries(skillInfo)
-    .sort((a, b) => b[1].count - a[1].count)
+  // Sort by count (for skills used in last 5 years) and then by duration
+  return skillDurations
+    .sort((a, b) => b.count - a.count || b.duration - a.duration)
     .slice(0, 10)
-    .map(([skill, info]) => ({ skill, duration: info.duration }));
+    .map(({ skill, duration }) => ({ skill, duration }));
 };
