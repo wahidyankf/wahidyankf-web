@@ -344,12 +344,43 @@ export const calculateDuration = (period: string): number => {
   const startDate = parseDate(start);
   const endDate = end === "Present" ? new Date() : parseDate(end);
 
-  return (
+  // Calculate full months
+  const months =
     (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-    endDate.getMonth() -
-    startDate.getMonth() +
-    (endDate.getDate() >= startDate.getDate() ? 1 : 0)
-  );
+    (endDate.getMonth() - startDate.getMonth());
+
+  // Add 1 to include both start and end months
+  return months + 1;
+};
+
+export const calculateTotalDuration = (
+  periods: { start: Date; end: Date }[]
+): number => {
+  if (periods.length === 0) return 0;
+
+  // Sort periods by start date
+  periods.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  let totalMonths = 0;
+  let currentEnd = new Date(0); // Initialize with the earliest possible date
+
+  for (const period of periods) {
+    const startDate = period.start > currentEnd ? period.start : currentEnd;
+    const endDate = period.end;
+
+    if (startDate < endDate) {
+      // Calculate months, always including start and end months
+      const monthsDiff =
+        (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+        (endDate.getMonth() - startDate.getMonth()) +
+        1; // Add 1 to include both start and end months
+
+      totalMonths += monthsDiff;
+      currentEnd = endDate > currentEnd ? endDate : currentEnd;
+    }
+  }
+
+  return totalMonths;
 };
 
 export const formatDuration = (months: number): string => {
@@ -365,39 +396,6 @@ export const formatDuration = (months: number): string => {
   } else {
     return `${remainingMonths} month${remainingMonths > 1 ? "s" : ""}`;
   }
-};
-
-export const calculateTotalDuration = (
-  periods: { start: Date; end: Date }[]
-): number => {
-  if (periods.length === 0) return 0;
-
-  // Sort periods by start date
-  periods.sort((a, b) => a.start.getTime() - b.start.getTime());
-
-  let totalMonths = 0;
-  let currentEnd = periods[0].start;
-
-  for (const period of periods) {
-    if (period.start > currentEnd) {
-      // New non-overlapping period
-      currentEnd = period.start;
-    }
-    if (period.end > currentEnd) {
-      // Add the non-overlapping part of the period
-      totalMonths += calculateDuration(
-        `${currentEnd.toLocaleString("default", {
-          month: "long",
-        })} ${currentEnd.getFullYear()} - ${period.end.toLocaleString(
-          "default",
-          { month: "long" }
-        )} ${period.end.getFullYear()}`
-      );
-      currentEnd = period.end;
-    }
-  }
-
-  return totalMonths;
 };
 
 export const getTopSkillsLastFiveYears = (
