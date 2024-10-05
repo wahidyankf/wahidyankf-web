@@ -545,3 +545,56 @@ export const getTopFrameworksLastFiveYears = (
     .slice(0, 10)
     .map(({ name, duration }) => ({ name, duration }));
 };
+
+export function getLanguagesAndFrameworks(data: CVEntry[]): {
+  languages: { name: string; duration: number }[];
+  frameworks: { name: string; duration: number }[];
+} {
+  const workEntries = data.filter(
+    (entry): entry is CVEntry & { type: "work" } => entry.type === "work"
+  );
+  const languageInfo: {
+    [key: string]: { periods: { start: Date; end: Date }[] };
+  } = {};
+  const frameworkInfo: {
+    [key: string]: { periods: { start: Date; end: Date }[] };
+  } = {};
+
+  workEntries.forEach((entry) => {
+    if (!entry.period) return;
+    const [startStr, endStr] = entry.period.split(" - ");
+    if (!startStr || !endStr) return;
+    const start = parseDate(startStr);
+    const end = endStr === "Present" ? new Date() : parseDate(endStr);
+
+    entry.programmingLanguages?.forEach((lang) => {
+      if (!languageInfo[lang]) {
+        languageInfo[lang] = { periods: [] };
+      }
+      languageInfo[lang].periods.push({ start, end });
+    });
+
+    entry.frameworks?.forEach((framework) => {
+      if (!frameworkInfo[framework]) {
+        frameworkInfo[framework] = { periods: [] };
+      }
+      frameworkInfo[framework].periods.push({ start, end });
+    });
+  });
+
+  const languages = Object.entries(languageInfo)
+    .map(([name, info]) => ({
+      name,
+      duration: calculateTotalDuration(info.periods),
+    }))
+    .sort((a, b) => b.duration - a.duration);
+
+  const frameworks = Object.entries(frameworkInfo)
+    .map(([name, info]) => ({
+      name,
+      duration: calculateTotalDuration(info.periods),
+    }))
+    .sort((a, b) => b.duration - a.duration);
+
+  return { languages, frameworks };
+}

@@ -2,7 +2,12 @@
 
 import { Briefcase, FolderOpen, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
-import { cvData, getTopSkillsLastFiveYears, formatDuration } from "@/app/data";
+import {
+  cvData,
+  getTopSkillsLastFiveYears,
+  formatDuration,
+  getLanguagesAndFrameworks,
+} from "@/app/data";
 import { Navigation } from "@/components/Navigation";
 import { useMemo } from "react";
 import { parseMarkdownLinks } from "@/lib/utils/markdown";
@@ -10,6 +15,10 @@ import { parseMarkdownLinks } from "@/lib/utils/markdown";
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
   const topSkills = useMemo(() => getTopSkillsLastFiveYears(cvData), []);
+  const { languages, frameworks } = useMemo(
+    () => getLanguagesAndFrameworks(cvData),
+    []
+  );
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
@@ -19,7 +28,7 @@ export default function Home() {
           Welcome to My Portfolio
         </h1>
 
-        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             About Me
           </h2>
@@ -28,28 +37,71 @@ export default function Home() {
               {parseMarkdownLinks(detail)}
             </p>
           ))}
-        </div>
+        </section>
 
-        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
-            Top Skills (Last 5 Years)
+            Skills & Expertise
           </h2>
-          <div className="flex flex-wrap gap-2">
-            {topSkills.map(({ skill, duration }, index) => (
-              <span
-                key={index}
-                className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
-              >
-                <span className="mr-2">{skill}</span>
-                <span className="text-xs text-green-300">
-                  ({formatDuration(duration)})
-                </span>
-              </span>
-            ))}
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold mb-2 text-green-300">
+                Top Skills
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {topSkills.map(({ name, duration }, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                  >
+                    <span className="mr-2">{name}</span>
+                    <span className="text-xs text-green-300">
+                      ({formatDuration(duration)})
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2 text-green-300">
+                Programming Languages
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {languages.map(({ name, duration }, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                  >
+                    <span className="mr-2">{name}</span>
+                    <span className="text-xs text-green-300">
+                      ({formatDuration(duration)})
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2 text-green-300">
+                Frameworks & Libraries
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {frameworks.map(({ name, duration }, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center"
+                  >
+                    <span className="mr-2">{name}</span>
+                    <span className="text-xs text-green-300">
+                      ({formatDuration(duration)})
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Quick Links
           </h2>
@@ -69,9 +121,9 @@ export default function Home() {
               Browse My Personal Projects
             </Link>
           </div>
-        </div>
+        </section>
 
-        <div className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Connect With Me
           </h2>
@@ -92,7 +144,7 @@ export default function Home() {
                 </a>
               ))}
           </div>
-        </div>
+        </section>
       </div>
     </main>
   );
