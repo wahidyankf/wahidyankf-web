@@ -2,9 +2,11 @@
 
 import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
-import { Github, Globe, Search, Youtube, X } from "lucide-react";
+import { Github, Globe, Youtube } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SearchComponent } from "@/components/SearchComponent";
+import { HighlightText } from "@/components/HighlightText";
 
 type Project = {
   title: string;
@@ -70,63 +72,6 @@ const LinkIcon = ({ type }: { type: string }) => {
   }
 };
 
-const highlightText = (text: string, searchTerm: string) => {
-  if (!searchTerm) return text;
-  const regex = new RegExp(`(${searchTerm})`, "gi");
-  return text.split(regex).map((part, index) =>
-    regex.test(part) ? (
-      <mark key={index} className="bg-yellow-300 text-gray-900">
-        {part}
-      </mark>
-    ) : (
-      part
-    )
-  );
-};
-
-const SearchComponent = ({
-  searchTerm,
-  setSearchTerm,
-  updateURL,
-}: {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  updateURL: (term: string) => void;
-}) => {
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTerm = e.target.value;
-    setSearchTerm(newTerm);
-    updateURL(newTerm);
-  };
-
-  const clearSearch = () => {
-    setSearchTerm("");
-    updateURL("");
-  };
-
-  return (
-    <div className="mb-8 relative">
-      <input
-        type="text"
-        placeholder="Search projects..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 pr-12 focus:outline-none focus:ring-2 focus:ring-green-400"
-      />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-      {searchTerm && (
-        <button
-          onClick={clearSearch}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition-colors duration-200 rounded-full p-1"
-          aria-label="Clear search"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      )}
-    </div>
-  );
-};
-
 export default function Projects() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -167,6 +112,7 @@ export default function Projects() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           updateURL={updateURL}
+          placeholder="Search projects..."
         />
 
         {filteredProjects.length > 0 ? (
@@ -177,15 +123,18 @@ export default function Projects() {
               className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200"
             >
               <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
-                {highlightText(project.title, searchTerm)}
+                <HighlightText text={project.title} searchTerm={searchTerm} />
               </h2>
               <p className="mb-2 text-green-300">
-                {highlightText(project.description, searchTerm)}
+                <HighlightText
+                  text={project.description}
+                  searchTerm={searchTerm}
+                />
               </p>
               <ul className="list-disc list-inside mb-2 text-green-200">
                 {project.details.map((detail, index) => (
                   <li key={index} className="mb-1">
-                    {highlightText(detail, searchTerm)}
+                    <HighlightText text={detail} searchTerm={searchTerm} />
                   </li>
                 ))}
               </ul>
@@ -199,10 +148,10 @@ export default function Projects() {
                     className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"
                   >
                     <LinkIcon type={key} />
-                    {highlightText(
-                      key.charAt(0).toUpperCase() + key.slice(1),
-                      searchTerm
-                    )}
+                    <HighlightText
+                      text={key.charAt(0).toUpperCase() + key.slice(1)}
+                      searchTerm={searchTerm}
+                    />
                   </a>
                 ))}
               </div>

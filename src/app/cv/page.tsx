@@ -12,14 +12,12 @@ import {
   Languages,
   Linkedin,
   Mail,
-  Search,
   Star,
   ToggleLeft,
   ToggleRight,
   User,
   Code,
   Package,
-  X,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -35,24 +33,8 @@ import {
   getTopFrameworksLastFiveYears,
 } from "../data";
 import { parseMarkdownLinks } from "@/lib/utils/markdown";
-
-const highlightText = (
-  text: string | React.ReactNode,
-  searchTerm: string
-): React.ReactNode => {
-  if (typeof text !== "string") return text;
-  if (!searchTerm) return text;
-  const regex = new RegExp(`(${searchTerm})`, "gi");
-  return text.split(regex).map((part, index) =>
-    regex.test(part) ? (
-      <mark key={index} className="bg-yellow-300 text-gray-900">
-        {part}
-      </mark>
-    ) : (
-      part
-    )
-  );
-};
+import { SearchComponent } from "@/components/SearchComponent";
+import { HighlightText } from "@/components/HighlightText";
 
 // Update the type definition for topSkills, topLanguages, and topFrameworks
 type TopItem = { name: string; duration: number };
@@ -77,10 +59,11 @@ const ClickableItem = ({
   >
     <div className="flex items-center">
       {icon}
-      {highlightText(name, searchTerm)}
+      <HighlightText text={name} searchTerm={searchTerm} />
     </div>
     <span className="text-xs text-green-300">
-      ({highlightText(formatDuration(duration), searchTerm)})
+      (<HighlightText text={formatDuration(duration)} searchTerm={searchTerm} />
+      )
     </span>
   </button>
 );
@@ -171,18 +154,18 @@ const CVEntryComponent = ({
 }) => (
   <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
     <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
-      {highlightText(entry.title, searchTerm)}
+      <HighlightText text={entry.title} searchTerm={searchTerm} />
     </h3>
     {entry.period && (
       <p className="mb-2 text-green-300">
-        {highlightText(entry.period, searchTerm)}
+        <HighlightText text={entry.period} searchTerm={searchTerm} />
         {entry.type === "work" && (
           <span className="ml-2 text-yellow-400">
             (
-            {highlightText(
-              formatDuration(calculateDuration(entry.period)),
-              searchTerm
-            )}
+            <HighlightText
+              text={formatDuration(calculateDuration(entry.period))}
+              searchTerm={searchTerm}
+            />
             )
           </span>
         )}
@@ -193,24 +176,24 @@ const CVEntryComponent = ({
       entry.location &&
       entry.locationType && (
         <p className="mb-2 text-green-200">
-          {highlightText(
-            `${entry.employmentType} | ${entry.location} | ${entry.locationType}`,
-            searchTerm
-          )}
+          <HighlightText
+            text={`${entry.employmentType} | ${entry.location} | ${entry.locationType}`}
+            searchTerm={searchTerm}
+          />
         </p>
       )}
     {entry.type === "work" ? (
       <ul className="list-disc list-inside mb-2 text-green-200">
         {entry.details.map((detail, index) => (
           <li key={index} className="mb-1">
-            {highlightText(detail, searchTerm)}
+            <HighlightText text={detail} searchTerm={searchTerm} />
           </li>
         ))}
       </ul>
     ) : (
       entry.details.map((detail, index) => (
         <p key={index} className="mb-2 text-green-200">
-          {highlightText(detail, searchTerm)}
+          <HighlightText text={detail} searchTerm={searchTerm} />
         </p>
       ))
     )}
@@ -301,22 +284,24 @@ const CVEntryComponent = ({
             {key === "website" && <Globe className="w-4 h-4 mr-1" />}
             {key === "email" && <Mail className="w-4 h-4 mr-1" />}
             {key === "credential" && <FileCheck className="w-4 h-4 mr-1" />}
-            {highlightText(
-              key === "github"
-                ? "GitHub"
-                : key === "githubOrg"
-                ? "GitHub (Org)"
-                : key === "linkedin"
-                ? "LinkedIn"
-                : key === "website"
-                ? "Website"
-                : key === "email"
-                ? "Email"
-                : key === "credential"
-                ? "View Credential"
-                : key,
-              searchTerm
-            )}
+            <HighlightText
+              text={
+                key === "github"
+                  ? "GitHub"
+                  : key === "githubOrg"
+                  ? "GitHub (Org)"
+                  : key === "linkedin"
+                  ? "LinkedIn"
+                  : key === "website"
+                  ? "Website"
+                  : key === "email"
+                  ? "Email"
+                  : key === "credential"
+                  ? "View Credential"
+                  : key
+              }
+              searchTerm={searchTerm}
+            />
           </a>
         ))}
       </div>
@@ -328,7 +313,7 @@ const StickyHeader = ({ children }: { children: React.ReactNode }) => (
   <div className="sticky top-0 z-10 bg-gray-900 py-2 mb-4">{children}</div>
 );
 
-// Update the CVSection prop types
+// Update the CVSection component
 const CVSection = ({
   title,
   entries,
@@ -347,27 +332,31 @@ const CVSection = ({
   topLanguages?: TopItem[];
   topFrameworks?: TopItem[];
   handleItemClick: (item: string) => void;
-}) => (
-  <div className="mb-8">
-    <StickyHeader>
-      <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
-        {icon}
-        <span className="ml-2">{highlightText(title, searchTerm)}</span>
-      </h2>
-    </StickyHeader>
-    {entries.map((entry, index) => (
-      <CVEntryComponent
-        key={index}
-        entry={entry}
-        searchTerm={searchTerm}
-        topSkills={topSkills}
-        topLanguages={topLanguages}
-        topFrameworks={topFrameworks}
-        handleItemClick={handleItemClick}
-      />
-    ))}
-  </div>
-);
+}) => {
+  return (
+    <div className="mb-8">
+      <StickyHeader>
+        <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
+          {icon}
+          <span className="ml-2">
+            <HighlightText text={title} searchTerm={searchTerm} />
+          </span>
+        </h2>
+      </StickyHeader>
+      {entries.map((entry, index) => (
+        <CVEntryComponent
+          key={index}
+          entry={entry}
+          searchTerm={searchTerm}
+          topSkills={topSkills}
+          topLanguages={topLanguages}
+          topFrameworks={topFrameworks}
+          handleItemClick={handleItemClick}
+        />
+      ))}
+    </div>
+  );
+};
 
 const isWithinLastFiveYears = (endDate: string): boolean => {
   const date = endDate === "Present" ? new Date() : parseDate(endDate);
@@ -451,7 +440,7 @@ const WorkExperienceSection = ({
         <div className="flex justify-between items-center">
           <h2 className="text-xl sm:text-2xl md:text-3xl text-yellow-400 flex items-center">
             <Briefcase className="w-6 h-6 mr-2" />
-            {highlightText("Work Experience", searchTerm)}
+            <HighlightText text="Work Experience" searchTerm={searchTerm} />
           </h2>
           <div className="flex items-center">
             <span className="text-sm text-green-300 mr-2">
@@ -470,7 +459,8 @@ const WorkExperienceSection = ({
           </div>
         </div>
         <div className="text-sm text-green-300 mt-2">
-          Total: {highlightText(totalWorkExperience, searchTerm)}
+          Total:{" "}
+          <HighlightText text={totalWorkExperience} searchTerm={searchTerm} />
         </div>
       </StickyHeader>
       {filteredOrganizations.map((organization) => (
@@ -479,10 +469,15 @@ const WorkExperienceSection = ({
           className="mb-6 border border-green-400 rounded-lg p-4"
         >
           <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400 flex justify-between items-center">
-            <span>{highlightText(organization, searchTerm)}</span>
+            <span>
+              <HighlightText text={organization} searchTerm={searchTerm} />
+            </span>
             <span className="text-sm text-green-300">
               Total:{" "}
-              {highlightText(organizationDurations[organization], searchTerm)}
+              <HighlightText
+                text={organizationDurations[organization]}
+                searchTerm={searchTerm}
+              />
             </span>
           </h3>
           {groupedEntries[organization]
@@ -500,51 +495,6 @@ const WorkExperienceSection = ({
             ))}
         </div>
       ))}
-    </div>
-  );
-};
-
-const SearchComponent = ({
-  searchTerm,
-  setSearchTerm,
-  updateURL,
-}: {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  updateURL: (term: string) => void;
-}) => {
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTerm = e.target.value;
-    setSearchTerm(newTerm);
-    updateURL(newTerm);
-  };
-
-  const clearSearch = () => {
-    setSearchTerm("");
-    updateURL("");
-  };
-
-  return (
-    <div className="sticky top-0 z-50 bg-gray-900 py-4">
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Search CV entries..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 pr-12 focus:outline-none focus:ring-2 focus:ring-green-400"
-        />
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-        {searchTerm && (
-          <button
-            onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition-colors duration-200 rounded-full p-1"
-            aria-label="Clear search"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
     </div>
   );
 };
@@ -616,6 +566,7 @@ export default function CV() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           updateURL={updateURL}
+          placeholder="Search CV entries..."
         />
 
         {filteredEntries.length > 0 ? (

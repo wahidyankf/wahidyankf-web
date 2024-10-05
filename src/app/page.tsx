@@ -9,8 +9,6 @@ import {
   Star,
   Code,
   Package,
-  Search,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -23,51 +21,9 @@ import {
 } from "@/app/data";
 import { Navigation } from "@/components/Navigation";
 import { useState, useEffect } from "react";
-import { parseMarkdownLinks } from "@/lib/utils/markdown";
 import { filterItems } from "@/utils/search";
-
-const SearchComponent = ({
-  searchTerm,
-  setSearchTerm,
-  updateURL,
-}: {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  updateURL: (term: string) => void;
-}) => {
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTerm = e.target.value;
-    setSearchTerm(newTerm);
-    updateURL(newTerm);
-  };
-
-  const clearSearch = () => {
-    setSearchTerm("");
-    updateURL("");
-  };
-
-  return (
-    <div className="mb-8 relative">
-      <input
-        type="text"
-        placeholder="Search skills, languages, or frameworks..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 pr-12 focus:outline-none focus:ring-2 focus:ring-green-400"
-      />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
-      {searchTerm && (
-        <button
-          onClick={clearSearch}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-yellow-400 text-gray-900 hover:bg-yellow-300 transition-colors duration-200 rounded-full p-1"
-          aria-label="Clear search"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      )}
-    </div>
-  );
-};
+import { SearchComponent } from "@/components/SearchComponent";
+import { HighlightText } from "@/components/HighlightText";
 
 export default function Home() {
   const router = useRouter();
@@ -111,21 +67,6 @@ export default function Home() {
     router.push(newURL, { scroll: false });
   };
 
-  const highlightText = (text: string | React.ReactNode): React.ReactNode => {
-    if (typeof text !== "string") return text;
-    if (!searchTerm) return text;
-    const regex = new RegExp(`(${searchTerm})`, "gi");
-    return text.split(regex).map((part, index) =>
-      regex.test(part) ? (
-        <mark key={index} className="bg-yellow-300 text-gray-900">
-          {part}
-        </mark>
-      ) : (
-        part
-      )
-    );
-  };
-
   const filteredAboutMe = aboutMe
     ? {
         ...aboutMe,
@@ -152,6 +93,7 @@ export default function Home() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           updateURL={updateURL}
+          placeholder="Search skills, languages, or frameworks..."
         />
 
         {/* About Me section */}
@@ -162,7 +104,7 @@ export default function Home() {
           {filteredAboutMe && filteredAboutMe.details.length > 0 ? (
             filteredAboutMe.details.map((detail, index) => (
               <p key={index} className="mb-4 text-green-300">
-                {parseMarkdownLinks(highlightText(detail))}
+                <HighlightText text={detail} searchTerm={searchTerm} />
               </p>
             ))
           ) : (
@@ -191,7 +133,9 @@ export default function Home() {
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">{highlightText(name)}</span>
+                    <span className="mr-2">
+                      <HighlightText text={name} searchTerm={searchTerm} />
+                    </span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
@@ -212,7 +156,9 @@ export default function Home() {
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Code className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">{highlightText(name)}</span>
+                    <span className="mr-2">
+                      <HighlightText text={name} searchTerm={searchTerm} />
+                    </span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
@@ -233,7 +179,9 @@ export default function Home() {
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Package className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">{highlightText(name)}</span>
+                    <span className="mr-2">
+                      <HighlightText text={name} searchTerm={searchTerm} />
+                    </span>
                     <span className="text-xs text-green-300">
                       ({formatDuration(Number(duration))})
                     </span>
