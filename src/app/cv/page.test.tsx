@@ -6,6 +6,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const mockPush = vi.fn();
 const mockGet = vi.fn();
 
+// Add this mock for window.scrollTo
+vi.stubGlobal("scrollTo", vi.fn());
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
@@ -88,6 +91,9 @@ describe("CV component", () => {
 
     mockGet.mockReturnValue("");
     vi.clearAllMocks();
+
+    // Reset the scrollTo mock
+    vi.mocked(window.scrollTo).mockReset();
   });
 
   it("renders the main sections", async () => {
@@ -167,5 +173,6 @@ describe("CV component", () => {
     fireEvent.click(skillButtons[0]);
     expect(mockPush).toHaveBeenCalled();
     expect(mockPush.mock.calls[0][0]).toMatch(/^\/cv\?search=React/);
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 });
