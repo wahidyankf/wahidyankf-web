@@ -34,6 +34,7 @@ import {
 } from "../data";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
+import { Suspense } from "react";
 
 // Update the type definition for topSkills, topLanguages, and topFrameworks
 type TopItem = { name: string; duration: number };
@@ -499,7 +500,7 @@ const WorkExperienceSection = ({
 };
 
 // In the main CV component, update the type of topSkills
-export default function CV() {
+function CVContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearchTerm = searchParams.get("search") || "";
@@ -636,5 +637,13 @@ export default function CV() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function CV() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CVContent />
+    </Suspense>
   );
 }

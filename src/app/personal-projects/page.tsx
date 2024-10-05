@@ -3,7 +3,7 @@
 import { Navigation } from "@/components/Navigation";
 import { filterItems } from "@/utils/search";
 import { Github, Globe, Youtube } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
@@ -72,7 +72,7 @@ const LinkIcon = ({ type }: { type: string }) => {
   }
 };
 
-export default function Projects() {
+function ProjectsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearchTerm = searchParams.get("search") || "";
@@ -89,7 +89,6 @@ export default function Projects() {
     router.push(newURL, { scroll: false });
   };
 
-  // Remove useMemo and directly filter projects
   const filteredProjects = filterItems(projects, searchTerm, [
     "title",
     "description",
@@ -98,68 +97,76 @@ export default function Projects() {
   ]);
 
   return (
+    <div className="flex-grow max-w-4xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
+        Personal Projects
+      </h1>
+
+      <SearchComponent
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        updateURL={updateURL}
+        placeholder="Search projects..."
+      />
+
+      {filteredProjects.length > 0 ? (
+        filteredProjects.map((project, index) => (
+          <div
+            id={`project-${index}`}
+            key={index}
+            className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200"
+          >
+            <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
+              <HighlightText text={project.title} searchTerm={searchTerm} />
+            </h2>
+            <p className="mb-2 text-green-300">
+              <HighlightText
+                text={project.description}
+                searchTerm={searchTerm}
+              />
+            </p>
+            <ul className="list-disc list-inside mb-2 text-green-200">
+              {project.details.map((detail: string, index: number) => (
+                <li key={index} className="mb-1">
+                  <HighlightText text={detail} searchTerm={searchTerm} />
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4">
+              {Object.entries(project.links).map(([key, value]) => (
+                <a
+                  key={key}
+                  href={value as string}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"
+                >
+                  <LinkIcon type={key} />
+                  <HighlightText
+                    text={key.charAt(0).toUpperCase() + key.slice(1)}
+                    searchTerm={searchTerm}
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-yellow-400">
+          No projects found matching your search.
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default function Projects() {
+  return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
       <Navigation activePage="projects" />
-      <div className="flex-grow max-w-4xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 text-center text-yellow-400">
-          Personal Projects
-        </h1>
-
-        <SearchComponent
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          updateURL={updateURL}
-          placeholder="Search projects..."
-        />
-
-        {filteredProjects.length > 0 ? (
-          filteredProjects.map((project, index) => (
-            <div
-              id={`project-${index}`}
-              key={index}
-              className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200"
-            >
-              <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
-                <HighlightText text={project.title} searchTerm={searchTerm} />
-              </h2>
-              <p className="mb-2 text-green-300">
-                <HighlightText
-                  text={project.description}
-                  searchTerm={searchTerm}
-                />
-              </p>
-              <ul className="list-disc list-inside mb-2 text-green-200">
-                {project.details.map((detail: string, index: number) => (
-                  <li key={index} className="mb-1">
-                    <HighlightText text={detail} searchTerm={searchTerm} />
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-4">
-                {Object.entries(project.links).map(([key, value]) => (
-                  <a
-                    key={key}
-                    href={value as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"
-                  >
-                    <LinkIcon type={key} />
-                    <HighlightText
-                      text={key.charAt(0).toUpperCase() + key.slice(1)}
-                      searchTerm={searchTerm}
-                    />
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-yellow-400">
-            No projects found matching your search.
-          </p>
-        )}
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ProjectsContent />
+      </Suspense>
     </main>
   );
 }

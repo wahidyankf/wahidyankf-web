@@ -24,8 +24,9 @@ import { useState, useEffect } from "react";
 import { filterItems } from "@/utils/search";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
+import { Suspense } from "react";
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearchTerm = searchParams.get("search") || "";
@@ -240,5 +241,13 @@ export default function Home() {
         </section>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
