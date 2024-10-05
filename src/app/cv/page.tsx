@@ -541,7 +541,7 @@ export default function CV() {
     (entry) => entry.type === "honor"
   );
   const licenseEntries = filteredEntries.filter(
-    (entry) => entry.type === "license"
+    (entry) => entry.type === "certification"
   );
   const languageEntries = filteredEntries.filter(
     (entry) => entry.type === "language"

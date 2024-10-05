@@ -1,34 +1,17 @@
-export type CVEntry =
-  | {
-      type: "about";
-      title: string;
-      organization: string;
-      period: string;
-      details: string[];
-      links?: { [key: string]: string };
-    }
-  | {
-      type: "work";
-      title: string;
-      organization: string;
-      period: string;
-      employmentType: string;
-      location: string;
-      locationType: string;
-      details: string[];
-      skills: string[];
-      programmingLanguages: string[];
-      frameworks: string[];
-      links?: { [key: string]: string };
-    }
-  | {
-      type: "education" | "honor" | "certification" | "language";
-      title: string;
-      organization: string;
-      period: string;
-      details: string[];
-      links?: { [key: string]: string };
-    };
+export type CVEntry = {
+  type: "about" | "work" | "education" | "honor" | "certification" | "language";
+  title: string;
+  organization: string;
+  period: string;
+  details: string[];
+  links?: { [key: string]: string };
+  employmentType?: string;
+  location?: string;
+  locationType?: string;
+  skills?: string[];
+  programmingLanguages?: string[];
+  frameworks?: string[];
+};
 
 export const cvData: CVEntry[] = [
   {
