@@ -79,6 +79,7 @@ export const cvData: CVEntry[] = [
       "Frontend Engineering",
       "Backend Engineering",
       "Software Testing",
+      "Financing System Engineering",
       "Data Engineering",
       "JavaScript",
       "Java",
