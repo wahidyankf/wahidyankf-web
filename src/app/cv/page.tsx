@@ -522,6 +522,17 @@ function CVContent() {
     setSearchTerm(initialSearchTerm);
   }, [initialSearchTerm]);
 
+  useEffect(() => {
+    const shouldScrollTop = searchParams.get("scrollTop") === "true";
+    if (shouldScrollTop) {
+      window.scrollTo(0, 0);
+      // Remove the scrollTop parameter from the URL
+      const newURL = new URL(window.location.href);
+      newURL.searchParams.delete("scrollTop");
+      router.replace(newURL.toString(), { scroll: false });
+    }
+  }, [searchParams, router]);
+
   const updateURL = (term: string) => {
     const newURL = term ? `/cv?search=${encodeURIComponent(term)}` : "/cv";
     router.push(newURL, { scroll: false });
@@ -530,6 +541,7 @@ function CVContent() {
   const handleItemClick = (item: string) => {
     setSearchTerm(item);
     updateURL(item);
+    window.scrollTo(0, 0);
   };
 
   const filteredEntries =

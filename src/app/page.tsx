@@ -79,7 +79,7 @@ function HomeContent() {
     : null;
 
   const handleItemClick = (item: string) => {
-    router.push(`/cv?search=${encodeURIComponent(item)}`);
+    router.push(`/cv?search=${encodeURIComponent(item)}&scrollTop=true`);
   };
 
   return (
