@@ -132,7 +132,7 @@ export default function Projects() {
                 />
               </p>
               <ul className="list-disc list-inside mb-2 text-green-200">
-                {project.details.map((detail, index) => (
+                {project.details.map((detail: string, index: number) => (
                   <li key={index} className="mb-1">
                     <HighlightText text={detail} searchTerm={searchTerm} />
                   </li>
@@ -142,7 +142,7 @@ export default function Projects() {
                 {Object.entries(project.links).map(([key, value]) => (
                   <a
                     key={key}
-                    href={value}
+                    href={value as string}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-yellow-400 underline decoration-yellow-400 hover:text-green-400 hover:decoration-green-400 transition-all duration-200 mr-4 inline-flex items-center"

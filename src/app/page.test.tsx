@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import Home from "./page";
+import { filterItems } from "@/utils/search";
 
 // Mock the next/navigation module
 const mockPush = vi.fn();
@@ -56,16 +57,22 @@ vi.mock("@/app/data", () => ({
       },
     },
   ],
-  getTopSkillsLastFiveYears: () => [{ name: "Skill 1", duration: 60 }],
-  getTopLanguagesLastFiveYears: () => [{ name: "Language 1", duration: 60 }],
-  getTopFrameworksLastFiveYears: () => [{ name: "Framework 1", duration: 60 }],
+  getTopSkillsLastFiveYears: () => [
+    { name: "Software Engineering", duration: 60 },
+    { name: "Web Development", duration: 55 },
+  ],
+  getTopLanguagesLastFiveYears: () => [
+    { name: "JavaScript", duration: 60 },
+    { name: "TypeScript", duration: 50 },
+  ],
+  getTopFrameworksLastFiveYears: () => [
+    { name: "React", duration: 60 },
+    { name: "Next.js", duration: 45 },
+  ],
   formatDuration: (duration: number) => `${duration} months`,
 }));
 
-// Remove this line:
-// import { filterItems } from "@/utils/search";
-
-// Add this mock:
+// Mock the filterItems function
 vi.mock("@/utils/search", () => ({
   filterItems: vi.fn((items) => items),
 }));
@@ -102,9 +109,9 @@ describe("Home component", () => {
 
   it("renders skills, languages, and frameworks", () => {
     render(<Home />);
-    expect(screen.getByText("Skill 1")).toBeInTheDocument();
-    expect(screen.getByText("Language 1")).toBeInTheDocument();
-    expect(screen.getByText("Framework 1")).toBeInTheDocument();
+    expect(screen.getByText("Software Engineering")).toBeInTheDocument();
+    expect(screen.getByText("JavaScript")).toBeInTheDocument();
+    expect(screen.getByText("React")).toBeInTheDocument();
   });
 
   it("renders quick links", () => {
@@ -130,21 +137,21 @@ describe("Home component", () => {
   });
 
   it("filters content based on search term", async () => {
-    const mockFilterItems = vi.fn((items) =>
-      items.filter((item: { name: string }) => item.name === "React")
+    const mockFilterItems = vi.fn((items: Array<{ name: string }>) =>
+      items.filter((item) => item.name === "React")
     );
-    vi.mocked(require("@/utils/search").filterItems).mockImplementation(
-      mockFilterItems
-    );
+    vi.mocked(filterItems).mockImplementation(mockFilterItems);
 
     render(<Home />);
     const searchInput = screen.getByTestId("search-component");
     fireEvent.change(searchInput, { target: { value: "React" } });
 
     await waitFor(() => {
-      expect(screen.queryByText("Skill 1")).not.toBeInTheDocument();
-      expect(screen.queryByText("Language 1")).not.toBeInTheDocument();
-      expect(screen.queryByText("Framework 1")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Software Engineering")
+      ).not.toBeInTheDocument();
+      expect(screen.queryByText("JavaScript")).not.toBeInTheDocument();
+      expect(screen.getByText("React")).toBeInTheDocument();
     });
 
     expect(mockFilterItems).toHaveBeenCalled();
@@ -152,8 +159,8 @@ describe("Home component", () => {
 
   it("handles item click and navigates to CV page", () => {
     render(<Home />);
-    const skillButton = screen.getByText("Skill 1");
+    const skillButton = screen.getByText("React");
     fireEvent.click(skillButton);
-    expect(mockPush).toHaveBeenCalledWith("/cv?search=Skill%201");
+    expect(mockPush).toHaveBeenCalledWith("/cv?search=React");
   });
 });

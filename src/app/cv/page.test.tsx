@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import CV from "./page";
-import { filterItems } from "@/utils/search";
 
 // Mock the next/navigation module
 const mockPush = vi.fn();
