@@ -96,7 +96,8 @@ export default function Home() {
     router.push(newURL, { scroll: false });
   };
 
-  const highlightText = (text: string): React.ReactNode => {
+  const highlightText = (text: string | React.ReactNode): React.ReactNode => {
+    if (typeof text !== "string") return text;
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, "gi");
     return text.split(regex).map((part, index) =>
@@ -109,6 +110,16 @@ export default function Home() {
       )
     );
   };
+
+  const filteredAboutMe = aboutMe
+    ? {
+        ...aboutMe,
+        details:
+          filterItems([{ details: aboutMe.details.join("\n") }], searchTerm, [
+            "details",
+          ])[0]?.details.split("\n") || [],
+      }
+    : null;
 
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row pb-20 lg:pb-0">
@@ -129,11 +140,17 @@ export default function Home() {
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             About Me
           </h2>
-          {aboutMe?.details.map((detail, index) => (
-            <p key={index} className="mb-4 text-green-300">
-              {parseMarkdownLinks(detail)}
+          {filteredAboutMe && filteredAboutMe.details.length > 0 ? (
+            filteredAboutMe.details.map((detail, index) => (
+              <p key={index} className="mb-4 text-green-300">
+                {parseMarkdownLinks(highlightText(detail))}
+              </p>
+            ))
+          ) : (
+            <p className="text-center text-yellow-400">
+              No matching content in the About Me section.
             </p>
-          ))}
+          )}
         </section>
 
         {/* Skills & Expertise section */}

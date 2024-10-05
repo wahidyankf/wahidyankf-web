@@ -1,13 +1,19 @@
 import React from "react";
 
-export const parseMarkdownLinks = (text: string): React.ReactNode[] => {
+export const parseMarkdownLinks = (
+  text: string | React.ReactNode
+): React.ReactNode => {
+  if (typeof text !== "string") return text;
+
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-  return text.split(linkRegex).map((part, index) => {
+  const parts = text.split(linkRegex);
+
+  return parts.map((part, index) => {
     if (index % 3 === 1) {
       return (
         <a
           key={index}
-          href={text.split(linkRegex)[index + 1]}
+          href={parts[index + 1]}
           target="_blank"
           rel="noopener noreferrer"
           className="text-yellow-400 hover:text-green-400 transition-colors duration-200"
