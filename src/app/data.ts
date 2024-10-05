@@ -12,7 +12,7 @@ export type CVEntry =
       title: string;
       organization: string;
       period: string;
-      employmentType?: string;
+      employmentType: string;
       location: string;
       locationType: string;
       details: string[];
