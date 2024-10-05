@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cvData, getTopSkillsLastFiveYears, formatDuration } from "@/app/data";
 import { Navigation } from "@/components/Navigation";
 import { useMemo } from "react";
+import { parseMarkdownLinks } from "@/lib/utils/markdown";
 
 export default function Home() {
   const aboutMe = cvData.find((entry) => entry.type === "about");
@@ -24,7 +25,7 @@ export default function Home() {
           </h2>
           {aboutMe?.details.map((detail, index) => (
             <p key={index} className="mb-4 text-green-300">
-              {detail}
+              {parseMarkdownLinks(detail)}
             </p>
           ))}
         </div>

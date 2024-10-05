@@ -18,7 +18,7 @@ export const cvData: CVEntry[] = [
     period: "",
     details: [
       "Yoka is a software engineering leader with a diverse portfolio and over three years of experience leading software engineering teams in high-traffic (the biggest ed-tech in SEA) and highly regulated businesses (e.g., financial institutions). He is passionate about this role because he feels that seeing his team grow while delivering product and business value and staying technically competent is a highly satisfying experience. He also loves to code in functional programming languages but thinks that paradigms and programming languages are only tools for delivering impact and achieving goals.",
-      "Yoka is about more than technical skills or getting the job done. He is a polyglot who speaks more than three languages and has three years of experience living overseas. During his free time, he usually reads books to expand his knowledge and contribute to the community via AyoKoding's website, ayokoding.com (in Bahasa and English), and YouTube channels (in Bahasa).",
+      "Yoka is about more than technical skills or getting the job done. He is a polyglot who speaks more than three languages and has three years of experience living overseas. During his free time, he usually reads books to expand his knowledge and contribute to the community via AyoKoding's website, [ayokoding.com](https://ayokoding.com) (in Bahasa and English), and [YouTube channel](https://youtube.com/ayokoding) (in Bahasa).",
     ],
     links: {
       github: "https://github.com/wahidyankf",

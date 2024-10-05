@@ -28,9 +28,10 @@ import {
   calculateTotalDuration,
   getTopSkillsLastFiveYears,
 } from "../data";
+import { parseMarkdownLinks } from "@/lib/utils/markdown";
 
 const highlightText = (text: string, searchTerm: string) => {
-  if (!searchTerm) return text;
+  if (!searchTerm) return parseMarkdownLinks(text);
   const regex = new RegExp(`(${searchTerm})`, "gi");
   return text.split(regex).map((part, index) =>
     regex.test(part) ? (
@@ -38,7 +39,7 @@ const highlightText = (text: string, searchTerm: string) => {
         {part}
       </mark>
     ) : (
-      part
+      parseMarkdownLinks(part)
     )
   );
 };
