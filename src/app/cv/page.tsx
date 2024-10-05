@@ -20,7 +20,8 @@ import {
   Code,
   Package,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   CVEntry,
   cvData,
@@ -34,8 +35,12 @@ import {
 } from "../data";
 import { parseMarkdownLinks } from "@/lib/utils/markdown";
 
-const highlightText = (text: string, searchTerm: string) => {
-  if (!searchTerm) return parseMarkdownLinks(text);
+const highlightText = (
+  text: string | React.ReactNode,
+  searchTerm: string
+): React.ReactNode => {
+  if (typeof text !== "string") return text;
+  if (!searchTerm) return text;
   const regex = new RegExp(`(${searchTerm})`, "gi");
   return text.split(regex).map((part, index) =>
     regex.test(part) ? (
@@ -43,7 +48,7 @@ const highlightText = (text: string, searchTerm: string) => {
         {part}
       </mark>
     ) : (
-      parseMarkdownLinks(part)
+      part
     )
   );
 };
@@ -321,12 +326,14 @@ const isWithinLastFiveYears = (endDate: string): boolean => {
 const WorkExperienceSection = ({
   entries,
   searchTerm,
+  showRecentOnly,
+  setShowRecentOnly,
 }: {
   entries: CVEntry[];
   searchTerm: string;
+  showRecentOnly: boolean;
+  setShowRecentOnly: (value: boolean) => void;
 }) => {
-  const [showRecentOnly, setShowRecentOnly] = useState(false);
-
   const groupedEntries = entries.reduce((acc, entry) => {
     if (!acc[entry.organization]) {
       acc[entry.organization] = [];
@@ -444,27 +451,50 @@ const WorkExperienceSection = ({
 const SearchComponent = ({
   searchTerm,
   setSearchTerm,
+  updateURL,
 }: {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
-}) => (
-  <div className="sticky top-0 z-50 bg-gray-900 py-4">
-    <div className="relative">
-      <input
-        type="text"
-        placeholder="Search CV entries..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
-      />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+  updateURL: (term: string) => void;
+}) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTerm = e.target.value;
+    setSearchTerm(newTerm);
+    updateURL(newTerm);
+  };
+
+  return (
+    <div className="sticky top-0 z-50 bg-gray-900 py-4">
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Search CV entries..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="w-full bg-gray-800 text-green-400 border border-green-400 rounded-lg py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // In the main CV component, update the type of topSkills
 export default function CV() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialSearchTerm = searchParams.get("search") || "";
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [showRecentOnly, setShowRecentOnly] = useState(false);
+
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+  }, [initialSearchTerm]);
+
+  const updateURL = (term: string) => {
+    const newURL = term ? `/cv?search=${encodeURIComponent(term)}` : "/cv";
+    router.push(newURL, { scroll: false });
+  };
 
   const filteredEntries = filterItems(cvData, searchTerm, [
     "title",
@@ -510,6 +540,7 @@ export default function CV() {
         <SearchComponent
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
+          updateURL={updateURL}
         />
 
         {filteredEntries.length > 0 ? (
@@ -531,6 +562,8 @@ export default function CV() {
               <WorkExperienceSection
                 entries={workEntries}
                 searchTerm={searchTerm}
+                showRecentOnly={showRecentOnly}
+                setShowRecentOnly={setShowRecentOnly}
               />
             </div>
             <div id="honors">
