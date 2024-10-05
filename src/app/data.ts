@@ -7,6 +7,8 @@ export type CVEntry = {
   locationType?: string;
   details: string[];
   skills?: string[];
+  programmingLanguages?: string[];
+  frameworks?: string[];
   links?: { [key: string]: string };
   type: "about" | "work" | "education" | "honor" | "certification" | "language";
 };
@@ -49,10 +51,9 @@ export const cvData: CVEntry[] = [
       "Backend Engineering",
       "Software Testing",
       "Core Banking",
-      "JavaScript",
-      "Java",
-      "TypeScript",
     ],
+    programmingLanguages: ["JavaScript", "Java", "TypeScript"],
+    frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
     type: "work",
   },
   {
@@ -81,11 +82,9 @@ export const cvData: CVEntry[] = [
       "Software Testing",
       "Financing System Engineering",
       "Data Engineering",
-      "JavaScript",
-      "Java",
-      "Python",
-      "TypeScript",
     ],
+    programmingLanguages: ["JavaScript", "Java", "Python", "TypeScript"],
+    frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
     type: "work",
   },
   {
@@ -112,11 +111,9 @@ export const cvData: CVEntry[] = [
       "Software Testing",
       "Systems Design",
       "Software Engineering",
-      "Python",
-      "TypeScript",
-      "Amazon Web Services (AWS)",
-      "Django",
     ],
+    programmingLanguages: ["JavaScript", "Python", "TypeScript"],
+    frameworks: ["React.js", "Next.js", "Django"],
   },
   {
     type: "work",
@@ -142,13 +139,15 @@ export const cvData: CVEntry[] = [
       "Frontend Engineering",
       "Software Engineering",
       "Software Testing",
+    ],
+    programmingLanguages: [
+      "JavaScript",
       "Golang",
       "ReasonML",
       "TypeScript",
-      "JavaScript",
-      "React.js",
       "SQL",
     ],
+    frameworks: ["React.js", "Next.js", "ReasonReact"],
   },
   {
     type: "work",
@@ -169,13 +168,16 @@ export const cvData: CVEntry[] = [
       "Backend Engineering",
       "Frontend Engineering",
       "Software Engineering",
-      "Python",
-      "Golang",
-      "TypeScript",
-      "JavaScript",
       "React.js",
+    ],
+    programmingLanguages: [
+      "JavaScript",
+      "Golang",
+      "ReasonML",
+      "TypeScript",
       "SQL",
     ],
+    frameworks: ["React.js", "React Native", "ReasonReact"],
   },
   {
     type: "work",
@@ -192,16 +194,15 @@ export const cvData: CVEntry[] = [
       "I was involved in Ruangguru's FE engineering committee and influenced its road map. One of the results was that Ruangguru's FE team quickly (i.e., about four weeks from the initial discussion) converged the convention and technological stacks for the then-new TypeScript adoption in Ruangguru's FE future projects.",
       "Heavily involved in Ruangguru's new FE engineer hiring. This involvement results in a faster FE engineering hiring process while ensuring only technical and culturally fit candidates pass. I also streamlined the FE team's onboarding process by creating documents and guides, resulting in a faster, more precise, and smoother onboarding for the new engineers while making it more scalable and reproducible.",
     ],
-    skills: [
-      "Frontend Engineering",
-      "Systems Design",
-      "Software Engineering",
-      "TypeScript",
+    skills: ["Frontend Engineering", "Systems Design", "Software Engineering"],
+    programmingLanguages: [
       "JavaScript",
-      "React.js",
+      "TypeScript",
+      "ReasonML",
       "HTML",
       "CSS",
     ],
+    frameworks: ["React.js", "React Native", "ReasonReact"],
   },
   {
     title: "Frontend Engineer",
@@ -218,16 +219,15 @@ export const cvData: CVEntry[] = [
       "Led a team of frontend developers to create Ruang Kerja's company dashboard using React JS stacks, flow-typed, and data visualization tools. Also did end-to-end testing for it using cypress. Resulting in a finely crafted and runtime-error-free dashboard web app.",
       "Became one of the pioneering engineers in Ruang Kerja's React Native app development. Resulting in more efficient engineering resource usage for Ruangguru by expanding the uses of its frontend engineers while theoretically cutting the cost of apps development down almost to 50% without losing any of native apps' development speed.",
     ],
-    skills: [
-      "Frontend Engineering",
-      "Software Engineering",
-      "ReasonML",
-      "TypeScript",
+    skills: ["Frontend Engineering", "Software Engineering"],
+    programmingLanguages: [
       "JavaScript",
-      "React.js",
+      "TypeScript",
+      "ReasonML",
       "HTML",
       "CSS",
     ],
+    frameworks: ["React.js", "React Native", "ReasonReact"],
     type: "work",
   },
   {
@@ -243,15 +243,9 @@ export const cvData: CVEntry[] = [
       "Rewrote and migrated Ruang Uji (https://uji.ruangguru.com) from Angular 1's (AngularJS) stacks to React.js' stacks from scratch. Thus solved the old \"exam event\" problem (e.g., no automatic submission in the background, submission error handler, continuing to the last exam on reload) at Ruang Uji. This project also results in the tech stack's modernization, making it less error-prone.",
       "Automated web apps' bug tracking using sentry (Raven.js) and deployment from Gitlab to AWS S3 and production using Codeship. The result was more precise bug tracking and faster web app integration, deployment, and delivery.",
     ],
-    skills: [
-      "Frontend Engineering",
-      "Software Engineering",
-      "JavaScript",
-      "React.js",
-      "CSS",
-      "HTML",
-      "Flow Type",
-    ],
+    skills: ["Frontend Engineering", "Software Engineering"],
+    programmingLanguages: ["JavaScript", "Flow Type", "HTML", "CSS"],
+    frameworks: ["React.js"],
     type: "work",
   },
   {
