@@ -140,7 +140,17 @@ describe("Home component", () => {
     const mockFilterItems = vi.fn((items: Array<{ name: string }>) =>
       items.filter((item) => item.name === "React")
     );
-    vi.mocked(filterItems).mockImplementation(mockFilterItems);
+    vi.mocked(filterItems).mockImplementation(
+      (items: unknown[], searchTerm: string) => {
+        return items.filter(
+          (item): item is { name: string } =>
+            typeof item === "object" &&
+            item !== null &&
+            "name" in item &&
+            item.name === searchTerm
+        );
+      }
+    );
 
     render(<Home />);
     const searchInput = screen.getByTestId("search-component");
