@@ -401,12 +401,6 @@ export const getTopSkillsLastFiveYears = (
   const fiveYearsAgo = new Date();
   fiveYearsAgo.setFullYear(fiveYearsAgo.getFullYear() - 5);
 
-  const recentWorkEntries = data.filter((entry) => {
-    if (entry.type !== "work") return false;
-    const endDate = entry.period.split(" - ")[1];
-    return endDate === "Present" || parseDate(endDate) >= fiveYearsAgo;
-  });
-
   const allWorkEntries = data.filter((entry) => entry.type === "work");
 
   const skillInfo: {
