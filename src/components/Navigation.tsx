@@ -28,10 +28,14 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
 
       {/* Desktop Navigation */}
       <nav className="hidden lg:block fixed left-0 top-0 h-full w-80 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50 border-r border-green-400">
-        <div className="mb-4 p-4">
+        <Link
+          href="/"
+          className="block mb-4 p-4 hover:text-yellow-400 transition-colors duration-200"
+        >
           <Folder className="inline-block mr-2" />
-          <span className="font-bold">organiclever</span>
-        </div>
+          <span className="font-bold">WahidyanKF</span>
+        </Link>
+        <hr className="border-t border-green-400 mx-4 mb-4" />
         <ul className="pl-4">
           <NavItem
             href="/"
