@@ -102,7 +102,7 @@ export default function Home() {
             About Me
           </h2>
           {filteredAboutMe && filteredAboutMe.details.length > 0 ? (
-            filteredAboutMe.details.map((detail, index) => (
+            filteredAboutMe.details.map((detail: string, index: number) => (
               <p key={index} className="mb-4 text-green-300">
                 <HighlightText text={detail} searchTerm={searchTerm} />
               </p>
