@@ -384,6 +384,7 @@ export default function CV() {
         "employmentType",
         "location",
         "locationType",
+        "period",
       ]),
     [searchTerm]
   );
