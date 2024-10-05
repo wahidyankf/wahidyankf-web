@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "Wahidyan Kresna Fridayoka | Software Engineer",
   description:
     "Portfolio and CV of Wahidyan Kresna Fridayoka, a seasoned Software Engineer specializing in Frontend Engineering and Engineering Management.",
+  icons: [
+    { rel: "icon", url: "/saitama.jpg" },
+    { rel: "apple-touch-icon", url: "/saitama.jpg" },
+  ],
   keywords: [
     "Software Engineer",
     "Frontend Engineer",
