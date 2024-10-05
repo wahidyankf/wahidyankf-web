@@ -38,3 +38,19 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Configuration
 
 This project uses `next.config.mjs` for Next.js configuration. You can find and modify the configuration in this file.
+
+## Testing
+
+To run tests:
+
+`npm run test`
+
+To run tests in watch mode:
+
+`npm run test:watch`
+
+## Linting
+
+To run ESLint:
+
+`npm run lint`
