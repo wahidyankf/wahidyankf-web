@@ -160,7 +160,7 @@ const CVEntryComponent = ({
   topFrameworks?: TopItem[];
   handleItemClick: (item: string) => void;
 }) => (
-  <div className="mb-4 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+  <div className="mb-4 border border-green-400 rounded-lg p-4">
     <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
       <HighlightText text={entry.title} searchTerm={searchTerm} />
     </h3>

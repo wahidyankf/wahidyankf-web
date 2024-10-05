@@ -114,7 +114,7 @@ function ProjectsContent() {
           <div
             id={`project-${index}`}
             key={index}
-            className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200"
+            className="mb-8 border border-green-400 rounded-lg p-4"
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl mb-2 text-yellow-400">
               <HighlightText text={project.title} searchTerm={searchTerm} />

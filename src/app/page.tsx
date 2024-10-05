@@ -98,7 +98,7 @@ function HomeContent() {
         />
 
         {/* About Me section */}
-        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             About Me
           </h2>
@@ -116,7 +116,7 @@ function HomeContent() {
         </section>
 
         {/* Skills & Expertise section */}
-        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Skills & Expertise
           </h2>
@@ -194,7 +194,7 @@ function HomeContent() {
         </section>
 
         {/* Quick Links section */}
-        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Quick Links
           </h2>
@@ -217,7 +217,7 @@ function HomeContent() {
         </section>
 
         {/* Connect With Me section */}
-        <section className="mb-8 border border-green-400 rounded-lg p-4 hover:bg-gray-800 transition-colors duration-200">
+        <section className="mb-8 border border-green-400 rounded-lg p-4">
           <h2 className="text-xl sm:text-2xl md:text-3xl mb-4 text-yellow-400">
             Connect With Me
           </h2>
