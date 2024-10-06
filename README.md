@@ -75,9 +75,14 @@ The pre-commit hook runs `lint-staged`, which:
 - Runs ESLint and automatically fixes issues on staged JavaScript and TypeScript files.
 - Runs Prettier on staged JavaScript, TypeScript, JSON, and Markdown files.
 
-To skip the pre-commit hook, you can use the `--no-verify` flag when committing:
+### Pre-push Hook
+
+The pre-push hook runs tests when pushing to the main branch.
+
+To skip the pre-commit or pre-push hooks, you can use the `--no-verify` flag:
 
 `git commit -m "Your commit message" --no-verify`
+`git push origin main --no-verify`
 
 ### Setting up Husky
 
