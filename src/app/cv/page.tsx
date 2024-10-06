@@ -35,6 +35,7 @@ import {
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
 import { Suspense } from "react";
+import { parseMarkdownLinks } from "@/utils/markdown";
 
 // Update the type definition for topSkills, topLanguages, and topFrameworks
 type TopItem = { name: string; duration: number };
@@ -144,7 +145,7 @@ const DynamicSkillsComponent = ({
   </>
 );
 
-// Update the CVEntryComponent prop types
+// Update the CVEntryComponent
 const CVEntryComponent = ({
   entry,
   searchTerm,
@@ -194,14 +195,14 @@ const CVEntryComponent = ({
       <ul className="list-disc list-inside mb-2 text-green-200">
         {entry.details.map((detail, index) => (
           <li key={index} className="mb-1">
-            <HighlightText text={detail} searchTerm={searchTerm} />
+            {parseMarkdownLinks(detail, searchTerm)}
           </li>
         ))}
       </ul>
     ) : (
       entry.details.map((detail, index) => (
         <p key={index} className="mb-2 text-green-200">
-          <HighlightText text={detail} searchTerm={searchTerm} />
+          {parseMarkdownLinks(detail, searchTerm)}
         </p>
       ))
     )}

@@ -25,6 +25,7 @@ import { filterItems } from "@/utils/search";
 import { SearchComponent } from "@/components/SearchComponent";
 import { HighlightText } from "@/components/HighlightText";
 import { Suspense } from "react";
+import { parseMarkdownLinks } from "@/utils/markdown";
 
 function HomeContent() {
   const router = useRouter();
@@ -105,7 +106,7 @@ function HomeContent() {
           {filteredAboutMe && filteredAboutMe.details.length > 0 ? (
             filteredAboutMe.details.map((detail: string, index: number) => (
               <p key={index} className="mb-4 text-green-300">
-                <HighlightText text={detail} searchTerm={searchTerm} />
+                {parseMarkdownLinks(detail, searchTerm)}
               </p>
             ))
           ) : (
