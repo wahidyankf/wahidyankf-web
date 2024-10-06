@@ -73,6 +73,13 @@ describe("CV component", () => {
         programmingLanguages: ["JavaScript"],
         frameworks: ["Next.js"],
       },
+      {
+        type: "education",
+        title: "Bachelor of Science in Computer Science",
+        organization: "University of Example",
+        period: "2015 - 2019",
+        details: ["Graduated with honors"],
+      },
     ];
 
     // Use vi.doMock for the data module
@@ -174,5 +181,18 @@ describe("CV component", () => {
     expect(mockPush).toHaveBeenCalled();
     expect(mockPush.mock.calls[0][0]).toMatch(/^\/cv\?search=React/);
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+  });
+
+  it("renders education entries with organization", async () => {
+    const CV = (await import("./page")).default;
+    render(<CV />);
+
+    expect(screen.getByText("Education")).toBeInTheDocument();
+    expect(
+      screen.getByText("Bachelor of Science in Computer Science")
+    ).toBeInTheDocument();
+    expect(screen.getByText("University of Example")).toBeInTheDocument();
+    expect(screen.getByText("2015 - 2019")).toBeInTheDocument();
+    expect(screen.getByText("Graduated with honors")).toBeInTheDocument();
   });
 });
