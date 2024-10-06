@@ -165,6 +165,11 @@ const CVEntryComponent = ({
     <h3 className="text-lg sm:text-xl md:text-2xl mb-2 text-yellow-400">
       <HighlightText text={entry.title} searchTerm={searchTerm} />
     </h3>
+    {entry.type === "education" && entry.organization && (
+      <p className="mb-2 text-green-300">
+        <HighlightText text={entry.organization} searchTerm={searchTerm} />
+      </p>
+    )}
     {entry.period && (
       <p className="mb-2 text-green-300">
         <HighlightText text={entry.period} searchTerm={searchTerm} />
