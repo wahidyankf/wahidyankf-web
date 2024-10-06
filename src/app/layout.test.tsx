@@ -24,15 +24,18 @@ describe("RootLayout", () => {
     expect(container.innerHTML).toContain("Test Child");
 
     // Check for important elements and attributes
-    const rootElement = container.firstElementChild;
-    expect(rootElement).toBeTruthy();
-    expect(rootElement?.getAttribute("lang")).toBe("en");
-    expect(rootElement?.className).toContain("root-layout");
+    const htmlElement = container.firstElementChild;
+    expect(htmlElement).toBeTruthy();
+    expect(htmlElement?.getAttribute("lang")).toBe("en");
+    expect(htmlElement?.className).toContain("inter-font");
 
-    const bodyContent = rootElement?.firstElementChild;
+    const bodyElement = htmlElement?.firstElementChild;
+    expect(bodyElement).toBeTruthy();
+    expect(bodyElement?.className).toContain("root-layout");
+
+    const bodyContent = bodyElement?.firstElementChild;
     expect(bodyContent).toBeTruthy();
-    expect(bodyContent?.className).toContain("body-content");
-    expect(bodyContent?.className).toContain("inter-font");
+    expect(bodyContent?.className).toBe("body-content");
   });
 
   it("includes ScrollToTop component", () => {
