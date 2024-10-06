@@ -49,6 +49,10 @@ To run tests in watch mode:
 
 `npm run test:watch`
 
+The project includes tests for utility functions, including:
+
+- `src/utils/search.test.ts`: Tests for the search functionality
+
 ## Linting
 
 To run ESLint:
