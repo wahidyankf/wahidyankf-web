@@ -63,3 +63,18 @@ This project uses Husky to manage Git hooks:
 - Pre-push: Runs tests when pushing to the main branch.
 
 Make sure to run `npm install` to set up these hooks after cloning the repository.
+
+## Development
+
+This project uses Husky for pre-commit and pre-push hooks to ensure code quality.
+
+### Pre-commit Hook
+
+The pre-commit hook runs `lint-staged`, which:
+
+- Runs ESLint and automatically fixes issues on staged JavaScript and TypeScript files.
+- Runs Prettier on staged JavaScript, TypeScript, JSON, and Markdown files.
+
+To skip the pre-commit hook, you can use the `--no-verify` flag when committing:
+
+`git commit -m "Your commit message" --no-verify`

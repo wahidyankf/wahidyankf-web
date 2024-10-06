@@ -11,7 +11,8 @@
     "test:watch": "vitest watch",
     "prepare": "husky",
     "format": "prettier --write .",
-    "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && vitest run || exit 0"
+    "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && vitest run || exit 0",
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -51,5 +52,10 @@
   "volta": {
     "node": "20.17.0",
     "npm": "10.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
