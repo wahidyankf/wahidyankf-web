@@ -96,3 +96,13 @@ Contributions, issues, and feature requests are welcome! Feel free to check [iss
 ## Author
 
 Your Name - [Your Website](https://your-website.com)
+
+## Project Structure
+
+...
+
+### Layout
+
+The `RootLayout` component in `src/app/layout.tsx` provides the basic structure for all pages. It uses `<div>` elements to simulate the `<html>` and `<body>` structure, which allows for easier testing while maintaining the necessary attributes and classes. Next.js handles the proper HTML structure in the production build.
+
+...

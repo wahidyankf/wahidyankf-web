@@ -67,11 +67,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <div lang="en" className="root-layout">
+      <div className={`${inter.className} body-content`}>
         {children}
         <ScrollToTop />
-      </body>
-    </html>
+      </div>
+    </div>
   );
 }
