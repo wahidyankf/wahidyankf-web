@@ -76,7 +76,7 @@ export default function RootLayout({
         </div>
       </body>
       <GoogleAnalytics gaId="G-0F62KPYGM3" />
-      <GoogleTagManager gtmId="G-0F62KPYGM3" />
+      <GoogleTagManager gtmId="GTM-W3T568XH" />
     </html>
   );
 }
