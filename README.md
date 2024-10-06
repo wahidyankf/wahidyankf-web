@@ -1,103 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Portfolio Website
+
+This is a personal portfolio website built with [Next.js](https://nextjs.org), showcasing CV, personal projects, and more. It's designed to be easily customizable for anyone who wants to create their own portfolio.
+
+## Features
+
+- Responsive design
+- CV/Resume page with searchable entries
+- Personal projects showcase
+- Dynamic content rendering
+- SEO optimization
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (v20.17.0 or later recommended)
+- npm (v10.8.3 or later recommended)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   `git clone https://github.com/your-username/your-portfolio-repo.git`
+   `cd your-portfolio-repo`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   `npm install`
 
-## Learn More
+3. Run the development server:
+   `npm run dev`
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+To use this project for your own portfolio:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Configuration
-
-This project uses `next.config.mjs` for Next.js configuration. You can find and modify the configuration in this file.
+1. Update `src/app/data.ts` with your personal information, work experience, education, and projects.
+2. Modify the content in `src/app/page.tsx`, `src/app/cv/page.tsx`, and `src/app/personal-projects/page.tsx` to reflect your personal information and style.
+3. Replace `src/app/favicon.ico` with your own favicon.
+4. Update `src/app/layout.tsx` with your name and relevant metadata.
 
 ## Testing
 
-To run tests:
-
+Run tests:
 `npm run test`
 
-To run tests in watch mode:
-
+Run tests in watch mode:
 `npm run test:watch`
 
-The project includes tests for utility functions, including:
+## Linting and Formatting
 
-- `src/utils/search.test.ts`: Tests for the search functionality
-
-## Linting
-
-To run ESLint:
-
+Run ESLint:
 `npm run lint`
+
+Format code with Prettier:
+`npm run format`
 
 ## Development Workflow
 
-This project uses Husky to manage Git hooks:
+This project uses Husky for Git hooks:
 
-- Pre-commit: Runs Prettier to format staged files.
+- Pre-commit: Runs linting and formatting on staged files.
 - Pre-push: Runs tests when pushing to the main branch.
 
-Make sure to run `npm install` to set up these hooks after cloning the repository.
+## Building for Production
 
-## Development
+Build the application for production:
+`npm run build`
 
-This project uses Husky for pre-commit and pre-push hooks to ensure code quality.
+## Deployment
 
-### Pre-commit Hook
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-The pre-commit hook runs `lint-staged`, which:
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-- Runs ESLint and automatically fixes issues on staged JavaScript and TypeScript files.
-- Runs Prettier on staged JavaScript, TypeScript, JSON, and Markdown files.
+## Technologies Used
 
-### Pre-push Hook
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vitest](https://vitest.dev/) for testing
+- [ESLint](https://eslint.org/) for linting
+- [Prettier](https://prettier.io/) for code formatting
+- [Husky](https://typicode.github.io/husky/) for Git hooks
 
-The pre-push hook runs tests when pushing to the main branch.
+## License
 
-To skip the pre-commit or pre-push hooks, you can use the `--no-verify` flag:
+This project is open source and available under the [MIT License](LICENSE).
 
-`git commit -m "Your commit message" --no-verify`
-`git push origin main --no-verify`
+## Contributing
 
-### Setting up Husky
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/your-username/your-portfolio-repo/issues) if you want to contribute.
 
-After cloning the repository, run:
+## Author
 
-`npm install`
-
-This will automatically set up the Husky hooks due to the "prepare" script in package.json.
-
-If you encounter any issues with Husky, you can try running:
-
-`npx husky`
-
-This will ensure that Husky is properly installed and configured.
+Your Name - [Your Website](https://your-website.com)
