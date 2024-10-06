@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { parseMarkdownLinks } from "./markdown";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 // Mock HighlightText component
 vi.mock("@/components/HighlightText", () => ({
