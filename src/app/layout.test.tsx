@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import RootLayout from "./layout";
 
 // Mock the ScrollToTop component
@@ -14,30 +14,31 @@ vi.mock("next/font/google", () => ({
 
 describe("RootLayout", () => {
   it("renders children correctly", () => {
-    render(
+    const { container } = render(
       <RootLayout>
         <div>Test Child</div>
       </RootLayout>
     );
-    expect(screen.getByText("Test Child")).toBeTruthy();
+
+    // Check if the layout renders the children
+    expect(container.innerHTML).toContain("Test Child");
+
+    // Check for important elements and attributes
+    const bodyElement = container.querySelector("body");
+    expect(bodyElement).toBeTruthy();
+    expect(bodyElement?.className).toContain("inter-font");
+
+    // Check for lang attribute on the closest ancestor (simulating html tag)
+    const rootElement = container.firstElementChild;
+    expect(rootElement?.getAttribute("lang")).toBe("en");
   });
 
   it("includes ScrollToTop component", () => {
-    render(
+    const { getByTestId } = render(
       <RootLayout>
         <div>Content</div>
       </RootLayout>
     );
-    expect(screen.getByTestId("scroll-to-top")).toBeTruthy();
-  });
-
-  it("applies Inter font class to the layout", () => {
-    const { container } = render(
-      <RootLayout>
-        <div>Content</div>
-      </RootLayout>
-    );
-    const bodyElement = container.querySelector("body");
-    expect(bodyElement?.className).toContain("inter-font");
+    expect(getByTestId("scroll-to-top")).toBeTruthy();
   });
 });
