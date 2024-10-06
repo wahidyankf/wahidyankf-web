@@ -150,18 +150,15 @@ function HomeContent() {
                 Top Programming Languages Used in The Last 5 Years
               </h3>
               <div className="flex flex-wrap gap-2">
-                {filteredLanguages.map(({ name, duration }) => (
+                {filteredLanguages.map(({ name }) => (
                   <button
                     key={name}
                     onClick={() => handleItemClick(name)}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Code className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
+                    <span>
                       <HighlightText text={name} searchTerm={searchTerm} />
-                    </span>
-                    <span className="text-xs text-green-300">
-                      ({formatDuration(Number(duration))})
                     </span>
                   </button>
                 ))}
@@ -173,18 +170,15 @@ function HomeContent() {
                 Top Frameworks & Libraries Used in The Last 5 Years
               </h3>
               <div className="flex flex-wrap gap-2">
-                {filteredFrameworks.map(({ name, duration }) => (
+                {filteredFrameworks.map(({ name }) => (
                   <button
                     key={name}
                     onClick={() => handleItemClick(name)}
                     className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
                   >
                     <Package className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
+                    <span>
                       <HighlightText text={name} searchTerm={searchTerm} />
-                    </span>
-                    <span className="text-xs text-green-300">
-                      ({formatDuration(Number(duration))})
                     </span>
                   </button>
                 ))}

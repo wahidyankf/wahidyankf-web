@@ -107,36 +107,36 @@ const DynamicSkillsComponent = ({
         </li>
       ))}
     </ul>
-
-    <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
+    <h4 className="text-lg font-semibold mb-2 text-yellow-400">
       Top Programming Languages Used in The Last 5 Years
     </h4>
     <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-      {languages.map(({ name, duration }, index) => (
+      {languages.map(({ name }, index) => (
         <li key={index}>
           <ClickableItem
             name={name}
-            duration={duration}
+            duration={0}
             icon={<Code className="w-4 h-4 mr-2 text-yellow-400" />}
             searchTerm={searchTerm}
             handleItemClick={handleItemClick}
+            showDuration={false}
           />
         </li>
       ))}
     </ul>
-
-    <h4 className="text-lg font-semibold mb-2 text-yellow-400 mt-4">
+    <h4 className="text-lg font-semibold mb-2 text-yellow-400">
       Top Frameworks & Libraries Used in The Last 5 Years
     </h4>
-    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-      {frameworks.map(({ name, duration }, index) => (
+    <ul className="list-none grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {frameworks.map(({ name }, index) => (
         <li key={index}>
           <ClickableItem
             name={name}
-            duration={duration}
+            duration={0}
             icon={<Package className="w-4 h-4 mr-2 text-yellow-400" />}
             searchTerm={searchTerm}
             handleItemClick={handleItemClick}
+            showDuration={false}
           />
         </li>
       ))}
