@@ -2,7 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import ScrollToTop from "@/components/ScrollToTop";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -76,6 +76,7 @@ export default function RootLayout({
         </div>
       </body>
       <GoogleAnalytics gaId="G-0F62KPYGM3" />
+      <GoogleTagManager gtmId="GTM-0F62KPYGM3" />
     </html>
   );
 }
