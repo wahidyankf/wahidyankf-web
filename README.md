@@ -95,14 +95,40 @@ Contributions, issues, and feature requests are welcome! Feel free to check [iss
 
 ## Author
 
-Your Name - [Your Website](https://your-website.com)
+Wahidyan Kresna Fridayoka - [wahidyan.com](https://wahidyan.com)
 
 ## Project Structure
 
-...
+The project follows a standard Next.js structure with some custom organization:
+
+- `src/`: Contains the main application code
+  - `app/`: Next.js App Router pages and layouts
+  - `components/`: Reusable React components
+  - `lib/`: Utility functions and shared logic
+  - `styles/`: Global styles and Tailwind CSS configuration
+- `public/`: Static assets like images and fonts
+- `tests/`: Test files for components and utilities
 
 ### Layout
 
-The `RootLayout` component in `src/app/layout.tsx` provides the basic structure for all pages. It uses `<div>` elements to simulate the `<html>` and `<body>` structure, which allows for easier testing while maintaining the necessary attributes and classes. Next.js handles the proper HTML structure in the production build.
+The `RootLayout` component in `src/app/layout.tsx` provides the basic structure for all pages. It includes:
 
-...
+- Metadata configuration for SEO optimization
+- Global styles and font settings
+- The main content area wrapped in a div with the Inter font applied
+- A `ScrollToTop` component for improved user experience
+
+This layout ensures consistent styling and structure across all pages while allowing for easy customization and testing.
+
+### Key Components
+
+- `HighlightText`: A reusable component for highlighting search terms within text
+- `ScrollToTop`: A utility component to allow users to quickly return to the top of the page
+
+### Testing
+
+The project uses Vitest for unit and component testing. Test files are located alongside the components they test, with additional test utilities in the `tests/` directory.
+
+### Styling
+
+Tailwind CSS is used for styling, with custom configurations in `tailwind.config.js`. Global styles are defined in `src/app/globals.css`.
