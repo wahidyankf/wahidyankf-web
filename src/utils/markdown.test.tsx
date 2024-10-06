@@ -35,7 +35,7 @@ describe("parseMarkdownLinks", () => {
     expect(githubLink).toHaveAttribute("href", "https://github.com");
 
     // Check for the presence of text fragments using a more flexible approach
-    const textElements = screen.getAllByText((content, element) => {
+    const textElements = screen.getAllByText((_content, element) => {
       return (
         (element?.textContent?.includes("Visit") &&
           element?.textContent?.includes("or")) ||
@@ -45,7 +45,7 @@ describe("parseMarkdownLinks", () => {
     expect(textElements.length).toBeGreaterThan(0);
 
     // Check that the full text is present, allowing for multiple elements
-    const fullTextElements = screen.getAllByText((content, element) => {
+    const fullTextElements = screen.getAllByText((_content, element) => {
       const hasText = (text: string) =>
         element?.textContent?.includes(text) || false;
       return (
