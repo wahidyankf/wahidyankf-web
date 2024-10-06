@@ -58,14 +58,16 @@ const ClickableItem = ({
 }) => (
   <button
     onClick={() => handleItemClick(name)}
-    className="flex items-center justify-between w-full bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm hover:bg-gray-700 transition-colors duration-200"
+    className="flex items-center justify-between w-full bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm hover:bg-gray-700 transition-colors duration-200 group"
   >
     <div className="flex items-center">
       {icon}
-      <HighlightText text={name} searchTerm={searchTerm} />
+      <span className="group-hover:text-white transition-colors duration-200">
+        <HighlightText text={name} searchTerm={searchTerm} />
+      </span>
     </div>
     {showDuration && (
-      <span className="text-xs text-green-300">
+      <span className="text-xs text-green-300 group-hover:text-white transition-colors duration-200">
         (
         <HighlightText
           text={formatDuration(duration)}

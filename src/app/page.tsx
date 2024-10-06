@@ -132,13 +132,13 @@ function HomeContent() {
                   <button
                     key={name}
                     onClick={() => handleItemClick(name)}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200 group"
                   >
                     <Star className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span className="mr-2">
+                    <span className="mr-2 group-hover:text-white transition-colors duration-200">
                       <HighlightText text={name} searchTerm={searchTerm} />
                     </span>
-                    <span className="text-xs text-green-300">
+                    <span className="text-xs text-green-300 group-hover:text-white transition-colors duration-200">
                       ({formatDuration(Number(duration))})
                     </span>
                   </button>
@@ -155,10 +155,10 @@ function HomeContent() {
                   <button
                     key={name}
                     onClick={() => handleItemClick(name)}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200 group"
                   >
                     <Code className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span>
+                    <span className="group-hover:text-white transition-colors duration-200">
                       <HighlightText text={name} searchTerm={searchTerm} />
                     </span>
                   </button>
@@ -175,10 +175,10 @@ function HomeContent() {
                   <button
                     key={name}
                     onClick={() => handleItemClick(name)}
-                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200"
+                    className="bg-gray-800 text-green-400 px-2 py-1 rounded-md text-sm flex items-center hover:bg-gray-700 transition-colors duration-200 group"
                   >
                     <Package className="w-4 h-4 mr-2 text-yellow-400" />
-                    <span>
+                    <span className="group-hover:text-white transition-colors duration-200">
                       <HighlightText text={name} searchTerm={searchTerm} />
                     </span>
                   </button>
