@@ -47,8 +47,15 @@ describe("highlightText", () => {
 
   it("returns React elements with highlighted parts", () => {
     const result = highlightText("Hello, world!", "world");
-    expect(React.isValidElement(result[1])).toBe(true);
-    expect(result[1].type).toBe("mark");
-    expect(result[1].props.children).toBe("world");
+
+    expect(Array.isArray(result)).toBe(true);
+
+    if (Array.isArray(result)) {
+      const highlightedPart = result[1] as React.ReactElement;
+
+      expect(React.isValidElement(highlightedPart)).toBe(true);
+      expect(highlightedPart.type).toBe("mark");
+      expect(highlightedPart.props.children).toBe("world");
+    }
   });
 });
