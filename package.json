@@ -10,7 +10,8 @@
     "test": "vitest",
     "test:watch": "vitest watch",
     "prepare": "husky",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && npm test || exit 0"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

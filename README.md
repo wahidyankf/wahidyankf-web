@@ -54,3 +54,12 @@ To run tests in watch mode:
 To run ESLint:
 
 `npm run lint`
+
+## Development Workflow
+
+This project uses Husky to manage Git hooks:
+
+- Pre-commit: Runs Prettier to format staged files.
+- Pre-push: Runs tests when pushing to the main branch.
+
+Make sure to run `npm install` to set up these hooks after cloning the repository.
