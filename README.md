@@ -78,3 +78,17 @@ The pre-commit hook runs `lint-staged`, which:
 To skip the pre-commit hook, you can use the `--no-verify` flag when committing:
 
 `git commit -m "Your commit message" --no-verify`
+
+### Setting up Husky
+
+After cloning the repository, run:
+
+`npm install`
+
+This will automatically set up the Husky hooks due to the "prepare" script in package.json.
+
+If you encounter any issues with Husky, you can try running:
+
+`npx husky`
+
+This will ensure that Husky is properly installed and configured.
