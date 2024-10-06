@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   darkMode: ["class"],
@@ -50,6 +51,14 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        light: {
+          background: "#FFFFFF",
+          foreground: "#000000", // Changed to pure black for maximum contrast
+          primary: "#0047AB",
+          secondary: "#1E90FF",
+          accent: "#DC143C",
+          muted: "#333333", // Darkened the muted color as well
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -63,6 +72,11 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    plugin(({ addVariant }) => {
+      addVariant("light-theme", ".light-theme &");
+    }),
+  ],
 };
+
 export default config;

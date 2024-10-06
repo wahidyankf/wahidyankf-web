@@ -8,15 +8,75 @@
   --background-end-rgb: 0, 0, 0;
 }
 
+.light-theme {
+  --foreground-rgb: 0, 0, 0; /* Updated to pure black */
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 255, 255, 255;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
 }
+
+/* Light theme styles */
+.light-theme body {
+  @apply text-light-foreground bg-light-background;
+}
+
+.light-theme .text-green-400 {
+  @apply text-light-primary;
+}
+
+.light-theme .text-yellow-400 {
+  @apply text-light-accent;
+}
+
+.light-theme .border-green-400 {
+  @apply border-light-primary;
+}
+
+.light-theme .bg-gray-900 {
+  @apply bg-light-background;
+}
+
+.light-theme .bg-gray-800 {
+  @apply bg-gray-100;
+}
+
+/* Increase contrast for links and interactive elements */
+.light-theme a:hover,
+.light-theme button:hover {
+  @apply text-light-accent;
+}
+
+/* Ensure form inputs have sufficient contrast */
+.light-theme input,
+.light-theme textarea,
+.light-theme select {
+  @apply border-gray-400 text-light-foreground;
+}
+
+/* Ensure all text elements use the darker color in light mode */
+.light-theme p,
+.light-theme span,
+.light-theme div,
+.light-theme h1,
+.light-theme h2,
+.light-theme h3,
+.light-theme h4,
+.light-theme h5,
+.light-theme h6,
+.light-theme ul,
+.light-theme ol,
+.light-theme li,
+.light-theme .duration,
+.light-theme [class*="duration"],
+.light-theme time {
+  @apply text-light-foreground;
+}
+
+/* Add more light theme overrides as needed */
 
 @media (min-width: 1024px) {
   body {

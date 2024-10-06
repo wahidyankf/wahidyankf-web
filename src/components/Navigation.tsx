@@ -10,7 +10,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
   return (
     <>
       {/* Mobile Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center z-50">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center z-50 light-theme:bg-light-background light-theme:border-light-primary">
         <NavLink
           href="/"
           activePage={activePage}
@@ -27,15 +27,15 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
       </nav>
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block fixed left-0 top-0 h-full w-80 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50 border-r border-green-400">
+      <nav className="hidden lg:block fixed left-0 top-0 h-full w-80 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50 border-r border-green-400 light-theme:bg-gray-100 light-theme:text-light-foreground light-theme:border-light-primary">
         <Link
           href="/"
-          className="block mb-4 p-4 hover:text-yellow-400 transition-colors duration-200"
+          className="block mb-4 p-4 hover:text-yellow-400 transition-colors duration-200 light-theme:text-light-primary light-theme:hover:text-light-accent"
         >
           <Folder className="inline-block mr-2" />
           <span className="font-bold">WahidyanKF</span>
         </Link>
-        <hr className="border-t border-green-400 mx-4 mb-4" />
+        <hr className="border-t border-green-400 mx-4 mb-4 light-theme:border-light-primary" />
         <ul className="pl-4">
           <NavItem
             href="/"
@@ -71,7 +71,9 @@ const NavLink: React.FC<{
   <Link
     href={href}
     className={`flex flex-col items-center ${
-      activePage === pageName ? "text-yellow-400" : "text-green-400"
+      activePage === pageName
+        ? "text-yellow-400 light-theme:text-light-accent"
+        : "text-green-400 light-theme:text-light-primary"
     }`}
   >
     <File className="w-6 h-6" />
@@ -89,7 +91,11 @@ const NavItem: React.FC<{
     <File className="inline-block mr-2" />
     <Link
       href={href}
-      className={activePage === pageName ? "text-yellow-400" : ""}
+      className={
+        activePage === pageName
+          ? "text-yellow-400 light-theme:text-light-accent"
+          : "light-theme:text-light-primary hover:text-light-accent"
+      }
     >
       {label}
     </Link>
