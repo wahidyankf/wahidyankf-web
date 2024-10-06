@@ -2,6 +2,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import ScrollToTop from "@/components/ScrollToTop";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -74,6 +75,7 @@ export default function RootLayout({
           <ScrollToTop />
         </div>
       </body>
+      <GoogleAnalytics gaId="G-0F62KPYGM3" />
     </html>
   );
 }
