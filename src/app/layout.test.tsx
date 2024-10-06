@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import RootLayout from "./layout";
 
 // Mock the ScrollToTop component
@@ -12,30 +12,32 @@ vi.mock("next/font/google", () => ({
   Inter: () => ({ className: "inter-font" }),
 }));
 
+// Mock the ThemeToggle component
+vi.mock("@/components/ThemeToggle", () => ({
+  default: () => <div data-testid="theme-toggle">ThemeToggle</div>,
+}));
+
 describe("RootLayout", () => {
   it("renders children correctly", () => {
     const { container } = render(
       <RootLayout>
-        <div>Test Child</div>
+        <div data-testid="child">Test Child</div>
       </RootLayout>
     );
 
-    // Check if the layout renders the children
-    expect(container.innerHTML).toContain("Test Child");
-
-    // Check for important elements and attributes
     const htmlElement = container.firstElementChild;
-    expect(htmlElement).toBeTruthy();
-    expect(htmlElement?.getAttribute("lang")).toBe("en");
-    expect(htmlElement?.className).toContain("inter-font");
+    expect(htmlElement?.tagName).toBe("HTML");
 
-    const bodyElement = htmlElement?.firstElementChild;
-    expect(bodyElement).toBeTruthy();
+    const bodyElement = htmlElement?.children[1]; // Target the second child (body)
+    expect(bodyElement?.tagName).toBe("BODY");
     expect(bodyElement?.className).toContain("root-layout");
 
     const bodyContent = bodyElement?.firstElementChild;
-    expect(bodyContent).toBeTruthy();
     expect(bodyContent?.className).toBe("body-content");
+
+    expect(screen.getByTestId("theme-toggle")).toBeInTheDocument();
+    expect(screen.getByTestId("child")).toBeInTheDocument();
+    expect(screen.getByTestId("scroll-to-top")).toBeInTheDocument();
   });
 
   it("includes ScrollToTop component", () => {

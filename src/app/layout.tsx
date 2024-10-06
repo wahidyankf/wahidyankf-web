@@ -72,6 +72,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'light') {
+                  document.documentElement.classList.add('light-theme');
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="root-layout">
         <div className="body-content">
           <div className="fixed top-4 right-4 z-50">

@@ -9,6 +9,7 @@ const ThemeToggle = () => {
   useEffect(() => {
     const theme = localStorage.getItem("theme");
     setIsDark(theme !== "light");
+    document.documentElement.classList.toggle("light-theme", theme === "light");
   }, []);
 
   const toggleTheme = () => {
