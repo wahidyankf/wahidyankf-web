@@ -9,8 +9,8 @@
 }
 
 .light-theme {
-  --foreground-rgb: 0, 0, 0; /* Updated to pure black */
-  --background-start-rgb: 255, 255, 255;
+  --foreground-rgb: 30, 30, 30; /* VS Light foreground */
+  --background-start-rgb: 255, 255, 255; /* VS Light background */
   --background-end-rgb: 255, 255, 255;
 }
 
@@ -25,11 +25,11 @@ body {
 }
 
 .light-theme .text-green-400 {
-  @apply text-light-primary;
+  @apply text-light-green;
 }
 
 .light-theme .text-yellow-400 {
-  @apply text-light-accent;
+  @apply text-light-yellow;
 }
 
 .light-theme .border-green-400 {
@@ -41,7 +41,7 @@ body {
 }
 
 .light-theme .bg-gray-800 {
-  @apply bg-gray-100;
+  @apply bg-light-soft;
 }
 
 /* Increase contrast for links and interactive elements */
@@ -54,10 +54,10 @@ body {
 .light-theme input,
 .light-theme textarea,
 .light-theme select {
-  @apply border-gray-400 text-light-foreground;
+  @apply border-light-muted text-light-foreground bg-white;
 }
 
-/* Ensure all text elements use the darker color in light mode */
+/* Ensure all text elements use the correct color in light mode */
 .light-theme p,
 .light-theme span,
 .light-theme div,
@@ -77,6 +77,34 @@ body {
 }
 
 /* Add more light theme overrides as needed */
+.light-theme a {
+  @apply text-light-primary hover:text-light-accent;
+}
+
+.light-theme code {
+  @apply bg-light-soft text-light-keyword px-1 rounded;
+}
+
+.light-theme pre {
+  @apply bg-light-soft p-4 rounded;
+}
+
+.light-theme blockquote {
+  @apply border-l-4 border-light-muted pl-4 italic;
+}
+
+/* VS Light specific syntax highlighting */
+.light-theme .comment {
+  @apply text-light-comment;
+}
+
+.light-theme .string {
+  @apply text-light-string;
+}
+
+.light-theme .keyword {
+  @apply text-light-keyword;
+}
 
 @media (min-width: 1024px) {
   body {

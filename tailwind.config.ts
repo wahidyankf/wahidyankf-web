@@ -52,12 +52,20 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
         light: {
-          background: "#FFFFFF",
-          foreground: "#000000", // Changed to pure black for maximum contrast
-          primary: "#0047AB",
-          secondary: "#1E90FF",
-          accent: "#DC143C",
-          muted: "#333333", // Darkened the muted color as well
+          background: "#ffffff", // VS Light background
+          foreground: "#1e1e1e", // VS Light foreground
+          primary: "#0000ff", // VS Light blue
+          secondary: "#267f99", // VS Light teal
+          accent: "#af00db", // VS Light purple
+          muted: "#717171", // VS Light gray
+          soft: "#f3f3f3", // VS Light soft background
+          hard: "#e4e4e4", // VS Light hard background
+          green: "#008000", // VS Light green
+          yellow: "#795e26", // VS Light yellow/brown
+          orange: "#cd3131", // VS Light red/orange
+          comment: "#008000", // VS Light comment green
+          string: "#a31515", // VS Light string red
+          keyword: "#0000ff", // VS Light keyword blue
         },
       },
       borderRadius: {
