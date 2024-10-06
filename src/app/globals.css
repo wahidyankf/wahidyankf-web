@@ -78,7 +78,7 @@ body {
 
 /* Add more light theme overrides as needed */
 .light-theme a {
-  @apply text-light-primary hover:text-light-accent;
+  @apply text-light-primary font-semibold underline decoration-2 underline-offset-2 hover:text-light-accent hover:decoration-light-accent;
 }
 
 .light-theme code {
@@ -104,6 +104,21 @@ body {
 
 .light-theme .keyword {
   @apply text-light-keyword;
+}
+
+/* Add this new style for the About Me section links */
+.light-theme .content-link {
+  @apply text-light-primary font-semibold underline decoration-2 underline-offset-2 hover:text-light-accent hover:decoration-light-accent;
+}
+
+/* Existing dark theme styles */
+a {
+  @apply text-yellow-400 hover:text-green-400 transition-colors duration-200;
+}
+
+/* Replace .about-me-link with .content-link for dark mode */
+.content-link {
+  @apply text-yellow-400 font-semibold underline decoration-2 underline-offset-2 hover:text-green-400 hover:decoration-green-400 transition-colors duration-200;
 }
 
 @media (min-width: 1024px) {

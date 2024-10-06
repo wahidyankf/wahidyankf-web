@@ -19,7 +19,7 @@ export const parseMarkdownLinks = (
           href={linkUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-yellow-400 hover:text-green-400 transition-colors duration-200"
+          className="content-link" // Changed from about-me-link to content-link
         >
           <HighlightText text={linkText} searchTerm={searchTerm} />
         </a>
