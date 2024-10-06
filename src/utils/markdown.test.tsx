@@ -53,18 +53,13 @@ describe("parseMarkdownLinks", () => {
     expect(link).toHaveAttribute("href", "https://example.com/my profile");
   });
 
-  it("should apply the correct CSS classes to links", () => {
+  it("should apply the correct CSS class to links", () => {
     const text = "[Styled Link](https://example.com)";
     const result = parseMarkdownLinks(text, "");
     render(<>{result}</>);
 
     const link = screen.getByRole("link", { name: "Styled Link" });
-    expect(link).toHaveClass(
-      "text-yellow-400",
-      "hover:text-green-400",
-      "transition-colors",
-      "duration-200"
-    );
+    expect(link).toHaveClass("content-link");
   });
 
   it("should highlight search terms in both link text and regular text", () => {
