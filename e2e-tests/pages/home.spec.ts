@@ -1,80 +1,111 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 
 test.describe("Home Page", () => {
-  test.beforeEach(async ({ page }) => {
+  let page: Page;
+
+  test.beforeEach(async ({ page: p }) => {
+    page = p;
     await page.goto("/");
   });
 
-  test("should render main sections", async ({ page }) => {
+  const checkSectionVisibility = async (headingText: string) => {
     await expect(
-      page.getByRole("heading", { name: "Welcome to My Portfolio" })
+      page.getByRole("heading", { name: headingText })
     ).toBeVisible();
-    await expect(page.getByRole("heading", { name: "About Me" })).toBeVisible();
+  };
+
+  const checkComponentVisibility = async (
+    selector: string,
+    placeholder?: string
+  ) => {
+    if (placeholder) {
+      await expect(page.getByPlaceholder(placeholder)).toBeVisible();
+    } else {
+      await expect(page.locator(selector)).toBeVisible();
+    }
+  };
+
+  test("should render main sections", async () => {
+    const sections = [
+      "Welcome to My Portfolio",
+      "About Me",
+      "Skills & Expertise",
+      "Quick Links",
+      "Connect With Me",
+    ];
+    for (const section of sections) {
+      await checkSectionVisibility(section);
+    }
+  });
+
+  test("should render Navigation components", async () => {
+    // Check for mobile navigation (visible on smaller screens)
+    await page.setViewportSize({ width: 375, height: 667 });
+    await expect(page.locator("nav.lg\\:hidden")).toBeVisible();
+
+    // Check for desktop navigation (visible on larger screens)
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await expect(page.locator("nav.hidden.lg\\:block")).toBeVisible();
+
+    // Reset viewport to default size
+    await page.setViewportSize({ width: 1280, height: 720 });
+  });
+
+  test("should render SearchComponent", async () => {
+    await checkComponentVisibility(
+      "",
+      "Search skills, languages, or frameworks..."
+    );
+  });
+
+  test("should render about me section", async () => {
     await expect(
-      page.getByRole("heading", { name: "Skills & Expertise" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Quick Links" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Connect With Me" })
+      page.locator("section", { hasText: "About Me" })
     ).toBeVisible();
   });
 
-  test("should render Navigation component", async ({ page }) => {
-    await expect(page.getByRole("navigation")).toBeVisible();
+  const checkSkillButtonVisibility = async (skillName: string) => {
+    await expect(
+      page.getByRole("button", { name: new RegExp(skillName, "i") })
+    ).toBeVisible();
+  };
+
+  test("should render skills, languages, and frameworks", async () => {
+    const skills = [
+      "Software Engineering",
+      "JavaScript",
+      "React.js",
+      "React Native",
+      "ReasonReact",
+    ];
+    for (const skill of skills) {
+      await checkSkillButtonVisibility(skill);
+    }
   });
 
-  test("should render SearchComponent", async ({ page }) => {
-    await expect(
-      page.getByPlaceholder("Search skills, languages, or frameworks...")
-    ).toBeVisible();
-  });
-
-  test("should render about me section", async ({ page }) => {
-    const aboutMeSection = page.locator("section", { hasText: "About Me" });
-    await expect(aboutMeSection).toBeVisible();
-    // You may want to add more specific checks for the content of the About Me section
-  });
-
-  test("should render skills, languages, and frameworks", async ({ page }) => {
-    // Check for a skill button
-    await expect(
-      page.getByRole("button", { name: /Software Engineering/ })
-    ).toBeVisible();
-
-    // Check for a programming language
-    await expect(
-      page.getByRole("button", { name: /JavaScript/ })
-    ).toBeVisible();
-
-    // Check for React-related frameworks
-    await expect(page.getByRole("button", { name: "React.js" })).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "React Native" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "ReasonReact" })
-    ).toBeVisible();
-  });
-
-  test("should render quick links", async ({ page }) => {
+  test("should render quick links", async () => {
     await expect(page.getByRole("link", { name: "View My CV" })).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Browse My Personal Projects" })
     ).toBeVisible();
   });
 
-  test("should render connect with me links", async ({ page }) => {
-    await expect(
-      page.getByRole("link", { name: "Github", exact: true })
-    ).toBeVisible();
-    await expect(page.getByRole("link", { name: "GithubOrg" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Linkedin" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Email" })).toBeVisible();
+  test("should render connect with me links", async () => {
+    const links = [
+      { name: "Github", exact: true },
+      { name: "GithubOrg", exact: true },
+      { name: "Linkedin", exact: true },
+      { name: "Email", exact: true },
+    ];
+
+    for (const link of links) {
+      await expect(
+        page.getByRole("link", { name: link.name, exact: link.exact })
+      ).toBeVisible();
+    }
   });
 
-  test("should update URL when searching", async ({ page }) => {
+  test("should update URL when searching", async () => {
     const searchInput = page.getByPlaceholder(
       "Search skills, languages, or frameworks..."
     );
@@ -83,87 +114,64 @@ test.describe("Home Page", () => {
     await expect(page).toHaveURL("/?search=React");
   });
 
-  test("should filter content based on search term", async ({ page }) => {
+  test("should filter content based on search term", async () => {
     const searchInput = page.getByPlaceholder(
       "Search skills, languages, or frameworks..."
     );
     await searchInput.fill("React");
     await searchInput.press("Enter");
 
-    // Check if React.js button is still visible
     await expect(page.getByRole("button", { name: "React.js" })).toBeVisible();
-
-    // Check if some other content is not visible
     await expect(
       page.getByRole("button", { name: "Software Engineering" })
     ).not.toBeVisible();
   });
 
-  test("should navigate to CV page when clicking on a skill", async ({
-    page,
-  }) => {
-    // Wait for the React skill buttons to be visible
-    await page.waitForSelector("button", { state: "visible" });
-
-    // Use page.evaluate to find and click the React.js button
-    await page.evaluate(() => {
+  const clickButtonByText = async (buttonText: string) => {
+    await page.evaluate((text) => {
       const buttons = Array.from(document.querySelectorAll("button"));
-      const reactButton = buttons.find((button) =>
-        button.textContent?.includes("React.js")
-      );
-      if (reactButton) {
-        (reactButton as HTMLElement).click();
+      const button = buttons.find((b) => b.textContent?.includes(text));
+      if (button) {
+        (button as HTMLElement).click();
       } else {
-        throw new Error("React.js button not found");
+        throw new Error(`${text} button not found`);
       }
-    });
+    }, buttonText);
+  };
 
-    // Wait for navigation to complete
+  test("should navigate to CV page when clicking on a skill", async () => {
+    await page.waitForSelector("button", { state: "visible" });
+    await clickButtonByText("React.js");
     await page.waitForURL("/cv?search=React.js&scrollTop=true");
-
-    // Assert that we've navigated to the correct URL
     await expect(page).toHaveURL("/cv?search=React.js&scrollTop=true");
   });
 
-  test("should navigate to correct pages from quick links", async ({
-    page,
-  }) => {
-    // Navigate to CV page
-    await page.evaluate(() => {
-      const cvLink = document.querySelector(
-        'a[href="/cv"]'
+  const navigateByLinkText = async (linkText: string, expectedUrl: string) => {
+    await page.evaluate((text) => {
+      const link = Array.from(document.querySelectorAll("a")).find(
+        (a) => a.textContent === text
       ) as HTMLAnchorElement;
-      if (cvLink) {
-        cvLink.click();
+      if (link) {
+        link.click();
       } else {
-        throw new Error("CV link not found");
+        throw new Error(`${text} link not found`);
       }
-    });
-    await page.waitForURL("/cv");
-    await expect(page).toHaveURL("/cv");
+    }, linkText);
+    await page.waitForURL(expectedUrl);
+    await expect(page).toHaveURL(expectedUrl);
+  };
 
-    await page.goto("/"); // Go back to home page
-
-    // Navigate to Personal Projects page
-    await page.evaluate(() => {
-      const projectsLink = document.querySelector(
-        'a[href="/personal-projects"]'
-      ) as HTMLAnchorElement;
-      if (projectsLink) {
-        projectsLink.click();
-      } else {
-        throw new Error("Personal Projects link not found");
-      }
-    });
-    await page.waitForURL("/personal-projects");
-    await expect(page).toHaveURL("/personal-projects");
+  test("should navigate to correct pages from quick links", async () => {
+    await navigateByLinkText("View My CV", "/cv");
+    await page.goto("/");
+    await navigateByLinkText(
+      "Browse My Personal Projects",
+      "/personal-projects"
+    );
   });
 
-  test("should open external links in new tabs", async ({ page, context }) => {
-    // Wait for all links to be visible
+  test("should open external links in new tabs", async ({ context }) => {
     await page.waitForSelector('a[target="_blank"]');
-
-    // Get all external links
     const externalLinks = await page.$$('a[target="_blank"]');
 
     for (const link of externalLinks) {
@@ -173,19 +181,23 @@ test.describe("Home Page", () => {
       if (href) {
         const [newPage] = await Promise.all([
           context.waitForEvent("page"),
-          page.evaluate((url) => window.open(url, "_blank"), href),
+          page.evaluate((linkHref) => {
+            const linkElement = document.querySelector(`a[href="${linkHref}"]`);
+            if (linkElement) {
+              (linkElement as HTMLAnchorElement).click();
+            }
+          }, href),
         ]);
 
-        await newPage.waitForLoadState();
+        await newPage.waitForLoadState("domcontentloaded");
         console.log(`Checking link: ${linkText} (${href})`);
 
         if (linkText?.includes("Github")) {
-          await expect(newPage.url()).toContain("github.com");
+          expect(newPage.url()).toContain("github.com");
         } else if (linkText?.includes("Linkedin")) {
-          await expect(newPage.url()).toContain("linkedin.com");
+          expect(newPage.url()).toContain("linkedin.com");
         } else if (linkText?.includes("Email")) {
-          // Check for the email address instead of mailto: protocol
-          await expect(newPage.url()).toContain("wahidyankf@gmail.com");
+          expect(newPage.url()).toContain("wahidyankf@gmail.com");
         }
 
         await newPage.close();
