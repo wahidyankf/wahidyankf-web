@@ -7,11 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
-    "test:watch": "vitest watch",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest watch",
+    "test:e2e": "npx playwright test",
+    "test:e2e:watch": "npx playwright test --ui",
     "prepare": "husky",
     "format": "prettier --write .",
-    "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && vitest run || exit 0",
+    "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && npm run test || exit 0",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
