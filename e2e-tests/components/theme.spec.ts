@@ -228,4 +228,70 @@ test.describe("Theme and Responsiveness", () => {
     await checkReadability(768, 1024); // Tablet
     await checkReadability(1280, 800); // Desktop
   });
+
+  test("should have correct color palette for both themes", async ({
+    page,
+  }) => {
+    // Function to check colors
+    const checkColors = async (isDarkTheme: boolean) => {
+      const theme = isDarkTheme ? "dark" : "light";
+      console.log(`Checking colors for ${theme} theme`);
+
+      // Check background color
+      const bodyBgColor = await page.evaluate(
+        () => window.getComputedStyle(document.body).backgroundColor
+      );
+      expect(bodyBgColor).toBe(
+        isDarkTheme ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)"
+      );
+
+      // Check text color
+      const textColor = await page.evaluate(
+        () => window.getComputedStyle(document.body).color
+      );
+      expect(textColor).toBe(
+        isDarkTheme ? "rgb(255, 255, 255)" : "rgb(30, 30, 30)"
+      );
+
+      // Check heading color
+      const heading = await page.locator("h1").first();
+      const headingColor = await heading.evaluate(
+        (el) => window.getComputedStyle(el).color
+      );
+      expect(headingColor).toBe(
+        isDarkTheme ? "rgb(250, 204, 21)" : "rgb(121, 94, 38)"
+      );
+
+      // Check link color
+      const link = await page.locator("a").first();
+      const linkColor = await link.evaluate(
+        (el) => window.getComputedStyle(el).color
+      );
+      expect(linkColor).toBe(
+        isDarkTheme ? "rgb(250, 204, 21)" : "rgb(175, 0, 219)"
+      );
+
+      // Log actual colors for debugging
+      console.log(`Body background color: ${bodyBgColor}`);
+      console.log(`Text color: ${textColor}`);
+      console.log(`Heading color: ${headingColor}`);
+      console.log(`Link color: ${linkColor}`);
+    };
+
+    // Check colors for dark theme (initial state)
+    await checkColors(true);
+
+    // Find and click the theme toggle button
+    const themeToggle = page.getByRole("button", { name: /theme/i });
+    await themeToggle.click();
+
+    // Check colors for light theme
+    await checkColors(false);
+
+    // Toggle back to dark theme
+    await themeToggle.click();
+
+    // Check colors for dark theme again
+    await checkColors(true);
+  });
 });
