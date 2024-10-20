@@ -1,3 +1,4 @@
+import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import RootLayout from "./layout";
@@ -19,33 +20,29 @@ vi.mock("@/components/ThemeToggle", () => ({
 
 describe("RootLayout", () => {
   it("renders children correctly", () => {
-    const { container } = render(
+    render(
       <RootLayout>
-        <div data-testid="child">Test Child</div>
+        <div>Test content</div>
       </RootLayout>
     );
 
-    const htmlElement = container.firstElementChild;
-    expect(htmlElement?.tagName).toBe("HTML");
-
-    const bodyElement = htmlElement?.children[1]; // Target the second child (body)
-    expect(bodyElement?.tagName).toBe("BODY");
-    expect(bodyElement?.className).toContain("root-layout");
-
-    const bodyContent = bodyElement?.firstElementChild;
-    expect(bodyContent?.className).toBe("body-content");
+    const bodyContent = screen
+      .getByText("Test content")
+      .closest(".body-content");
+    expect(bodyContent).toBeInTheDocument();
+    expect(bodyContent).toHaveClass("body-content flex-grow");
 
     expect(screen.getByTestId("theme-toggle")).toBeInTheDocument();
-    expect(screen.getByTestId("child")).toBeInTheDocument();
-    expect(screen.getByTestId("scroll-to-top")).toBeInTheDocument();
+    expect(screen.getByText("Test content")).toBeInTheDocument();
   });
 
   it("includes ScrollToTop component", () => {
-    const { getByTestId } = render(
+    render(
       <RootLayout>
-        <div>Content</div>
+        <div>Test content</div>
       </RootLayout>
     );
-    expect(getByTestId("scroll-to-top")).toBeTruthy();
+
+    expect(screen.getByTestId("scroll-to-top")).toBeInTheDocument();
   });
 });

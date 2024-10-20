@@ -163,10 +163,12 @@ function ProjectsContent() {
 export default function Projects() {
   return (
     <main className="min-h-screen bg-gray-900 text-green-400 p-4 sm:p-8 md:p-12 lg:p-16 lg:ml-80 flex flex-col pb-20 lg:pb-0">
-      <Navigation activePage="projects" />
-      <Suspense fallback={<div>Loading...</div>}>
-        <ProjectsContent />
-      </Suspense>
+      <Navigation />
+      <div className="flex-grow max-w-4xl mx-auto w-full">
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProjectsContent />
+        </Suspense>
+      </div>
     </main>
   );
 }
