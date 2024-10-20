@@ -10,7 +10,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
   return (
     <>
       {/* Mobile Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-2 flex justify-around items-center z-50 light-theme:bg-light-background light-theme:border-light-primary">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-green-400 p-4 flex justify-around z-50">
         <NavLink
           href="/"
           activePage={activePage}
@@ -27,7 +27,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activePage }) => {
       </nav>
 
       {/* Desktop Navigation */}
-      <nav className="hidden lg:block fixed left-0 top-0 h-full w-80 text-green-400 font-mono bg-gray-900 overflow-y-auto z-50 border-r border-green-400 light-theme:bg-gray-100 light-theme:text-light-foreground light-theme:border-light-primary">
+      <nav className="hidden lg:block fixed left-0 top-0 bottom-0 w-80 bg-gray-900 border-r border-green-400 p-4 overflow-y-auto z-50">
         <Link
           href="/"
           className="block mb-4 p-4 hover:text-yellow-400 transition-colors duration-200 light-theme:text-light-primary light-theme:hover:text-light-accent"

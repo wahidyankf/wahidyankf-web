@@ -86,8 +86,8 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="root-layout">
-        <div className="body-content">
+      <body className="root-layout flex flex-col lg:flex-row">
+        <div className="body-content flex-grow">
           <div className="fixed top-4 right-4 z-50">
             <ThemeToggle />
           </div>
