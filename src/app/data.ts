@@ -53,7 +53,7 @@ export const cvData: CVEntry[] = [
       "Core Banking",
       "Data Engineering",
     ],
-    programmingLanguages: ["JavaScript", "Java", "TypeScript", "SQL"],
+    programmingLanguages: ["JavaScript", "Java", "TypeScript", "Python", "SQL"],
     frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
     type: "work",
   },
