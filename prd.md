@@ -543,26 +543,20 @@ The Wahidyan KF Web portfolio implements a dual-theme system with a dark theme a
 
 1. Dark Theme (Default):
 
-   - Background: Dark gray or black (bg-gray-900)
-   - Primary Text: Green (text-green-400)
-   - Headings and Highlights: Yellow (text-yellow-400)
-   - Secondary Text: Lighter shades of green (text-green-300, text-green-200)
-   - Borders: Green (border-green-400)
-   - Card Backgrounds: Slightly lighter gray (bg-gray-800)
+   - Background: Black (#000000)
+   - Primary Text: White (#ffffff)
+   - Headings and Highlights: Yellow (#facc15)
+   - Links: Yellow (#facc15)
 
 2. Light Theme:
 
    - Background: White (#ffffff)
    - Primary Text: Dark gray (#1e1e1e)
-   - Primary Accent: Blue (#0000ff)
-   - Secondary Accent: Teal (#267f99)
-   - Muted Text: Gray (#717171)
-   - Soft Background: Light gray (#f3f3f3)
-   - Hard Background: Slightly darker gray (#e4e4e4)
+   - Headings: Brown (#795e26)
+   - Links: Purple (#af00db)
 
 3. Interactive Elements:
-   - Dark Theme: Yellow for default, green for hover
-   - Light Theme: Primary blue for default, accent color for hover
+   - Consistent styling for hover effects in both themes
 
 ### 5.2 Typography
 
@@ -628,7 +622,8 @@ The Wahidyan KF Web portfolio implements a dual-theme system with a dark theme a
 
 1. Easily accessible theme toggle button
 2. Smooth transition between light and dark themes
-3. Consistent readability and contrast in both themes
+3. Theme preference persists across page navigation
+4. Default theme is dark
 
 ### 5.8 Accessibility Considerations
 
@@ -642,61 +637,47 @@ The Wahidyan KF Web portfolio implements a dual-theme system with a dark theme a
 2. Tailwind CSS extended theme configuration for custom colors and styles
 3. Consistent use of utility classes across components
 
-### 5.10 Code Syntax Highlighting (Light Theme)
+### 5.10 Code Syntax Highlighting
 
-1. Comments: Green (#008000)
-2. Strings: Red (#a31515)
-3. Keywords: Blue (#0000ff)
+[Remove this section as it's not implemented in the current version]
 
 ### 5.11 Implementation Details
 
 1. Tailwind CSS configuration extends the default theme with custom colors and styles
 2. Global CSS file (globals.css) defines base styles and theme-specific overrides
 3. Use of the `light-theme` class to toggle between dark and light modes
-4. Custom Tailwind plugin to add a `light-theme` variant for flexible styling
+4. Theme toggle implemented using client-side JavaScript
 
 ### 5.12 Responsiveness
 
-The Wahidyan KF Web portfolio is designed to be fully responsive, providing an optimal viewing experience across a wide range of devices. The responsive design is implemented using Tailwind CSS utility classes and custom CSS media queries.
-
 1. Breakpoints:
 
-   - Small (sm): 640px
-   - Medium (md): 768px
    - Large (lg): 1024px
-   - Extra Large (xl): 1280px
-   - 2X Large (2xl): 1536px
 
 2. Layout Adjustments:
 
-   - Mobile (< 640px):
-     - Single column layout
+   - Mobile (< 1024px):
      - Full-width components
      - Bottom-fixed navigation menu
-   - Tablet (640px - 1023px):
-     - Possible two-column layout for some sections
-     - Adjusted padding and margins
    - Desktop (≥ 1024px):
-     - Multi-column layout
      - Sidebar navigation
-     - Increased content width and padding
 
-3. Typography:
+3. Navigation:
+
+   - Mobile: Bottom-fixed, icon-based navigation
+   - Desktop: Left sidebar with expanded labels
+
+4. Typography:
 
    - Fluid typography using responsive font sizes:
      - Page Titles: text-2xl sm:text-3xl md:text-4xl
      - Section Headings: text-xl sm:text-2xl md:text-3xl
    - Adjusted line heights and letter spacing for readability on different screen sizes
 
-4. Images and Media:
+5. Images and Media:
 
    - Use of responsive image techniques (e.g., srcset, sizes attributes)
    - Fluid video embeds that maintain aspect ratio
-
-5. Navigation:
-
-   - Mobile: Bottom-fixed, icon-based navigation
-   - Desktop: Left sidebar with expanded labels
 
 6. Interactive Elements:
 
