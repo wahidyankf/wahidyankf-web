@@ -39,7 +39,7 @@ export const cvData: CVEntry[] = [
     location: "Indonesia",
     locationType: "Hybrid",
     details: [
-      "Led Hijra group's Bank domain (core banking, transactions, consumer life-cycle, and release management) team of 16 engineers (including BE, FE, Mobile/React Native, SEIT, SQA), including dealing with day-to-day interactions with compliance and regulators related to the engineering.",
+      "Led Hijra group's Bank domain (core banking, transactions, consumer life-cycle, financing, data engineering, and release management) team of 19 engineers (including BE, FE, Mobile/React Native, SEIT, SQA), including dealing with day-to-day interactions with compliance and regulators related to the engineering.",
       "Led Hijra Bank's high-priority core banking migration initiative. This initiative is projected to save around 600 Million IDR/Month when completed.",
       "Pushing the automation test initiative to cover the critical path of the business flow. This initiative will also increase the correctness of the Hijra Bank's system and significantly decrease the duration of the regression test.",
     ],
@@ -51,6 +51,7 @@ export const cvData: CVEntry[] = [
       "Backend Engineering",
       "Software Testing",
       "Core Banking",
+      "Data Engineering",
     ],
     programmingLanguages: ["JavaScript", "Java", "TypeScript", "SQL"],
     frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
