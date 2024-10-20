@@ -15,7 +15,8 @@
     "prepare": "husky",
     "format": "prettier --write .",
     "test:push": "git rev-parse --abbrev-ref HEAD | grep -q '^main$' && npm run test || exit 0",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "get-tree": "tree -L 4 -I 'node_modules|playwright-report|test-results' | pbcopy"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
