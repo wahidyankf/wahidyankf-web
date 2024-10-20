@@ -82,6 +82,7 @@ export const cvData: CVEntry[] = [
       "Backend Engineering",
       "Software Testing",
       "Financing Engineering",
+      "Data Engineering",
     ],
     programmingLanguages: ["JavaScript", "Java", "Python", "TypeScript", "SQL"],
     frameworks: ["React.js", "Next.js", "React Native", "Spring Boot"],
